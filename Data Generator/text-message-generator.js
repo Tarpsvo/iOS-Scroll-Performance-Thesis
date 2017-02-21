@@ -1,9 +1,9 @@
 const Random = require('./random');
 
 const TextMessages = {
-  SHORT: (id) => `Short msg with id [${id}]`,
-  MEDIUM: (id) => `Medium message with id [${id}]\n--Medium message with id [${id}] --`,
-  LONG: (id) => `Long message with id [${id}]\n---Long message with id [${id}]---\nLong message with id [${id}]`
+  SHORT: (id) => `Short message [${id}]`,
+  MEDIUM: (id) => `Medium message with id [${id}]\nMedium message with id [${id}]`,
+  LONG: (id) => `A very long message with id [${id}]\nA very long message with id [${id}]\nA very long message with id [${id}]`
 };
 
 module.exports = (id) => {
