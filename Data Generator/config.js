@@ -1,0 +1,6 @@
+module.exports = {
+  ACCESS_TOKEN: '',
+  MESSAGE_COUNT: 1000,
+  MAX_MEDIA_ITEMS: 3,
+  MEDIA_MESSAGE_PROBABILITY: 0.5
+};

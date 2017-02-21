@@ -1,0 +1,1 @@
+Downloaded from Giphy.com.
