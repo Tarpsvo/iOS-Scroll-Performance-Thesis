@@ -1,0 +1,112 @@
+%%
+% Estonian Information Technology College stylepackage
+% Author: Tarvo Reinpalu <latex@trv.im>
+%%
+
+%%
+% Constants
+%%
+\def\university{ESTONIAN INFORMATION TECHNOLOGY COLLEGE}
+\def\title#1{\gdef\@title{#1}}
+\def\paper#1{\gdef\@paper{#1}}
+\def\author#1{\gdef\@author{#1}}
+\def\curriculum#1{\gdef\@curriculum{#1}}
+\def\supervisor#1{\gdef\@supervisor{#1}}
+\def\consultant#1{\gdef\@consultant{#1}}
+
+%%
+% Base configuration
+%%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{itk_thesis_eng}[20/02/2017 - Estonian IT College Style Package]
+
+%%
+% Style parameters
+%%
+\usepackage[hmargin={3.1cm, 2.54cm},vmargin=3.17cm]{geometry} % Page margins
+\brokenpenalty=10000 % Disallow page breaks at hyphens
+
+%%
+% Generation of list of stops (dots)
+%%
+\newcommand{\indexdotsep}{1.24}
+\newcommand{\indexdotfill}{
+  \leaders\hbox{$\m@th
+    \mkern\indexdotsep mu\hbox{.}
+    \mkern\indexdotsep mu$}\hfill}
+
+%%
+% Title page
+%%
+\def\itkTitlePage{\newpage}
+\def\enditkTitlePage{\itkMakeTitlePage}
+
+\def\itkMakeTitlePage{
+	\thispagestyle{empty}
+	\centering
+
+	{\LARGE\MakeUppercase {\university} \par}
+	\vskip2in
+	{\Large \@author \par}
+	{\LARGE\MakeUppercase {\@title} \par}
+	\vskip.5in
+	{\Large {\@paper} \par}
+	\vskip.5in
+	{\large\textbf {\MakeUppercase \@curriculum} \par}
+	\vfill
+	\begin{flushright}
+		{\large Supervisor: \@supervisor \par}
+		{\large Consultant: \@consultant \par}
+	\end{flushright}
+	\vfill
+	{\large {Tallinn \the\year} \par}}
+
+%%
+% Create author declaration
+%%
+\def\itkMakeAuthorDeclaration{
+	\newpage
+	\thispagestyle{empty}
+
+	{\Large\textbf {\centerline {AUTORIDEKLARATSIOON}} \par}
+
+	\vskip.5in
+
+	\begin{flushleft}
+		Deklareerin, et käesolev diplomitöö, mis on minu iseseisva töö tulemus, on esitatud Eesti Infotehnoloogia Kolledžile lõpudiplomi taotlemiseks IT Süsteemide arendamise erialal.  Diplomitöö alusel ei ole varem eriala lõpudiplomit taotletud.
+	\end{flushleft}
+
+	\vskip1.5in
+
+	\begin{flushleft}
+		\begin{tabular}{p{8.0cm}p{4.0cm}}
+			Autor: \@author & ..............................\\
+			& (allkiri ja kuupäev)  \\
+			Töö vastab kehtivatele nõuetele &  \\	
+			Juhendaja: \@supervisor & ..............................\\
+			& (allkiri ja kuupäev) \\
+		\end{tabular}
+	\end{flushleft}}
+
+%%
+% Introduction page (include in contents, don't display number)
+%%
+\def\introduction#1{
+	\section*{Introduction}
+	\addcontentsline{toc}{section}{Introduction}}
+
+%%
+% Image including
+%%
+\usepackage{float}
+\usepackage{graphicx}
+
+\def\itkIncludeImage#1#2#3{
+	\begin{figure}[H]
+	\begin{center}
+	\leavevmode
+	\includegraphics[width=0.8\textwidth]{#1}
+	\end{center}
+	\caption{#2}
+	\label{#3}
+	\end{figure}}

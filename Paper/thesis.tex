@@ -1,0 +1,241 @@
+\documentclass[a4paper,12pt]{article}
+ 
+ %%
+ % General configuration
+ %%
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{itk_thesis_eng}
+\usepackage{cite}
+
+%%
+% Specific setup (with explanations)
+%%
+\usepackage{mathptmx} % Apply Times New Roman font
+\usepackage[toc, xindy, style=list, nonumberlist]{glossaries}
+\usepackage{url}
+\graphicspath{{img/}}
+\linespread{1.5}
+
+%% lingid
+\usepackage{hyperref}
+\usepackage{titlesec}
+\newcommand{\sectionbreak}{\vspace*{1.5cm}}
+
+\begin{document}
+
+%%
+% Title page
+%%
+\begin{itkTitlePage}
+\title{Maximizing UITableView scrolling performance in iOS applications}
+\paper{Diploma thesis}
+\author{Tarvo Reinpalu}
+\curriculum{IT systems development curriculum}
+\supervisor{Gary Planthaber}
+\consultant{N/A}
+\end{itkTitlePage}
+
+%%%%
+%% Pre-content chapters
+%%%%
+
+%%
+% Author delcaration
+%%
+\itkMakeAuthorDeclaration
+
+%%
+% Table of contents
+%%
+\clearpage
+\thispagestyle{empty}
+\tableofcontents
+\newpage
+
+%%%%
+%% Content chapters
+%%%%
+
+%%
+% Sissejuhatus
+%%
+\newpage
+%%%% Introduction
+\introduction*{Introduction}
+
+%%% Description of the problem
+\subsection*{Description of the problem}
+
+%%% Problem background
+\subsection*{Problem background}
+
+%%% Goal of the thesis
+\subsection*{Goal of the thesis}
+
+%%% Structure of the thesis
+\subsection*{Structure of the thesis}
+
+
+%%
+% Used third party libraries
+%%
+\newpage
+\section{Used third party libraries}
+Creating every aspect from scratch in the test project would have been to large of a task to cover in this thesis,
+therefore third-party solutions were used to simplify some tasks. The affected aspects were for example JSON parsing,
+image loading and caching, detailed logging and in-code constraint creation.
+
+\subsection{JASON}
+JASON is a faster JSON deserializer written in Swift.\cite{JASON} The sole purpose for this library in the test
+project is to turn the test data from JSON form into Swift objects. Even though deserialization of the JSON information
+could have been done using Swift's built in capabilities, JASON allows the same purpose to be achieved with much shorter
+and more readable code.
+
+\subsection{SnapKit}
+SnapKit is a DSL to make Auto Layout easy on both iOS and OS X.\cite{SnapKit} SnapKit is used extensively in the test
+project to create constraints in the code, rather than in the storyboard. Creating layout constraints in the code has
+many benefits over creating them in the storyboards. For example, it removes the system overhead brought in by the
+processing of storyboards. It also gives the engineer very precise control over each constraint and provides an overview
+of all constraints that exist and when they will be created. Storyboard only has the benefit of providing the user with
+a graphical interface in which to create those constraints.
+
+\subsection{PINRemoteImage}
+PINRemoteImage, also known as PINRemoteImageManager, is an image downloading, processing and caching manager.\cite{PINRemoteImage}
+PINRemoteImage is used for the exact three things brought out in the library's description: it downloads the images,
+allows them to be processed and then stored safely in a disk cache. All that with minimal
+effort from the library user. Downloading images would've been trivial with the Swift's built in tools as well, but
+processing and caching, not that easy. Processing the images is especially useful, since it allows to scale the image
+down if necessary, which in turn makes the image smaller in dimensions and the file smaller in size. The caching
+manager is also quite advanced and extremely useful because it provides the option to cache different versions of
+the same image, including the original one. The different versions are dinstinguished by a string key passed to
+the process function.
+
+\subsection{XCGLogger}
+XCGLogger is a debug log framework for use in Swift projects.\cite{XCGLogger} XCGLogger improves Swift's built-in
+logging mechanism by adding a lot of useful, yet optional, information about every log statement. For example, it
+displays the thread name on which the log statement was executed on, without forcing the engineer to explicitly print
+out the thread name. The exact same goes for function names, file names and line numbers. Its uses and benefits in the
+test project are the same as the examples brought out previously (such as the identification of threads).
+
+%%
+% Specifications
+%%
+\newpage
+%%%% Specifications
+\section{Specifications}
+The test project was meant to broadly mimic the user interface of the real-life iOS application of Pairby. This
+could only be possible if there were a number of requirements set to the project's test data and user interface.
+
+%%%% Test data requirements
+\subsection{Test data requirements}
+The test data contained 1000 message type objects. The data was stored in JSON format and
+saved to a file, which could then be loaded into the iOS test project.
+
+%%% Message type
+\subsubsection*{Message type}
+The type definition for the Message object.
+
+\vskip.2in
+
+% Possibly is a table, might need to be referenced as such
+\begin{tabular}{| l | l | l |}
+  \hline
+  Property & Type & Required \\
+  \hline
+  messageId & Integer & true \\
+  direction & String & true \\
+  message & String & false \\
+  mediaItems & String[] & false \\
+  \hline
+\end{tabular}
+
+%%% Message properties
+\subsubsection*{Message properties}
+
+%% Message ID
+\paragraph{messageId}
+A unique identifier of integer type. The first message had a value of 0 and the sequence had an increment of 1.
+
+%% Direction
+\paragraph{direction}
+A string value that can either be "in" or "out". Represents the direction of the message (either inbound or outbound).
+
+%% Message
+\paragraph{message}
+Text message's text as string. Not present in media messages.
+
+%% Media items
+\paragraph{mediaItems}
+Media message's media item URL-s as a String array. Can contain 1 to 3 URL-s (inclusive). Not present in text messages.
+
+%%% Text message requirements
+\subsubsection*{Text message requirements}
+Text messages can vary in both width and height. Width is purely dependant on the length of the longest line of text in
+the message text. The height depends on the number of lines in the text. The number of lines in turn depends on whether
+the text is long enough to require text wrapping or contains line breaks.
+
+Messages of three different sizes were chosen t
+
+For testing purposes, three different width and height messages were chosen to mimic a real-life use
+
+Text messages should vary in height (which means that their number of lines should not be constant). The data generation
+script generates three different heights of text messages: one line messages, two line messages and three line messages.
+The number of lines will be guaranteed by using line breaks (word-wrapping in UI is not necessary).
+
+%%% Media message requirements
+\subsubsection*{Media message requirements}
+Media messages should contain URLs to different media items. The number of media items they contain should vary between
+1 and 3 (inclusive).
+
+%%%% Test data generation
+\subsection{Test data generation}
+Test data for the project is generated in a separate script, which is written in JavaScript and executed in a
+Node.JS environment.
+
+%%%% User interface requirements
+\subsection{User interface requirements}
+As stated in the introduction to this section, the user interface is meant to mimic Pairby iOS application's messaging
+user interface.
+
+\subsubsection*{Common design elements}
+Both the text and media message views should have rounded corners and a thin border of gray colour.
+
+\subsubsection{Text message}
+The text message view should be able to handle line breaks (increase in height to display all lines). The background
+color for inbound and outbound messages should be different: teal for outbound, gray for inbound.
+
+\subsubsection{Media message}
+Media message view stylings depend on the number of images they contain.
+
+\paragraph{1 (one) media item}
+A single media item message should display the image with a width and height of 180 points.
+
+\paragraph{2 (two) media items}
+A two media item message should display the images side by side, with the image widths and heights being 90 points.
+
+\paragraph{3 (two) media items}
+A three media item message should display the images side by side, with the image widths and heights beind 90 points.
+
+%%%%
+%% After-content chapters
+%%%%
+%%
+% Figures
+%%
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{List of Figures}
+\listoffigures
+
+%%
+% References
+%%
+\newpage
+\phantomsection
+\addcontentsline{toc}{section}{References}
+\bibliography{thesis}
+\bibliographystyle{plain}
+		
+\end{document}
