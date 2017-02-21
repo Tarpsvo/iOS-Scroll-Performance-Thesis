@@ -26,7 +26,7 @@ function generateMedia() {
     }
 
     // all items were transcoded, create URL-s for the items
-    return uploadedMediaItems.map(m => `https://media-dev.pairby.com/${m.web_folder}/l.${(m.mime_type.includes('gif') ? 'gif' : 'jpg')}`);
+    return uploadedMediaItems.map(m => `https://media-dev.pairby.com/${m.web_folder}l.${(m.mime_type.includes('gif') ? 'gif' : 'jpg')}`);
   });
 }
 
