@@ -17,6 +17,7 @@ function generateMessages() {
           message: TextMessageGenerator(i),
           direction: (Math.random() >= 0.5) ? 'out' : 'in'
         });
+        continue;
       }
 
       // MEDIA MESSAGE
@@ -26,10 +27,10 @@ function generateMessages() {
         for (let i = 0; i < numberOfMediaItems; i++) mediaItems.push(mediaItemUrls[Random(0, mediaItemUrls.length - 1)]);
         messages.push({
           id: i,
-          message: TextMessageGenerator(i),
           direction: (Math.random() >= 0.5) ? 'out' : 'in',
           mediaItems: mediaItems
         });
+        continue;
       }
     }
 
