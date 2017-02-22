@@ -1,0 +1,10 @@
+platform :ios, '8.2'
+
+target 'iOS Scroll Test' do
+  use_frameworks!
+
+  pod 'PINRemoteImage', '~> 2.1'
+  pod 'XCGLogger', '~> 4.0.0'
+  pod 'SnapKit', '~> 3.1.2'
+  pod 'JASON', '~> 3.0'
+end

@@ -1,0 +1,33 @@
+PODS:
+  - FLAnimatedImage (1.0.12)
+  - JASON (3.1)
+  - PINCache (2.3)
+  - PINRemoteImage (2.1.4):
+    - PINRemoteImage/FLAnimatedImage (= 2.1.4)
+  - PINRemoteImage/Core (2.1.4):
+    - PINCache (>= 2.1)
+  - PINRemoteImage/FLAnimatedImage (2.1.4):
+    - FLAnimatedImage (>= 1.0)
+    - PINRemoteImage/Core
+  - SnapKit (3.1.2)
+  - XCGLogger (4.0.0):
+    - XCGLogger/Core (= 4.0.0)
+  - XCGLogger/Core (4.0.0)
+
+DEPENDENCIES:
+  - JASON (~> 3.0)
+  - PINRemoteImage (~> 2.1)
+  - SnapKit (~> 3.1.2)
+  - XCGLogger (~> 4.0.0)
+
+SPEC CHECKSUMS:
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
+  JASON: c1204b01c9979eef35b6948ca939aac5e7bef081
+  PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
+  PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
+  SnapKit: 12b24f569cb7c143acc9c22b9d91b23e7b1c84a2
+  XCGLogger: 38063ea89b4c8b23232d18efd2e12eb0005f3ea4
+
+PODFILE CHECKSUM: 530ac319e0e7cedfbcd037d8d42add06217e55ad
+
+COCOAPODS: 1.2.0
