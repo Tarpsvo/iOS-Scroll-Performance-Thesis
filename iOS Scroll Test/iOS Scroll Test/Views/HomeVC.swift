@@ -8,7 +8,7 @@ class HomeVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        return 6
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -27,6 +27,12 @@ class HomeVC: UITableViewController {
         // (2) STATIC CELLS
         if (row == 3) { cell.textLabel?.text = "2 - Static cells" }
 
+        // (3) MANUAL HEIGHT CALCULATIONS
+        if (row == 4) { cell.textLabel?.text = "3 - Manual height calculations" }
+
+        // (4) HEIGHT CACHING
+        if (row == 5) { cell.textLabel?.text = "4 - Height caching" }
+
         return cell
     }
     
@@ -44,6 +50,12 @@ class HomeVC: UITableViewController {
 
         // (2) STATIC CELLS
         if (row == 3) { self.navigationController?.show(StaticCellsVC(), sender: nil) }
+
+        // (3) MANUAL HEIGHT CALCULATIONS
+        if (row == 4) { self.navigationController?.show(ManualHeightCalcVC(), sender: nil) }
+
+        // (4) HEIGHT CACHING
+        if (row == 5) { self.navigationController?.show(HeightCachingVC(), sender: nil) }
     }
 
 }
