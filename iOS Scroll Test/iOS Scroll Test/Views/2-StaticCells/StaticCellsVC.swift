@@ -40,7 +40,7 @@ class StaticCellsVC: BaseVC, UITableViewDelegate, UITableViewDataSource {
         
         let cell = self._tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! ReusableCell
         cell.updateFromMessage(message: message)
-        return cell as! UITableViewCell
+        return cell
     }
     
 }
