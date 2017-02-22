@@ -72,48 +72,6 @@
 %%% Structure of the thesis
 \subsection*{Structure of the thesis}
 
-
-%%
-% Used third party libraries
-%%
-\newpage
-\section{Used third party libraries}
-Creating every aspect from scratch in the test project would have been to large of a task to cover in this thesis,
-therefore third-party solutions were used to simplify some tasks. The affected aspects were for example JSON parsing,
-image loading and caching, detailed logging and in-code constraint creation.
-
-\subsection{JASON}
-JASON is a faster JSON deserializer written in Swift.\cite{JASON} The sole purpose for this library in the test
-project is to turn the test data from JSON form into Swift objects. Even though deserialization of the JSON information
-could have been done using Swift's built in capabilities, JASON allows the same purpose to be achieved with much shorter
-and more readable code.
-
-\subsection{SnapKit}
-SnapKit is a DSL to make Auto Layout easy on both iOS and OS X.\cite{SnapKit} SnapKit is used extensively in the test
-project to create constraints in the code, rather than in the storyboard. Creating layout constraints in the code has
-many benefits over creating them in the storyboards. For example, it removes the system overhead brought in by the
-processing of storyboards. It also gives the engineer very precise control over each constraint and provides an overview
-of all constraints that exist and when they will be created. Storyboard only has the benefit of providing the user with
-a graphical interface in which to create those constraints.
-
-\subsection{PINRemoteImage}
-PINRemoteImage, also known as PINRemoteImageManager, is an image downloading, processing and caching manager.\cite{PINRemoteImage}
-PINRemoteImage is used for the exact three things brought out in the library's description: it downloads the images,
-allows them to be processed and then stored safely in a disk cache. All that with minimal
-effort from the library user. Downloading images would've been trivial with the Swift's built in tools as well, but
-processing and caching, not that easy. Processing the images is especially useful, since it allows to scale the image
-down if necessary, which in turn makes the image smaller in dimensions and the file smaller in size. The caching
-manager is also quite advanced and extremely useful because it provides the option to cache different versions of
-the same image, including the original one. The different versions are dinstinguished by a string key passed to
-the process function.
-
-\subsection{XCGLogger}
-XCGLogger is a debug log framework for use in Swift projects.\cite{XCGLogger} XCGLogger improves Swift's built-in
-logging mechanism by adding a lot of useful, yet optional, information about every log statement. For example, it
-displays the thread name on which the log statement was executed on, without forcing the engineer to explicitly print
-out the thread name. The exact same goes for function names, file names and line numbers. Its uses and benefits in the
-test project are the same as the examples brought out previously (such as the identification of threads).
-
 %%
 % Specifications
 %%
@@ -125,8 +83,8 @@ could only be possible if there were a number of requirements set to the project
 
 %%%% Test data requirements
 \subsection{Test data requirements}
-The test data contained 1000 message type objects. The data was stored in JSON format and
-saved to a file, which could then be loaded into the iOS test project.
+The test data contained 1000 message type objects. The data was stored in JSON format and saved to a file,
+which could then be loaded into the iOS test project.
 
 %%% Message type
 \subsubsection*{Message type}
@@ -171,23 +129,72 @@ Text messages can vary in both width and height. Width is purely dependant on th
 the message text. The height depends on the number of lines in the text. The number of lines in turn depends on whether
 the text is long enough to require text wrapping or contains line breaks.
 
-Messages of three different sizes were chosen t
-
-For testing purposes, three different width and height messages were chosen to mimic a real-life use
-
-Text messages should vary in height (which means that their number of lines should not be constant). The data generation
-script generates three different heights of text messages: one line messages, two line messages and three line messages.
-The number of lines will be guaranteed by using line breaks (word-wrapping in UI is not necessary).
+To simulate real life scenarios, text messages of three different widths and heights were created. These test messages
+consisted of short single line messages, medium two line messages and wide three line messages. To guarantee similar
+data rendering across different devices and screen widths, line breaks were used to create multi-line messages. The
+other option would have required word-wrapping, which would have depended on the width of the screen on the device
+and not produced the same number of lines on across all devices.
 
 %%% Media message requirements
 \subsubsection*{Media message requirements}
-Media messages should contain URLs to different media items. The number of media items they contain should vary between
-1 and 3 (inclusive).
+In the Pairby real life application, media messages can contain up to 6 media items that can either be static images (JPG),
+animated images (GIF) or videos (MP4).
+
+Inside the messages list view, however, the media items are restricted into two different formats: static and animated
+images. Videos are not included as videos, when displayed as a thumbnail inside a message view, instead, a static thumbnail
+image is used. This reduces the required different media types down to JPG and GIF formats.
+
+To simplify and speed up the building of different benchmark views, the maximum number of media items in a message
+was reduced to 3, instead of 6. Therefore the number of media items inside a media message could be 1 to 3 (inclusive).
+
+To simulate real conditions, all media should be loaded from Pairby servers through the network.
 
 %%%% Test data generation
 \subsection{Test data generation}
 Test data for the project is generated in a separate script, which is written in JavaScript and executed in a
-Node.JS environment.
+Node.JS environment. The output of the script is a JSON file that contains an array of message type objects.
+
+%%% Message generation
+\subsubsection*{Message generation}
+The number of messages to be generated is configurable and was set to 1000 for the purposes of this test project.
+
+The type (text or media) of each message was decided using a semi-random probability technique: a random number
+from 0 to 1 was generated and compared against a configurable parameter called "media message probability". If the
+generated number was less than or equal to the "media message probability" parameter, the message type was set to be
+media message and therefore its "mediaItems" parameter was filled out. If the generated number happened to be larger
+than the previously defined parameter, then the message was set to be of text type and its "message" property was filled out.
+
+The message ID was simply set to the sequence number in the running loop (which started at zero and ended at the number of
+generated messages minus 1). For the 1000 messages generated for the purpose of this test, the IDs ranged from 0 to 999
+(inclusive).
+
+Each message's direction was also defined through a random number generator and was set to have an equal chance of either
+being outbound or inbound. This process was similar to the way the message type was chosen: a random number between 0 and
+1 was generated and it was compared against 0.5, if was less than or equal to it, "direction" property was set to out,
+otherwise it was set to "in".
+
+%%% Text message generation functionality
+\subsubsection*{Text message content generation}
+As defined in the specifications, there are three different text messages, that are all different in height and width. The
+text for each three different type is static and will not change. Selecting one of the three was random and each message type
+had an equal chance of being selected. A random whole number between 1 and 3 (inclusive) was generated, if it was 1, then the
+one line and shortest width message was chosen. If the generated number happened to be 2, then the two line medium width
+text was chosen. If the number was 3, then the three line and widest text was selected.
+
+%%% Media message generation functionality
+\subsubsection*{Media message content generation}
+In order to properly mimic the real life scenarios in the message list view all media should be loaded from the Pairby media servers.
+This obviously ruled out the possibility of including the images locally with the iOS test project. The ability of uploading media
+to the Pairby media servers through the actual API was built to the data generator, which then returned the URLs to the uploaded files.
+
+The sample media files folder contained 100 static images of JPG format and 10 animated images of GIF format. All of those images were uploaded
+to the Pairby media servers.
+
+The number of media items to include with a specific media message was a random number between 1 and 3 (inclusive).
+
+The URL or URLs that would represent the media items were chosen completely randomly and duplicates were not prevented. Therefore there
+could be media messages that contained the same item twice. Even though this would not be possible in the real life Pairby application,
+there was no direct reason to prevent it from happening either, for it should still work as expected.
 
 %%%% User interface requirements
 \subsection{User interface requirements}
@@ -212,6 +219,47 @@ A two media item message should display the images side by side, with the image 
 
 \paragraph{3 (two) media items}
 A three media item message should display the images side by side, with the image widths and heights beind 90 points.
+
+%%
+% Used third party libraries
+%%
+\newpage
+\section{Used third party libraries}
+Creating every aspect from scratch in the test project would have been to large of a task to cover in this thesis,
+therefore third-party solutions were used to simplify some tasks. The affected aspects were for example JSON parsing,
+image loading and caching, detailed logging and in-code constraint creation.
+
+\subsection{JASON}
+JASON is a faster JSON deserializer written in Swift.\cite{JASON} The sole purpose for this library in the test
+project is to turn the test data from JSON form into Swift objects. Even though deserialization of the JSON information
+could have been done using Swift's built in capabilities, JASON allows the same purpose to be achieved with much shorter
+and more readable code.
+
+\subsection{SnapKit}
+SnapKit is a DSL to make Auto Layout easy on both iOS and OS X.\cite{SnapKit} SnapKit is used extensively in the test
+project to create constraints in the code, rather than in the storyboard. Creating layout constraints in the code has
+many benefits over creating them in the storyboards. For example, it removes the system overhead brought in by the
+processing of storyboards. It also gives the engineer very precise control over each constraint and provides an overview
+of all constraints that exist and when they will be created. Storyboard only has the benefit of providing the user with
+a graphical interface in which to create those constraints.
+
+\subsection{PINRemoteImage}
+PINRemoteImage, also known as PINRemoteImageManager, is an image downloading, processing and caching manager.\cite{PINRemoteImage}
+PINRemoteImage is used for the exact three things brought out in the library's description: it downloads the images,
+allows them to be processed and then stored safely in a disk cache. All that with minimal
+effort from the library user. Downloading images would've been trivial with the Swift's built in tools as well, but
+processing and caching, not that easy. Processing the images is especially useful, since it allows to scale the image
+down if necessary, which in turn makes the image smaller in dimensions and the file smaller in size. The caching
+manager is also quite advanced and extremely useful because it provides the option to cache different versions of
+the same image, including the original one. The different versions are dinstinguished by a string key passed to
+the process function.
+
+\subsection{XCGLogger}
+XCGLogger is a debug log framework for use in Swift projects.\cite{XCGLogger} XCGLogger improves Swift's built-in
+logging mechanism by adding a lot of useful, yet optional, information about every log statement. For example, it
+displays the thread name on which the log statement was executed on, without forcing the engineer to explicitly print
+out the thread name. The exact same goes for function names, file names and line numbers. Its uses and benefits in the
+test project are the same as the examples brought out previously (such as the identification of threads).
 
 %%%%
 %% After-content chapters
