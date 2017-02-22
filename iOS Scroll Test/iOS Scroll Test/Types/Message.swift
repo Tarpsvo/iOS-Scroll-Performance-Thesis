@@ -9,7 +9,7 @@ struct Message {
     public var mediaItems: [String]?
     
     init(_ json: JSON) {
-        id = json["message_id"].nsNumberValue.int64Value
+        id = json["id"].nsNumberValue.int64Value
         direction = json["direction"].stringValue
         message = json["message"].string
         mediaItems = json["mediaItems"].array as? [String]

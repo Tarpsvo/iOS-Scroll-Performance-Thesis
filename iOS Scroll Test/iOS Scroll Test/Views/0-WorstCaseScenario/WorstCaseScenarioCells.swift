@@ -56,7 +56,7 @@ class WorstCaseScenario_TextCell: UITableViewCell {
 
         // set text
         if let message = message.message { self._messageLabel.text = message }
-        else { self._messageLabel.text = "Media message with id [\(message.id)]" }
+        else { self._messageLabel.text = "Media message with ID [\(message.id)]" }
     }
 
     required init?(coder aDecoder: NSCoder) {
