@@ -8,7 +8,7 @@ class HomeVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 7
+        return 8
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -36,6 +36,9 @@ class HomeVC: UITableViewController {
         // (5) IMAGE OPTIMIZATIONS
         if (row == 6) { cell.textLabel?.text = "5 - Image optimizations" }
 
+        // (6) LAYER RASTERIZATION
+        if (row == 7) { cell.textLabel?.text = "6 - Layer rasterization" }
+
         return cell
     }
     
@@ -62,6 +65,9 @@ class HomeVC: UITableViewController {
 
         // (5) IMAGE OPTIMIZATIONS
         if (row == 6) { self.navigationController?.show(ImageOptimizationVC(), sender: nil) }
+
+        // (6) LAYER RASTERIZATION
+        if (row == 7) { self.navigationController?.show(LayerRasterizationVC(), sender: nil) }
     }
 
 }
