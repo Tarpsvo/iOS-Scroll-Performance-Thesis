@@ -19,6 +19,7 @@
 		690797F85233C797A3BDB3BA /* ImageOptimizationCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079B14AD47EACAD8B39068 /* ImageOptimizationCells.swift */; };
 		69079895E51DDE81237D14A8 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079B84697ACE6FB8D0EB6C /* UIColor.swift */; };
 		690798B6346FF28F54835A62 /* WorstCaseScenarioCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079174E2377A3F52663DAA /* WorstCaseScenarioCells.swift */; };
+		690798F55C5958438664080C /* NoOffscreenRenderingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690799A368730287B0D0744C /* NoOffscreenRenderingVC.swift */; };
 		6907996904DB1718A8FC91D9 /* ManualHeightCalcVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690792C498997B5B16B056F1 /* ManualHeightCalcVC.swift */; };
 		690799B3357465A92B1FCD32 /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690798BC4B2925087D85FA2E /* ReusableCell.swift */; };
 		69079A5BA17294B8F7A5148A /* Pairby.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079AF47495FB2F20C5D451 /* Pairby.swift */; };
@@ -32,6 +33,7 @@
 		69079E4BA2E0412612E5F2DE /* ImageOptimizationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079821A239441F802021C5 /* ImageOptimizationVC.swift */; };
 		69079EDA35E564BB74FBFF07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6907993B43FA49C67C1FFABD /* AppDelegate.swift */; };
 		69079F2ABE6E379C021456B8 /* StaticCellsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079FA40E9F6B6360F43776 /* StaticCellsCells.swift */; };
+		69079FCE0BC9288A11CD0AF0 /* NoOffscreenRenderingCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690796DF944FBC697A570FBE /* NoOffscreenRenderingCells.swift */; };
 		88D5734B1AF2C0790A24F3C8 /* Pods_iOS_Scroll_Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDEA02867525442C451667B0 /* Pods_iOS_Scroll_Test.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +49,7 @@
 		690792C498997B5B16B056F1 /* ManualHeightCalcVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualHeightCalcVC.swift; sourceTree = "<group>"; };
 		690792DE1D3425FCB4C61FD0 /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		69079657B6F235E26260CC49 /* BestCaseScenarioVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BestCaseScenarioVC.swift; sourceTree = "<group>"; };
+		690796DF944FBC697A570FBE /* NoOffscreenRenderingCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoOffscreenRenderingCells.swift; sourceTree = "<group>"; };
 		69079821A239441F802021C5 /* ImageOptimizationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageOptimizationVC.swift; sourceTree = "<group>"; };
 		6907984E08C6BE712482CCDA /* ReusingCellsCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusingCellsCells.swift; sourceTree = "<group>"; };
 		690798BC4B2925087D85FA2E /* ReusableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusableCell.swift; sourceTree = "<group>"; };
@@ -54,6 +57,7 @@
 		6907991677ADD3A2891553A7 /* ReusingCellsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusingCellsVC.swift; sourceTree = "<group>"; };
 		6907993B43FA49C67C1FFABD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		690799544BE56E34BB24AE0F /* iOS Scroll Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Scroll Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		690799A368730287B0D0744C /* NoOffscreenRenderingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoOffscreenRenderingVC.swift; sourceTree = "<group>"; };
 		69079A1848F47DE3000945FA /* WorstCaseScenarioVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorstCaseScenarioVC.swift; sourceTree = "<group>"; };
 		69079AF47495FB2F20C5D451 /* Pairby.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pairby.swift; sourceTree = "<group>"; };
 		69079B14AD47EACAD8B39068 /* ImageOptimizationCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageOptimizationCells.swift; sourceTree = "<group>"; };
@@ -206,8 +210,18 @@
 				69079001580A44691E1609C1 /* 4-HeightCaching */,
 				69079236C3DE0D49D8162CC0 /* 5-ImageOptimization */,
 				69079F3D046D7AAB3903FE7B /* 6-LayerRasterization */,
+				69079DFCA91607ED6C3D4261 /* 7-NoOffscreenRendering */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		69079DFCA91607ED6C3D4261 /* 7-NoOffscreenRendering */ = {
+			isa = PBXGroup;
+			children = (
+				690799A368730287B0D0744C /* NoOffscreenRenderingVC.swift */,
+				690796DF944FBC697A570FBE /* NoOffscreenRenderingCells.swift */,
+			);
+			path = "7-NoOffscreenRendering";
 			sourceTree = "<group>";
 		};
 		69079E4F20A612927857AE40 /* 3-ManualHeightCalc */ = {
@@ -386,6 +400,8 @@
 				69079B2C1FE9EA3E5B19AC9C /* ImageOptimizer.swift in Sources */,
 				69079CAD6BB02423F777E96C /* LayerRasterizationVC.swift in Sources */,
 				69079548EBDC1A26944CDBAC /* LayerRasterizationCells.swift in Sources */,
+				690798F55C5958438664080C /* NoOffscreenRenderingVC.swift in Sources */,
+				69079FCE0BC9288A11CD0AF0 /* NoOffscreenRenderingCells.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

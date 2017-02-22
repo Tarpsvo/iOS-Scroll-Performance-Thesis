@@ -8,7 +8,7 @@ class HomeVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 8
+        return 9
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -39,6 +39,9 @@ class HomeVC: UITableViewController {
         // (6) LAYER RASTERIZATION
         if (row == 7) { cell.textLabel?.text = "6 - Layer rasterization" }
 
+        // (7) NO OFFSCREEN RENDERING
+        if (row == 8) { cell.textLabel?.text = "7 - No offscreen rendering" }
+
         return cell
     }
     
@@ -68,6 +71,9 @@ class HomeVC: UITableViewController {
 
         // (6) LAYER RASTERIZATION
         if (row == 7) { self.navigationController?.show(LayerRasterizationVC(), sender: nil) }
+
+        // (7) NO OFFSCREEN RENDERING
+        if (row == 8) { self.navigationController?.show(NoOffscreenRenderingVC(), sender: nil) }
     }
 
 }
