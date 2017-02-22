@@ -1,13 +1,30 @@
 PODS:
+  - AsyncDisplayKit (2.1):
+    - AsyncDisplayKit/PINRemoteImage (= 2.1)
+  - AsyncDisplayKit/Core (2.1)
+  - AsyncDisplayKit/PINRemoteImage (2.1):
+    - AsyncDisplayKit/Core
+    - PINRemoteImage/iOS (= 3.0.0-beta.7)
+    - PINRemoteImage/PINCache
   - FLAnimatedImage (1.0.12)
   - JASON (3.1)
-  - PINCache (2.3)
-  - PINRemoteImage (2.1.4):
-    - PINRemoteImage/FLAnimatedImage (= 2.1.4)
-  - PINRemoteImage/Core (2.1.4):
-    - PINCache (>= 2.1)
-  - PINRemoteImage/FLAnimatedImage (2.1.4):
+  - PINCache (3.0.1-beta.2):
+    - PINCache/Arc-exception-safe (= 3.0.1-beta.2)
+    - PINCache/Core (= 3.0.1-beta.2)
+  - PINCache/Arc-exception-safe (3.0.1-beta.2):
+    - PINCache/Core
+  - PINCache/Core (3.0.1-beta.2)
+  - PINRemoteImage (3.0.0-beta.7):
+    - PINRemoteImage/FLAnimatedImage (= 3.0.0-beta.7)
+    - PINRemoteImage/PINCache (= 3.0.0-beta.7)
+  - PINRemoteImage/Core (3.0.0-beta.7)
+  - PINRemoteImage/FLAnimatedImage (3.0.0-beta.7):
     - FLAnimatedImage (>= 1.0)
+    - PINRemoteImage/Core
+  - PINRemoteImage/iOS (3.0.0-beta.7):
+    - PINRemoteImage/Core
+  - PINRemoteImage/PINCache (3.0.0-beta.7):
+    - PINCache (= 3.0.1-beta.2)
     - PINRemoteImage/Core
   - SnapKit (3.1.2)
   - XCGLogger (4.0.0):
@@ -15,19 +32,21 @@ PODS:
   - XCGLogger/Core (4.0.0)
 
 DEPENDENCIES:
+  - AsyncDisplayKit (~> 2.1)
   - JASON (~> 3.0)
-  - PINRemoteImage (~> 2.1)
+  - PINRemoteImage (~> 3.0.0-beta.7)
   - SnapKit (~> 3.1.2)
   - XCGLogger (~> 4.0.0)
 
 SPEC CHECKSUMS:
+  AsyncDisplayKit: 28de788f9d6ec573be7662f0fe8931e656357e93
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   JASON: c1204b01c9979eef35b6948ca939aac5e7bef081
-  PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
-  PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
+  PINCache: 6d273a6e0754bd26e3f12a38a90dde73cc6a42b2
+  PINRemoteImage: ff63baf185088530db6cfa41cb665e2b5126b5c3
   SnapKit: 12b24f569cb7c143acc9c22b9d91b23e7b1c84a2
   XCGLogger: 38063ea89b4c8b23232d18efd2e12eb0005f3ea4
 
-PODFILE CHECKSUM: 530ac319e0e7cedfbcd037d8d42add06217e55ad
+PODFILE CHECKSUM: e914a981c09353e89a081bfc832a9d6c407f090b
 
 COCOAPODS: 1.2.0

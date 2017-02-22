@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D12F7691E5DD2D4000AB8D4 /* AsyncDisplayKitCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D12F7671E5DD2D4000AB8D4 /* AsyncDisplayKitCells.swift */; };
+		3D12F76A1E5DD2D4000AB8D4 /* AsyncDisplayKitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D12F7681E5DD2D4000AB8D4 /* AsyncDisplayKitVC.swift */; };
 		3D12F76C1E5DF613000AB8D4 /* MessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D12F76B1E5DF613000AB8D4 /* MessageStore.swift */; };
 		69079163B755983E9FF8ABF5 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079F76E0FE9708012709C7 /* Message.swift */; };
 		690791A183A35EEADC5E58DE /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690790447E90060C5D6104DA /* BaseVC.swift */; };
@@ -40,6 +42,8 @@
 
 /* Begin PBXFileReference section */
 		11F7F934C5823394194CDFAE /* Pods-iOS Scroll Test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Scroll Test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS Scroll Test/Pods-iOS Scroll Test.debug.xcconfig"; sourceTree = "<group>"; };
+		3D12F7671E5DD2D4000AB8D4 /* AsyncDisplayKitCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncDisplayKitCells.swift; sourceTree = "<group>"; };
+		3D12F7681E5DD2D4000AB8D4 /* AsyncDisplayKitVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncDisplayKitVC.swift; sourceTree = "<group>"; };
 		3D12F76B1E5DF613000AB8D4 /* MessageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageStore.swift; sourceTree = "<group>"; };
 		3D485F6A1E5CD65F00AC21D2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3E6105C45F52561B48F79A1A /* Pods-iOS Scroll Test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Scroll Test.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS Scroll Test/Pods-iOS Scroll Test.release.xcconfig"; sourceTree = "<group>"; };
@@ -86,6 +90,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3D12F7661E5DD2D4000AB8D4 /* 8-AsyncDisplayKit */ = {
+			isa = PBXGroup;
+			children = (
+				3D12F7671E5DD2D4000AB8D4 /* AsyncDisplayKitCells.swift */,
+				3D12F7681E5DD2D4000AB8D4 /* AsyncDisplayKitVC.swift */,
+			);
+			path = "8-AsyncDisplayKit";
+			sourceTree = "<group>";
+		};
 		5D1608B551AAE6E3E2B7825C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -211,6 +224,7 @@
 				69079236C3DE0D49D8162CC0 /* 5-ImageOptimization */,
 				69079F3D046D7AAB3903FE7B /* 6-LayerRasterization */,
 				69079DFCA91607ED6C3D4261 /* 7-NoOffscreenRendering */,
+				3D12F7661E5DD2D4000AB8D4 /* 8-AsyncDisplayKit */,
 				690790447E90060C5D6104DA /* BaseVC.swift */,
 				690792DE1D3425FCB4C61FD0 /* HomeVC.swift */,
 				690798BC4B2925087D85FA2E /* ReusableCell.swift */,
@@ -382,6 +396,8 @@
 			files = (
 				69079EDA35E564BB74FBFF07 /* AppDelegate.swift in Sources */,
 				690796AA40C4E2C0142413EB /* String.swift in Sources */,
+				3D12F7691E5DD2D4000AB8D4 /* AsyncDisplayKitCells.swift in Sources */,
+				3D12F76C1E5DF613000AB8D4 /* MessageStore.swift in Sources */,
 				69079895E51DDE81237D14A8 /* UIColor.swift in Sources */,
 				690795EC41C2CCB72980A254 /* JASON+Properties.swift in Sources */,
 				69079A5BA17294B8F7A5148A /* Pairby.swift in Sources */,
@@ -404,6 +420,7 @@
 				69079CAD6BB02423F777E96C /* LayerRasterizationVC.swift in Sources */,
 				69079548EBDC1A26944CDBAC /* LayerRasterizationCells.swift in Sources */,
 				690798F55C5958438664080C /* NoOffscreenRenderingVC.swift in Sources */,
+				3D12F76A1E5DD2D4000AB8D4 /* AsyncDisplayKitVC.swift in Sources */,
 				69079FCE0BC9288A11CD0AF0 /* NoOffscreenRenderingCells.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,7 +8,7 @@ class HomeVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 9
+        return 10
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -41,6 +41,9 @@ class HomeVC: UITableViewController {
 
         // (7) NO OFFSCREEN RENDERING
         if (row == 8) { cell.textLabel?.text = "7 - No offscreen rendering" }
+        
+        // (8) ASYNCDISPLAYKIT
+        if (row == 9) { cell.textLabel?.text = "8 - AsyncDisplayKit" }
 
         return cell
     }
@@ -74,6 +77,9 @@ class HomeVC: UITableViewController {
 
         // (7) NO OFFSCREEN RENDERING
         if (row == 8) { self.navigationController?.show(NoOffscreenRenderingVC(), sender: nil) }
+        
+        // (8) ASYNCDISPLAYKIT
+        if (row == 9) { self.navigationController?.show(AsyncDisplayKitVC(), sender: nil) }
     }
 
 }
