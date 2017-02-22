@@ -8,24 +8,24 @@ class HomeVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 4
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = indexPath.row
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         
         // (0) BEST CASE SCENARIO
-        if (row == 0) {
-            cell.textLabel?.text = "0 - Best case scenario"
-            cell.detailTextLabel?.text = ""
-        }
+        if (row == 0) { cell.textLabel?.text = "0 - Best case scenario" }
 
-        // (1) WORST CASE SCENARIO
-        if (row == 1) {
-            cell.textLabel?.text = "0 - Worst case scenario"
-            cell.detailTextLabel?.text = ""
-        }
+        // (0) WORST CASE SCENARIO
+        if (row == 1) { cell.textLabel?.text = "0 - Worst case scenario" }
+
+        // (1) REUSING CELLS
+        if (row == 2) { cell.textLabel?.text = "1 - Reusing cells" }
+
+        // (2) STATIC CELLS
+        if (row == 3) { cell.textLabel?.text = "2 - Static cells" }
 
         return cell
     }
@@ -36,8 +36,14 @@ class HomeVC: UITableViewController {
         // (0) BEST CASE SCENARIO
         if (row == 0) { self.navigationController?.show(BestCaseScenarioVC(), sender: nil) }
 
-        // (1) WORST CASE SCENARIO
+        // (0) WORST CASE SCENARIO
         if (row == 1) { self.navigationController?.show(WorstCaseScenarioVC(), sender: nil) }
+
+        // (1) REUSING CELLS
+        if (row == 2) { self.navigationController?.show(ReusingCellsVC(), sender: nil) }
+
+        // (2) STATIC CELLS
+        if (row == 3) { self.navigationController?.show(StaticCellsVC(), sender: nil) }
     }
 
 }

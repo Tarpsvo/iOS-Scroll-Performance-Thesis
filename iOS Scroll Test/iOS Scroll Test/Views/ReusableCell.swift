@@ -1,5 +1,5 @@
-protocol ReusableCell {
-    
-    func updateFromMessage(message: Message)
-    
+import UIKit
+
+class ReusableCell: UITableViewCell {
+    func updateFromMessage(message: Message) {}
 }
