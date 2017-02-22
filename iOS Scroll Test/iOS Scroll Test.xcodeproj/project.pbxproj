@@ -127,10 +127,10 @@
 				69079CE19DDF433BFE5E59F2 /* Views */,
 				690792C42C6378D4A67EE8D9 /* Types */,
 				690791FBA2FDD91DD8C3F452 /* Extensions */,
+				6907994890D1B78A62BCD562 /* Utils */,
 				69079F7145C26C6FC42C3F55 /* LaunchScreen.storyboard */,
 				3D485F6A1E5CD65F00AC21D2 /* Info.plist */,
 				69079F27469679F84A1FC791 /* Assets.xcassets */,
-				6907994890D1B78A62BCD562 /* Utils */,
 			);
 			path = "iOS Scroll Test";
 			sourceTree = "<group>";
@@ -201,9 +201,6 @@
 			children = (
 				69079FE924C91B854EA1DFA1 /* 0-BestCaseScenario */,
 				690793DAE9D7AF5DD8FACCAA /* 0-WorstCaseScenario */,
-				690790447E90060C5D6104DA /* BaseVC.swift */,
-				690792DE1D3425FCB4C61FD0 /* HomeVC.swift */,
-				690798BC4B2925087D85FA2E /* ReusableCell.swift */,
 				6907969AA6AFB8DF1D926B15 /* 1-ReusingCells */,
 				690796A0287B7DF94BEE73C1 /* 2-StaticCells */,
 				69079E4F20A612927857AE40 /* 3-ManualHeightCalc */,
@@ -211,6 +208,9 @@
 				69079236C3DE0D49D8162CC0 /* 5-ImageOptimization */,
 				69079F3D046D7AAB3903FE7B /* 6-LayerRasterization */,
 				69079DFCA91607ED6C3D4261 /* 7-NoOffscreenRendering */,
+				690790447E90060C5D6104DA /* BaseVC.swift */,
+				690792DE1D3425FCB4C61FD0 /* HomeVC.swift */,
+				690798BC4B2925087D85FA2E /* ReusableCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
