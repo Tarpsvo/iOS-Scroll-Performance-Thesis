@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D12F76C1E5DF613000AB8D4 /* MessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D12F76B1E5DF613000AB8D4 /* MessageStore.swift */; };
 		69079163B755983E9FF8ABF5 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079F76E0FE9708012709C7 /* Message.swift */; };
 		690791A183A35EEADC5E58DE /* BaseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690790447E90060C5D6104DA /* BaseVC.swift */; };
 		69079275437EB58BC5B533DD /* BestCaseScenarioVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079657B6F235E26260CC49 /* BestCaseScenarioVC.swift */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		11F7F934C5823394194CDFAE /* Pods-iOS Scroll Test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Scroll Test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS Scroll Test/Pods-iOS Scroll Test.debug.xcconfig"; sourceTree = "<group>"; };
+		3D12F76B1E5DF613000AB8D4 /* MessageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageStore.swift; sourceTree = "<group>"; };
 		3D485F6A1E5CD65F00AC21D2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3E6105C45F52561B48F79A1A /* Pods-iOS Scroll Test.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Scroll Test.release.xcconfig"; path = "Pods/Target Support Files/Pods-iOS Scroll Test/Pods-iOS Scroll Test.release.xcconfig"; sourceTree = "<group>"; };
 		690790447E90060C5D6104DA /* BaseVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseVC.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 		6907994890D1B78A62BCD562 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				3D12F76B1E5DF613000AB8D4 /* MessageStore.swift */,
 				690791F13514F393EB5CBC95 /* ImageOptimizer.swift */,
 			);
 			path = Utils;

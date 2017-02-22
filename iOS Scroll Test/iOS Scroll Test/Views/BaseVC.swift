@@ -35,13 +35,7 @@ class BaseVC: UIViewController {
         self._benchmarkButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(benchmarkButtonTapped)))
         
         // load messages
-        if let path = Bundle.main.path(forResource: "MessagesJSON", ofType: "json") {
-            let jsonData = try! NSData(contentsOfFile: path, options: .mappedIfSafe) as Data
-            let json = JSON(jsonData)
-            self._messages = json.map(Message.init)
-        } else {
-            self._messages = []
-        }
+        self._messages = MessageStore.messages
     }
     
     required init?(coder aDecoder: NSCoder) {
