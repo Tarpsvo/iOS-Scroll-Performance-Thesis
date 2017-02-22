@@ -8,7 +8,7 @@ class HomeVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return 7
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -33,6 +33,9 @@ class HomeVC: UITableViewController {
         // (4) HEIGHT CACHING
         if (row == 5) { cell.textLabel?.text = "4 - Height caching" }
 
+        // (5) IMAGE OPTIMIZATIONS
+        if (row == 6) { cell.textLabel?.text = "5 - Image optimizations" }
+
         return cell
     }
     
@@ -56,6 +59,9 @@ class HomeVC: UITableViewController {
 
         // (4) HEIGHT CACHING
         if (row == 5) { self.navigationController?.show(HeightCachingVC(), sender: nil) }
+
+        // (5) IMAGE OPTIMIZATIONS
+        if (row == 6) { self.navigationController?.show(ImageOptimizationVC(), sender: nil) }
     }
 
 }

@@ -15,6 +15,7 @@
 		690795EC41C2CCB72980A254 /* JASON+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690798D53FA6557077B02703 /* JASON+Properties.swift */; };
 		690796AA40C4E2C0142413EB /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6907915D3F7758EAA83AA805 /* String.swift */; };
 		6907975ACC4D72EA1A788018 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690792DE1D3425FCB4C61FD0 /* HomeVC.swift */; };
+		690797F85233C797A3BDB3BA /* ImageOptimizationCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079B14AD47EACAD8B39068 /* ImageOptimizationCells.swift */; };
 		69079895E51DDE81237D14A8 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079B84697ACE6FB8D0EB6C /* UIColor.swift */; };
 		690798B6346FF28F54835A62 /* WorstCaseScenarioCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079174E2377A3F52663DAA /* WorstCaseScenarioCells.swift */; };
 		6907996904DB1718A8FC91D9 /* ManualHeightCalcVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690792C498997B5B16B056F1 /* ManualHeightCalcVC.swift */; };
@@ -22,9 +23,11 @@
 		69079A5BA17294B8F7A5148A /* Pairby.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079AF47495FB2F20C5D451 /* Pairby.swift */; };
 		69079AF295FE20C5CF0CA4ED /* HeightCachingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690791DF590FB9656D70A932 /* HeightCachingVC.swift */; };
 		69079B259DC84997B987150F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69079F7145C26C6FC42C3F55 /* LaunchScreen.storyboard */; };
+		69079B2C1FE9EA3E5B19AC9C /* ImageOptimizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690791F13514F393EB5CBC95 /* ImageOptimizer.swift */; };
 		69079B92E223F9B416BFB146 /* WorstCaseScenarioVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079A1848F47DE3000945FA /* WorstCaseScenarioVC.swift */; };
 		69079C45AB402497FC91616D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69079F27469679F84A1FC791 /* Assets.xcassets */; };
 		69079E17795A110FA0EBE92E /* ReusingCellsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6907984E08C6BE712482CCDA /* ReusingCellsCells.swift */; };
+		69079E4BA2E0412612E5F2DE /* ImageOptimizationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079821A239441F802021C5 /* ImageOptimizationVC.swift */; };
 		69079EDA35E564BB74FBFF07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6907993B43FA49C67C1FFABD /* AppDelegate.swift */; };
 		69079F2ABE6E379C021456B8 /* StaticCellsCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079FA40E9F6B6360F43776 /* StaticCellsCells.swift */; };
 		88D5734B1AF2C0790A24F3C8 /* Pods_iOS_Scroll_Test.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDEA02867525442C451667B0 /* Pods_iOS_Scroll_Test.framework */; };
@@ -38,9 +41,11 @@
 		6907915D3F7758EAA83AA805 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		69079174E2377A3F52663DAA /* WorstCaseScenarioCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorstCaseScenarioCells.swift; sourceTree = "<group>"; };
 		690791DF590FB9656D70A932 /* HeightCachingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeightCachingVC.swift; sourceTree = "<group>"; };
+		690791F13514F393EB5CBC95 /* ImageOptimizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageOptimizer.swift; sourceTree = "<group>"; };
 		690792C498997B5B16B056F1 /* ManualHeightCalcVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManualHeightCalcVC.swift; sourceTree = "<group>"; };
 		690792DE1D3425FCB4C61FD0 /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		69079657B6F235E26260CC49 /* BestCaseScenarioVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BestCaseScenarioVC.swift; sourceTree = "<group>"; };
+		69079821A239441F802021C5 /* ImageOptimizationVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageOptimizationVC.swift; sourceTree = "<group>"; };
 		6907984E08C6BE712482CCDA /* ReusingCellsCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusingCellsCells.swift; sourceTree = "<group>"; };
 		690798BC4B2925087D85FA2E /* ReusableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReusableCell.swift; sourceTree = "<group>"; };
 		690798D53FA6557077B02703 /* JASON+Properties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "JASON+Properties.swift"; sourceTree = "<group>"; };
@@ -49,6 +54,7 @@
 		690799544BE56E34BB24AE0F /* iOS Scroll Test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Scroll Test.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		69079A1848F47DE3000945FA /* WorstCaseScenarioVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WorstCaseScenarioVC.swift; sourceTree = "<group>"; };
 		69079AF47495FB2F20C5D451 /* Pairby.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pairby.swift; sourceTree = "<group>"; };
+		69079B14AD47EACAD8B39068 /* ImageOptimizationCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageOptimizationCells.swift; sourceTree = "<group>"; };
 		69079B84697ACE6FB8D0EB6C /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		69079BFEED5BDC7985C75BC3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		69079F27469679F84A1FC791 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -96,6 +102,15 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		69079236C3DE0D49D8162CC0 /* 5-ImageOptimization */ = {
+			isa = PBXGroup;
+			children = (
+				69079821A239441F802021C5 /* ImageOptimizationVC.swift */,
+				69079B14AD47EACAD8B39068 /* ImageOptimizationCells.swift */,
+			);
+			path = "5-ImageOptimization";
+			sourceTree = "<group>";
+		};
 		6907928301ED76D179B136B9 /* iOS Scroll Test */ = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +122,7 @@
 				69079F7145C26C6FC42C3F55 /* LaunchScreen.storyboard */,
 				3D485F6A1E5CD65F00AC21D2 /* Info.plist */,
 				69079F27469679F84A1FC791 /* Assets.xcassets */,
+				6907994890D1B78A62BCD562 /* Utils */,
 			);
 			path = "iOS Scroll Test";
 			sourceTree = "<group>";
@@ -146,6 +162,14 @@
 			path = "2-StaticCells";
 			sourceTree = "<group>";
 		};
+		6907994890D1B78A62BCD562 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				690791F13514F393EB5CBC95 /* ImageOptimizer.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
 		69079ABA2823745464B1BAE1 = {
 			isa = PBXGroup;
 			children = (
@@ -176,6 +200,7 @@
 				690796A0287B7DF94BEE73C1 /* 2-StaticCells */,
 				69079E4F20A612927857AE40 /* 3-ManualHeightCalc */,
 				69079001580A44691E1609C1 /* 4-HeightCaching */,
+				69079236C3DE0D49D8162CC0 /* 5-ImageOptimization */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -342,6 +367,9 @@
 				69079F2ABE6E379C021456B8 /* StaticCellsCells.swift in Sources */,
 				6907996904DB1718A8FC91D9 /* ManualHeightCalcVC.swift in Sources */,
 				69079AF295FE20C5CF0CA4ED /* HeightCachingVC.swift in Sources */,
+				69079E4BA2E0412612E5F2DE /* ImageOptimizationVC.swift in Sources */,
+				690797F85233C797A3BDB3BA /* ImageOptimizationCells.swift in Sources */,
+				69079B2C1FE9EA3E5B19AC9C /* ImageOptimizer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
