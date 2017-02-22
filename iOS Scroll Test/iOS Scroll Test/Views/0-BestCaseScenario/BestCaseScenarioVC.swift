@@ -24,6 +24,7 @@ class BestCaseScenarioVC: BaseVC, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = self._messages[indexPath.row]
         let cell = self._tableView.dequeueReusableCell(withIdentifier: "BestCaseScenarioCell", for: indexPath)
+        cell.backgroundColor = nil
         cell.textLabel?.text = (message.message != nil) ? message.message : "Media message with ID [\(message.id)]"
         return cell
     }
