@@ -1,11 +1,11 @@
-%%
-% Estonian Information Technology College stylepackage
-% Author: Tarvo Reinpalu <latex@trv.im>
-%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% Estonian Information Technology College stylepackage %%%%
+%%%%           Tarvo Reinpalu <latex@trv.im>              %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%
-% Constants
-%%
+%%%%%%%%%%%%%
+% Constants %
+%%%%%%%%%%%%%
 \def\university{ESTONIAN INFORMATION TECHNOLOGY COLLEGE}
 \def\title#1{\gdef\@title{#1}}
 \def\paper#1{\gdef\@paper{#1}}
@@ -14,30 +14,21 @@
 \def\supervisor#1{\gdef\@supervisor{#1}}
 \def\consultant#1{\gdef\@consultant{#1}}
 
-%%
-% Base configuration
-%%
+%%%%%%%%%%%%%%%%%%%%%%
+% Base configuration %
+%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{itk_thesis_eng}[20/02/2017 - Estonian IT College Style Package]
 
-%%
-% Style parameters
-%%
-\usepackage[hmargin={3.1cm, 2.54cm},vmargin=3.17cm]{geometry} % Page margins
-\brokenpenalty=10000 % Disallow page breaks at hyphens
+%%%%%%%%%%%%%%%%%%%%
+% Style parameters %
+%%%%%%%%%%%%%%%%%%%%
+\usepackage[hmargin={3.1cm, 2.54cm},vmargin=3.17cm]{geometry}
+\brokenpenalty=10000
 
-%%
-% Generation of list of stops (dots)
-%%
-\newcommand{\indexdotsep}{1.24}
-\newcommand{\indexdotfill}{
-  \leaders\hbox{$\m@th
-    \mkern\indexdotsep mu\hbox{.}
-    \mkern\indexdotsep mu$}\hfill}
-
-%%
-% Title page
-%%
+%%%%%%%%%%%%%%
+% Title page %
+%%%%%%%%%%%%%%
 \def\itkTitlePage{\newpage}
 \def\enditkTitlePage{\itkMakeTitlePage}
 
@@ -61,9 +52,9 @@
 	\vfill
 	{\large {Tallinn \the\year} \par}}
 
-%%
-% Create author declaration
-%%
+%%%%%%%%%%%%%%%%%%%%%%
+% Author declaration %
+%%%%%%%%%%%%%%%%%%%%%%
 \def\itkMakeAuthorDeclaration{
 	\newpage
 	\thispagestyle{empty}
@@ -88,16 +79,16 @@
 		\end{tabular}
 	\end{flushleft}}
 
-%%
-% Introduction page (include in contents, don't display number)
-%%
+%%%%%%%%%%%%%%%%%%%%%
+% Introduction page %
+%%%%%%%%%%%%%%%%%%%%%
 \def\introduction#1{
 	\section*{Introduction}
 	\addcontentsline{toc}{section}{Introduction}}
 
-%%
-% Image including
-%%
+%%%%%%%%%%%%%%%%%%%
+% Image inclusion %
+%%%%%%%%%%%%%%%%%%%
 \usepackage{float}
 \usepackage{graphicx}
 
