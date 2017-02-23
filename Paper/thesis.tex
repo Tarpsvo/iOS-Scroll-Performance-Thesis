@@ -72,14 +72,23 @@
 %%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \introduction{Introduction}
+Verbal feedback from smartphone users, online studies regarding the priorities of mobile application users\cite{AppSpeedStudyHP}\cite{AppSpeedStudyApigee} and the author's personal preference all indicate that mobile applications' performance is important. This is not a recent trend. The expectation of having no input lag has been around as long as the technological devices that require user input have existed.\cite{NielsenUsabilityEngineering} Even the slightest delay (anything above 0.1s) is not considered instantaneous by users and anything above 1 second results in the user's flow of thought to be interrupted and focus to be lost.\cite{NielsenUsabilityEngineering} That is enough information to conclude that not only do the users expect a smooth and fast user experience, it is actually necessary to retain the user's attention.
 
-\subsection*{Description of the problem}
+Pairby's mobile applications are no exception when it comes to that good user experience requirement. Pairby, of which the author is a co-founder of, is a mobile dating service which has applications on both iOS and Android platforms. The thesis subject is directly derived from the author's interest in solving a performance issue in the iOS application.
 
-\subsection*{Problem background}
+\introductionSubsection{Description of the problem}
+Pairby iOS application contains, among other views, a multitude of different vertically scrolling views, which can contain a theoretically unlimited amount of subviews. One of those vertically scrolling views is the message list view, which this thesis will focus on. The message list view's purpose is to render a list of messages using a \mintinline{swift}{UITableView} component, where each message could contain either text or images.
 
-\subsection*{Goal of the thesis}
+Pairby iOS application's first prototype version was scratched due to a massive performance issue in the message list view. Namely, scrolling up or down at a rapid speed in that view was so resource consuming on any older Apple device it froze the whole user interface. This behavior was deemed unacceptable by the Pairby team and development of that prototype was halted. It becamse apparent to the developer that something had been done wrong both in the development of the user interface and in the handling of the data in the model.
 
-\subsection*{Structure of the thesis}
+At the time of starting the thesis test project, the development of the new iOS application for Pairby had started, but a solution to the performance issue had not yet been found.
+
+\introductionSubsection{Goal of the thesis}
+The goal of the thesis was to analyze a number of different optimizations that can be done to the \mintinline{swift}{UITableView} component and its subviews (cells) in order to reduce the resource consumption on less powerful iOS devices and through that improve the responsiveness of the user interface. All optimizations were applied in a sequence, where the next one would complement the previous one, creating a more performant view after each optimization. The user interface was designed with the Pairby real-life application in mind: visually, the test project and the real life application share many similarities.
+
+Each optimization had to go through a pre-defined programmatic scrolling test while different aspects of the device's were monitored. The monitoring resulted in large data sets about the frame rate, CPU usage and memory usage, which were then analyzed and combined into general data about the test. These generalized values were then compared against existing results and the optimization's effectiveness was decided based on that.
+
+The expected end result was a \mintinline{swift}{UITableView} component that is performant even when the scroll speeds exceed the boundaries of realistic use cases.
 
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Specifications % % REVIEWED | T:   | G:   %
