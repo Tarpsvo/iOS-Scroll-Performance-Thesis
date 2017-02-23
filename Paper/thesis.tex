@@ -66,9 +66,9 @@
 %%%% Content chapters %%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%
-% Introduction %
-%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Introduction % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \introduction{Introduction}
 
@@ -80,9 +80,9 @@
 
 \subsection*{Structure of the thesis}
 
-%%%%%%%%%%%%%%%%%%
-% Specifications %
-%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Specifications % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Specifications}
 The test project was meant to broadly mimic the user interface of the real-life iOS application of Pairby. This could only be possible if there were a number of requirements set to the project's test data and user interface.
@@ -180,9 +180,9 @@ A two media item message should display the images side by side, with the image 
 \paragraph*{3 media items}
 A three media item message should display the images side by side, with the image widths and heights being 90 points.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-% Measuring performance %
-%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Measuring performance % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Measuring performance}
 To be able to gather quantifiable information and not base comparison points on visual judgement, there needed to be a way to run equal and repeatable tests and gather statistics based on numbers from each test. This was achieved in two different parts: the creation of a repeatable test case and figuring out how to gather statistics from each case.
@@ -212,9 +212,9 @@ This resulted with a list of the following metrics for each test:
   \item Average memory consumption
 \end{itemize}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Used third party libraries %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Used third party libraries % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Used third party libraries}
 Creating every aspect from scratch in the test project would have been to large of a task to cover in this thesis, therefore third-party solutions were used to simplify some tasks. The affected aspects were for example JSON parsing, image loading and caching, detailed logging and in-code constraint creation.
@@ -231,9 +231,9 @@ PINRemoteImage, also known as PINRemoteImageManager, is an image downloading, pr
 \subsection{XCGLogger}
 XCGLogger is a debug log framework for use in Swift projects.\cite{XCGLogger} XCGLogger improves Swift's built-in logging mechanism by adding a lot of useful, yet optional, information about every log statement. For example, it displays the thread name on which the log statement was executed on, without forcing the engineer to explicitly print out the thread name. The exact same goes for function names, file names and line numbers. Its uses and benefits in the test project are the same as the examples brought out previously (such as the identification of threads).
 
-%%%%%%%%%%%%%%%%%%%%%
-% Comparison points %
-%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Comparison points % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Comparison points}
 In order to be able to compare performance changes in the test project, we need some starting points. It was decided to use a best case scenario and a worst case scenario for starting points. Each of the tests should be run with the exact same data set, including the best and worst case scenario ones.
@@ -254,9 +254,9 @@ The worst case scenario should have the least possible amount of optimizations a
 Running the performance benchmarks yielded the following result:
 % TODO
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Performance optimizations %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Performance optimizations % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Performance optimizations}
 
