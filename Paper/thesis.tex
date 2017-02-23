@@ -185,7 +185,32 @@ A three media item message should display the images side by side, with the imag
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Measuring performance}
-Bla bla how measure.
+To be able to gather quantifiable information and not base comparison points on visual judgement, there needed to be a way to run equal and repeatable tests and gather statistics based on numbers from each test. This was achieved in two different parts: the creation of a repeatable test case and figuring out how to gather statistics from each case.
+
+\subsection{Repeatable test case}
+The repeatable test case's purpose was well defined from the start: it should simulate scrolling. And it should do it in a way that is exactly the same every time.
+
+To achieve this, \mintinline{swift}{UITableView}'s \mintinline{swift}{setContentOffset(contentOffset, animated: true)} function was used along with a repeating \mintinline{swift}{Timer}. The timer fired every 0.3 seconds and forced the view to scroll, starting from the top, towards the bottom every cycle. The scrolling was purposefully not linear, every cycle would increase it by a certain amount, which depended on a fixed parameter and the amount currently scrolled. This would bring an increasing scroll speed factor into play, which serves the purpose of simulating a real user scrolling.
+
+\subsection{Measuring test case performance}
+The only metric behind measuring scrolling performance was framerate. Measuring the framerate with high accuracy and in a deterministic manner was the key to giving metrics to test case performance. In addition to measuring the framerate, it was decided to analyze how framerate is dependant on the resource usage, so memory and processor usage were also monitored.
+
+Xcode is bundled with a Instruments tool, which also includes a Core Animation statistics monitor which displays the framerate of the application it attaches itself to.
+
+The tool was configured to extract the current framerate of the scroll view application every 1/10th of a second. The framerate numbers that were reported back while the programmatic scrolling test was running were placed into a spreadsheet and analytics were calculated based on the reported information.
+
+In addition to that, the tool was also configured to extract the memory and processor usage. Since precision in these metrics is not that important for our tests, the information sampling rate was set to once a second. The gathered information was also put into a spreadsheet and analytics were based on that.
+
+\subsection{Analyzing gathered metrics}
+In order to get a comprehensible view of the gathered data, the large sets of data had to be trimmed down to a small number of data points. For framerates, it was decided to use average and lowest framerate as the key indicators. For memory and processor usage, only averages were calculated.
+
+This resulted with a list of the following metrics for each test:
+\begin{itemize}
+  \item Average framerate (FPS)
+  \item Lowest framerate (FPS)
+  \item Average CPU usage
+  \item Average memory consumption
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Used third party libraries %
@@ -220,12 +245,20 @@ To achieve a text-only message list, all media messages were replaced at runtime
 
 From just a glance, it was obvious that the scrolling on this view was extremely smooth and most likely a constant 60 frames per second, which is the so called iOS golden standard.\cite{IntroducingAsyncDisplayKit}
 
-Running the performance benchmarks yielded the following statistics:
+Running the performance benchmarks yielded the following results:
 % TODO
 
 \subsection{Worst case scenario}
-The worst case scenario should have the least possible amount of optimizations and not follow any common performance boosting patterns. The data set was the same as the one provided in the best case scenario one, but media items were not been omitted in this case. All messages were displayed as was specified in the user 
+The worst case scenario should have the least possible amount of optimizations and not follow any common performance boosting patterns. The data set was the same as the one provided in the best case scenario one, but media items were not been omitted in this case. All messages were displayed as was specified in the user interface specifications. Scrolling in this view was noticeably slow and a lot of frames were dropped.
 
+Running the performance benchmarks yielded the following result:
+% TODO
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Performance optimizations %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\section{Performance optimizations}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
