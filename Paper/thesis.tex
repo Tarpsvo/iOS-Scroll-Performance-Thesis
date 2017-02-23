@@ -96,30 +96,19 @@ The type definition for the Message object.
 \vskip.2in
 
 % TODO: Make full width and add table reference
-\begin{tabular}{| l | l | l |}
-  \hline
-  Property & Type & Required \\
-  \hline
-  messageId & Integer & true \\
-  direction & String & true \\
-  message & String & false \\
-  mediaItems & String[] & false \\
-  \hline
-\end{tabular}
-
-\subsubsection*{Message properties}
-
-\paragraph{messageId}
-A unique identifier of integer type. The first message had a value of 0 and the sequence had an increment of 1.
-
-\paragraph{direction}
-A string value that can either be "in" or "out". Represents the direction of the message (either inbound or outbound).
-
-\paragraph{message}
-Text message's text as string. Not present in media messages.
-
-\paragraph{mediaItems}
-Media message's media item URL-s as a String array. Can contain 1 to 3 URL-s (inclusive). Not present in text messages.
+\begin{table}
+  \caption{Message type definition}
+  \begin{tabularx}{\textwidth}{| l | l | l | X |}
+    \hline
+    Property & Type & Required & Description \\
+    \hline
+    messageId & Integer & true & A unique identifier derived from a sequence starting at 0 with an increment of 1. \\
+    direction & String & true & Can be either "in" or "out", representing the direction of the message relative to the user. \\
+    message & String & false & Text message's text. Not present in media messages. \\
+    mediaItems & String[] & false & Media message's media URLs. Not present in text messages. \\
+    \hline
+  \end{tabularx}
+\end{table}
 
 \subsubsection*{Text message requirements}
 Text messages can vary in both width and height. Width is purely dependant on the length of the longest line of text in the message text. The height depends on the number of lines in the text. The number of lines in turn depends on whether the text is long enough to require text wrapping or contains line breaks.
