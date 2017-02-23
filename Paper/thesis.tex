@@ -15,14 +15,16 @@
 \usepackage{cite}
 \usepackage{parskip} % Define paragraph line-breaks
 \usepackage{mathptmx} % Apply Times New Roman font
-\usepackage[toc, xindy, style=list, nonumberlist]{glossaries} % Define glossary style
+\usepackage[toc, xindy, style=list, nonumberlist]{glossaries}
 \usepackage{url}
 \graphicspath{{img/}}
 \linespread{1.5}
 \usepackage{hyperref}
-\usepackage{titlesec}
+
+\usepackage{titlesec} % Make new sections start with a 1.5cm margin
 \newcommand{\sectionbreak}{\vspace*{1.5cm}}
-\usepackage{minted} % Code colouring
+
+\usepackage{minted} % Code coloring
 \usemintedstyle{vs}
 
 \begin{document}
@@ -68,7 +70,7 @@
 % Introduction %
 %%%%%%%%%%%%%%%%
 \newpage
-\introduction*{Introduction}
+\introduction{Introduction}
 
 \subsection*{Description of the problem}
 
