@@ -285,7 +285,7 @@ Reusing cells means that every time a new message enters the view, instead of cr
 
 This is beneficial to scrolling performance because it removes the necessity to create new views every time a new message needs to be rendered. The system overhead from allocating memory for each subview and garbage collector having to clean up views that are no longer rendered adds up when the user is scrolling rapidly and will cause hiccups in the user interface.
 
-\subsubsection{Performance improvements}
+\subsubsection{Performance changes}
 Cell reusing did yield an increase in the average frame rate, as expected, but the increase was not drastic.
 
 % TODO Comparisons, analytics, graphs
