@@ -275,7 +275,46 @@ Running the performance benchmarks yielded the following result:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Performance optimizations}
+Performance optimizations started by taking the code from the worst case scenario test case and applying the first optimization to it. The rest of the optimizations were then applied to one another in the same pattern.
+
 \subsection{Reusing cells}
+Cell reusing is one of the optimizations that was not necessarily easiest to implement, but was definitely the correct starting point, for this is something that requires fundamental changes to the way the views are handled.
+
+\subsubsection{Theoretical benefits}
+Reusing cells means that every time a new message enters the view, instead of creating a new instance of the cell class, an existing object created from that class is used. This will require the fundamental changes mentioned earlier: views will need to have the ability to re-adjust themselves depending on the type of message they're meant to display. Previously, views only needed to define their layout state once, upon initialization, and would no longer have to readjust themselves.
+
+This is beneficial to scrolling performance because it removes the necessity to create new views every time a new message needs to be rendered. The system overhead from allocating memory for each subview and garbage collector having to clean up views that are no longer rendered adds up when the user is scrolling rapidly and will cause hiccups in the user interface.
+
+\subsubsection{Performance improvements}
+Cell reusing did yield an increase in the average frame rate, as expected, but the increase was not drastic.
+
+% TODO Comparisons, analytics, graphs
+
+\subsubsection{Code examples}
+The \mintinline{swift}{UITableView} component has support for view recycling already built in, requiring very little effort from the software engineer. All the recyclable classes should be registered to the instance of the \mintinline{swift}{UITableView} class and they can be requested from the same instance later.
+
+Below is an example on how to register cell classes to be reused in a specific UITableView instance.
+\begin{listing}[H]
+  \caption{Registering cells to be reused on a specific UITableView instance}
+  \begin{minted}{swift}
+    self._tableView.register(ReusingCells_TextCell.self, forCellReuseIdentifier: "ReusingCells_TextCell")
+    self._tableView.register(ReusingCells_MediaCell.self, forCellReuseIdentifier: "ReusingCells_MediaCell")
+  \end{minted}
+\end{listing}
+
+Below is an example on how to query and use recycled cells in the same UITableView instance.
+\begin{listing}[H]
+  \caption{Using recycled cells in the test project}
+  \begin{minted}{swift}
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+      let message = self._messages[indexPath.row]
+      let cellIdentifier = (message.mediaItems == nil) ? "ReusingCells_TextCell" : "ReusingCells_MediaCell"
+      let cell = self._tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! ReusableCell
+      cell.updateFromMessage(message: message)
+      return cell
+    }
+  \end{minted}
+\end{listing}
 
 \subsection{Static views}
 
