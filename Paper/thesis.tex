@@ -323,6 +323,45 @@ Below is an example on how to query and use recycled cells in the same UITableVi
 % Static layouts % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Making cell views' layout static}
+Changing views by creating and removing both views and constraints was the next obvious performance degrader. The solution to this problem was simple: create specific views for each different view and only change their content. This meant that instead of the two different table cell views that existed at that point, there would be eight different views. These new views would technically have a static layout.
+
+List of necessary cell views to make views with a static layout possible:
+\begin{itemize}
+  \item Inbound text message view
+  \item Outbound text message view
+  \item Inbound media item view (1 media item)
+  \item Outbound media item view (1 media items)
+  \item Inbound media item view (2 media items)
+  \item Outbound media item view (2 media items)
+  \item Inbound media item view (3 media items)
+  \item Outbound media item view (3 media items)
+\end{itemize}
+
+\subsubsection{Theoretical benefits}
+The most straightforward benefit is the fact that this solution would remove the overhead of adding and removing of both subviews and their constraints. This is similar to the previous optimization, but on a smaller scale. In this case, the inner views were being removed and recreated every time a cell needed to be displayed. 
+
+\subsubsection{Performance changes}
+Making the views' layout static yielded a more significant increase in the scroll performance compared to the cell reusing optimization. The increase in performance was expected.
+
+% TODO Comparisons, analytics, graphs
+
+\subsubsection{Code examples}
+This also changed the code for reusing the cells. After re-working the cell views, 8 different views needed to be registered to be recycled and that in turn made the logic of querying reusable cells a bit more difficult.
+
+Below is the new code where the 8 new views are registered in the main \mintinline{swift}{UITableView} instance:
+\begin{listing}[H]
+  \caption{Using recycled cells in the test project}
+  \begin{minted}{swift}
+    self._tableView.register(StaticCells_TextCell_In.self, forCellReuseIdentifier: "StaticCells_TextCell_In")
+    self._tableView.register(StaticCells_TextCell_Out.self, forCellReuseIdentifier: "StaticCells_TextCell_Out")
+    self._tableView.register(StaticCells_MediaCell_1_In.self, forCellReuseIdentifier: "StaticCells_MediaCell_1_In")
+    self._tableView.register(StaticCells_MediaCell_1_Out.self, forCellReuseIdentifier: "StaticCells_MediaCell_1_Out")
+    self._tableView.register(StaticCells_MediaCell_2_In.self, forCellReuseIdentifier: "StaticCells_MediaCell_2_In")
+    self._tableView.register(StaticCells_MediaCell_2_Out.self, forCellReuseIdentifier: "StaticCells_MediaCell_2_Out")
+    self._tableView.register(StaticCells_MediaCell_3_In.self, forCellReuseIdentifier: "StaticCells_MediaCell_3_In")
+    self._tableView.register(StaticCells_MediaCell_3_Out.self, forCellReuseIdentifier: "StaticCells_MediaCell_3_Out")
+  \end{minted}
+\end{listing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Manual cell height calculations % % REVIEWED | T:   | G:   %
