@@ -24,14 +24,8 @@ class ReusingCellsVC: BaseVC, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = self._messages[indexPath.row]
-        
-        if (message.mediaItems != nil) {
-            let cell = self._tableView.dequeueReusableCell(withIdentifier: "ReusingCells_MediaCell", for: indexPath) as! ReusableCell
-            cell.updateFromMessage(message: message)
-            return cell
-        }
-        
-        let cell = self._tableView.dequeueReusableCell(withIdentifier: "ReusingCells_TextCell", for: indexPath) as! ReusableCell
+        let cellIdentifier = (message.mediaItems == nil) ? "ReusingCells_TextCell" : "ReusingCells_MediaCell"
+        let cell = self._tableView.dequeueReusableCell(withIdentifier: cellIdentifier) as! ReusableCell
         cell.updateFromMessage(message: message)
         return cell
     }
