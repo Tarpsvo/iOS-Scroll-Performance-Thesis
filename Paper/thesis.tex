@@ -261,7 +261,11 @@ Running the performance benchmarks yielded the following results:
 % TODO
 
 \subsection{Worst case scenario}
-The worst case scenario should have the least possible amount of optimizations and not follow any common performance boosting patterns. The data set was the same as the one provided in the best case scenario one, but media items were not been omitted in this case. All messages were displayed as was specified in the user interface specifications. Scrolling in this view was noticeably slow and a lot of frames were dropped.
+The worst case scenario should have the least possible amount of optimizations and not follow any common performance boosting patterns. The data set was the same as the one provided in the best case scenario one, but media items were not been omitted in this case. All messages were displayed as was specified in the user interface specifications.
+
+To render both text and media message views, two different view classes that inherited from \mintinline{swift}{UITableViewCell} were created. One for displaying text messages, the second one for displaying media messages.
+
+Scrolling in this view was noticeably slow and a lot of frames were dropped.
 
 Running the performance benchmarks yielded the following result:
 % TODO
