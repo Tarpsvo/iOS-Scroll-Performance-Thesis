@@ -277,6 +277,9 @@ Running the performance benchmarks yielded the following result:
 \section{Performance optimizations}
 Performance optimizations started by taking the code from the worst case scenario test case and applying the first optimization to it. The rest of the optimizations were then applied to one another in the same pattern.
 
+%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Reusing cells % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Reusing cells}
 Cell reusing is one of the optimizations that was not necessarily easiest to implement, but was definitely the correct starting point, for this is something that requires fundamental changes to the way the views are handled.
 
@@ -316,18 +319,39 @@ Below is an example on how to query and use recycled cells in the same UITableVi
   \end{minted}
 \end{listing}
 
-\subsection{Static views}
+%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Static layouts % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Making cell views' layout static}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Manual cell height calculations % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Manual cell height calculations}
 
+%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cell height caching % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Cell height caching}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Optimizing image sizes % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Optimizing image sizes}
 
+%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Layer rasterization % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Rasterizing cell layers}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Avoiding offscreen rendering % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Avoiding offscreen rendering}
 
+%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% AsyncDisplayKit % % REVIEWED | T:   | G:   %
+%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{ASyncDisplayKit}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
