@@ -367,6 +367,13 @@ Below is the new code where the 8 new views are registered in the main \mintinli
 % Manual cell height calculations % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Manual cell height calculations}
+So far, the cell height calculations had been done automatically. This was possible due to the \mintinline{swift}{UITableView} instance's property \mintinline{swift}{rowHeight} being set to \mintinline{swift}{UITableViewAutomaticDimension}. According to a multitude of sources, these automatic calculations are often slow and it's sensible to override them with manual calculations that will do the bare minimum.\cite{PerfectSmoothScrollingInUITableViews}\cite{HowToMakeDynamicTableViewCellHeight}
+
+\subsubsection{Theoretical benefits}
+
+\subsubsection{Performance changes}
+
+\subsubsection{Code examples}
 
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Cell height caching % % REVIEWED | T:   | G:   %
