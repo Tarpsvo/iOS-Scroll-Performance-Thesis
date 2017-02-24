@@ -110,12 +110,22 @@
 % Table captions %
 %%%%%%%%%%%%%%%%%%
 \usepackage{caption}
- \captionsetup[table]{
+\captionsetup[table]{
   labelsep=newline,
-  name=Table,
   justification=raggedleft,
   singlelinecheck=false,
   labelsep=newline,
   labelfont=bf,
   skip=8pt}
 
+%%%%%%%%%%%%%%%%%%%%%
+% Listings captions %
+%%%%%%%%%%%%%%%%%%%%%
+\captionsetup[listing]{
+  labelsep=colon,
+  name=Code,
+  justification=raggedright,
+  singlelinecheck=false,
+  font=bf,
+  labelfont=bf,
+  skip=4pt}
