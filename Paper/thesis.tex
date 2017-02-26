@@ -460,7 +460,24 @@ As expected, the performace improved slightly.
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Layer rasterization % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Rasterizing cell layers}
+\subsection{Rasterization of cell layers}
+Rasterization in the iOS view rendering context means turning the view into a more efficiently renderable and cachable bitmap. Layer rasterization is a built in technique to the \mintinline{swift}{CALayer} part of the views.
+
+\subsubsection*{Theoretical benefits}
+All the views expect the ones containing animated images are static once rendered and will not change. This is one of the requirements to reap benefits from layer rasterization. Rasterization process does consume resources at first, but once done, the view will be handled much more efficiently by the rendering engine due to the fact that the GPU can use the cached bitmap instead of re-drawing the view.\cite{MovingPixelsOntoTheScreen}
+
+\subsubsection*{Performance changes}
+Performance did improve.
+
+\subsubsection*{Code examples}
+In order to enable rasterization of the views, only two lines of code need to be written. Below is the example of the two lines of code. The first one enabled rasterization and the second one tells the rasterization mechanism to use a certain scale to compensate for the fact that some devices are using retina screens and require views to be scaled up.
+\begin{listing}[H]
+  \caption{Rasterizing views}
+  \begin{minted}{swift}
+    self.view.layer.shouldRasterize = true
+    self.view.layer.rasterizationScale = UIScreen.main.scale
+  \end{minted}
+\end{listing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Avoiding offscreen rendering % % REVIEWED | T:   | G:   %
