@@ -45,14 +45,14 @@ class ManualHeightCalcVC: BaseVC, UITableViewDelegate, UITableViewDataSource {
         let message = self._messages[indexPath.row]
         if let mediaItems = message.mediaItems {
             let baseHeight = (mediaItems.count == 1) ? Pairby.MessageUI.HEIGHT_MEDIA_ONE : Pairby.MessageUI.HEIGHT_MEDIA_MULTIPLE
-            let verticalMargin = (2 * Pairby.MessageUI.MARGIN_VERTICAL_WRAP)
-            return (baseHeight + verticalMargin)
+            let verticalMarginsSum = (2 * Pairby.MessageUI.MARGIN_VERTICAL_WRAP)
+            return (baseHeight + verticalMarginsSum)
         }
         
-        let MaxWidth = (self._tableView.frame.size.width - (2 * Pairby.MessageUI.MARGIN_HORIZONTAL) - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_DYNAMIC - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_FIXED)
-        let HeightAdd = (2 * Pairby.MessageUI.MARGIN_VERTICAL + 2 * Pairby.MessageUI.MARGIN_VERTICAL_WRAP)
-        let Height = ceil(message.message!.heightWithConstrainedWidth(width: MaxWidth, font: Pairby.MessageUI.TEXT_FONT))
-        return (Height + HeightAdd)
+        let maximumWidth = (self._tableView.frame.size.width - (2 * Pairby.MessageUI.MARGIN_HORIZONTAL) - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_DYNAMIC - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_FIXED)
+        let verticalMarginsSum = (2 * Pairby.MessageUI.MARGIN_VERTICAL + 2 * Pairby.MessageUI.MARGIN_VERTICAL_WRAP)
+        let baseHeight = ceil(message.message!.heightWithConstrainedWidth(width: maximumWidth, font: Pairby.MessageUI.TEXT_FONT))
+        return (baseHeight + verticalMarginsSum)
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
