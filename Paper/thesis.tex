@@ -537,6 +537,31 @@ In order to work around using CALayer's corner radius when drawing text cell vie
 % AsyncDisplayKit % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{ASyncDisplayKit}
+AsyncDisplayKit is an iOS framework built on top of UIKit that keeps even the most complex user interfaces smooth and responsive.\cite{IntroducingAsyncDisplayKit} This library's goal was to make even the most complex views have a 60 frames per second performance in iOS applications by moving the rendering off the main threads.
+
+In order to test this out, a best case scenario view was built, just like it was built with UIKit, but instead, AsyncDisplayKit's classes and methodologies were used.
+
+\subsubsection*{Theoretical benefits}
+The theoretical result for using ASyncDisplayKit would be the same as their purpose: providing the user with a smooth, constant 60 frames per second user interface.
+
+\subsubsection*{Performance changes}
+The performance for ASyncDisplayKit was very bad and comparably worse than that of iOS's built in UIKit's worst case scenario.
+
+\subsubsection*{Code examples}
+Below is a code example of how cells were created and returned to be used in the user interface, following AsyncDisplayKit's concentions.
+\begin{listing}[H]
+  \caption{Creating and using cells with AsyncDisplayKit's classes}
+  \begin{minted}{swift}
+    func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
+      let message = self._messages[indexPath.row]
+      return {
+        let cell = ASTextCellNode()
+        cell.text = (message.message != nil) ? message.message! : "Media message with ID [\(message.id)]"
+        return cell
+      }
+    }
+  \end{minted}
+\end{listing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % End result comparisons % % REVIEWED | T:   | G:   %
