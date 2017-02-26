@@ -482,7 +482,56 @@ In order to enable rasterization of the views, only two lines of code need to be
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Avoiding offscreen rendering % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Avoiding offscreen rendering}
+\subsection{Avoiding unnecessary offscreen rendering}
+Offscreen rendering renders the required view into a new buffer (bitmap cache) which is offscreen (not on the screen) and then that buffer is drawn onto the screen. Compared to the conventional way of drawing the views piece by piece on the screen. For example, rasterization takes place offscreen as the view is composed into a bitmap and then the bitmap is drawn onto the screen.
+
+Offscreen rendering is only beneficial to performance if the GPU can use the composed bitmap later on as well. This is only the case for  views containing static images and text. For views containing animated images, offscreen rendering would only add unnecessary strain on the GPU.
+
+Layer rasterization was one way of manually triggering offscreen rendering. Offscreen rendering can also be triggered automatically by Core Animation. This would happen for example when a mask is directly or indirectly applied to a layer. That would force Core Animation to do offscreen rendering in order to apply that mask. This will in turn, as stated earlier, put unnecessary burden on the GPU.\cite{MovingPixelsOntoTheScreen}
+
+In order to reap full benefits from rasterization of the layers, all other direct or indirect causes of offscreen rendering should be avoided. For example indirect causes for offscreen rendering are applying shadows and corner radiuses to the layer, the latter of which the test project does for all cells to create the chat bubble effect.\cite{MovingPixelsOntoTheScreen}
+
+\subsubsection*{Theoretical benefits}
+The main benefit for this is to avoid unnecessary work on the CPU and GPU when rendering views, which should lead to a much faster UI when scrolling. 
+
+\subsubsection*{Performance changes}
+Performance increase significantly!
+
+\subsubsection*{Code examples}
+In order to work around using CALayer's corner radius when drawing text cell views, the background with a corner radius could be drawn manually. This was achieved by creating a custom wrapper view for the text that knows how to draw the background efficiently. Below is the code for that view, which shows the background color being customizable and the draw method being only aware of drawing a rectangle with rounded corners.
+\begin{listing}[H]
+  \caption{Custom wrapper view for text message view with rounded corners that avoids offscreen rendering}
+  \begin{minted}{swift}
+    class NoOffscreenRendering_TextCell_LabelWrapView: UIView {
+      private var _fillColor: UIColor?
+
+      override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = Pairby.Colors.GRAY_BG
+      }
+
+      convenience init() {
+        self.init(frame: CGRect.zero)
+      }
+
+      required init(coder aDecoder: NSCoder) {
+        fatalError("This class does not support NSCoding")
+      }
+
+      func fillWith(color: UIColor) {
+        self._fillColor = color
+        self.setNeedsDisplay()
+      }
+
+      override func draw(_ rect: CGRect) {
+        UIBezierPath(roundedRect: rect, cornerRadius: 15.0).addClip()
+        self._fillColor?.setFill()
+        UIBezierPath(rect: rect).fill()
+      }
+    }
+  \end{minted}
+\end{listing}
+
 
 %%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % AsyncDisplayKit % % REVIEWED | T:   | G:   %
