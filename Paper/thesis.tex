@@ -280,17 +280,17 @@ Performance optimizations started by taking the code from the worst case scenari
 \subsection{Reusing cells}
 Cell reusing is one of the optimizations that was not necessarily easiest to implement, but was definitely the correct starting point, for this is something that requires fundamental changes to the way the views are handled.
 
-\subsubsection{Theoretical benefits}
+\subsubsection*{Theoretical benefits}
 Reusing cells means that every time a new message enters the view, instead of creating a new instance of the cell class, an existing object created from that class is used. This will require the fundamental changes mentioned earlier: views will need to have the ability to re-adjust themselves depending on the type of message they're meant to display. Previously, views only needed to define their layout state once, upon initialization, and would no longer have to readjust themselves.
 
 This is beneficial to scrolling performance because it removes the necessity to create new views every time a new message needs to be rendered. The system overhead from allocating memory for each subview and garbage collector having to clean up views that are no longer rendered adds up when the user is scrolling rapidly and will cause hiccups in the user interface.
 
-\subsubsection{Performance changes}
+\subsubsection*{Performance changes}
 Cell reusing did yield an increase in the average frame rate, as expected, but the increase was not drastic.
 
 % TODO Comparisons, analytics, graphs
 
-\subsubsection{Code examples}
+\subsubsection*{Code examples}
 The \mintinline{swift}{UITableView} component has support for view recycling already built in, requiring very little effort from the software engineer. All the recyclable classes should be registered to the instance of the \mintinline{swift}{UITableView} class and they can be requested from the same instance later.
 
 Below is an example on how to register cell classes to be reused in a specific UITableView instance.
@@ -334,15 +334,15 @@ List of necessary cell views to make views with a static layout possible:
   \item Outbound media item view (3 media items)
 \end{itemize}
 
-\subsubsection{Theoretical benefits}
+\subsubsection*{Theoretical benefits}
 The most straightforward benefit is the fact that this solution would remove the overhead of adding and removing of both subviews and their constraints. This is similar to the previous optimization, but on a smaller scale. In this case, the inner views were being removed and recreated every time a cell needed to be displayed. 
 
-\subsubsection{Performance changes}
+\subsubsection*{Performance changes}
 Making the views' layout static yielded a more significant increase in the scroll performance compared to the cell reusing optimization. The increase in performance was expected.
 
 % TODO Comparisons, analytics, graphs
 
-\subsubsection{Code examples}
+\subsubsection*{Code examples}
 This also changed the code for reusing the cells. After re-working the cell views, 8 different views needed to be registered to be recycled and that in turn made the logic of querying reusable cells a bit more difficult.
 
 Below is the new code where the 8 new views are registered in the main \mintinline{swift}{UITableView} instance:
@@ -363,12 +363,12 @@ Below is the new code where the 8 new views are registered in the main \mintinli
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Manual cell height calculations % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Manual cell height calculations}
+\subsection{Manual cell height calculations}\label{subsection:ManualCellHeightCalculations}
 So far, the cell height calculations had been done automatically. This was possible due to the \mintinline{swift}{UITableView} instance's property \mintinline{swift}{rowHeight} being set to \mintinline{swift}{UITableViewAutomaticDimension}. According to a multitude of sources, these automatic calculations are often slow and it's sensible to override them with manual calculations that will do the bare minimum.\cite{PerfectSmoothScrollingInUITableViews}\cite{HowToMakeDynamicTableViewCellHeight}
 
-\subsubsection{Theoretical benefits}
+\subsubsection*{Theoretical benefits}
 
-\subsubsection{Performance changes}
+\subsubsection*{Performance changes}
 
 \subsubsection{Code examples}
 
