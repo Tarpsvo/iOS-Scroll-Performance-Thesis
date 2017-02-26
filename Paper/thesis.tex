@@ -367,10 +367,47 @@ Below is the new code where the 8 new views are registered in the main \mintinli
 So far, the cell height calculations had been done automatically. This was possible due to the \mintinline{swift}{UITableView} instance's property \mintinline{swift}{rowHeight} being set to \mintinline{swift}{UITableViewAutomaticDimension}. According to a multitude of sources, these automatic calculations are often slow and it's sensible to override them with manual calculations that will do the bare minimum.\cite{PerfectSmoothScrollingInUITableViews}\cite{HowToMakeDynamicTableViewCellHeight}
 
 \subsubsection*{Theoretical benefits}
+Doing the cell height calculations manually using optimized calculations improves the performance when scrolling at high speeds. When doing manual calculations, it's trivial to optimize the calculations for the type of cells the application should be able to render. For example, media cells have a fixed height and calculations are actually not necessary in that case.
 
 \subsubsection*{Performance changes}
+Manual cell height calculations improved the performance of rapid scrolling.
 
-\subsubsection{Code examples}
+% TODO Analysis, tests, graphs
+
+\subsubsection*{Code examples}
+The cell height calculations overwriting has to occur in the function displayed below.
+\begin{listing}[H]
+  \caption{Overwriting cell height calculations}
+  \begin{minted}{swift}
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+      return UITableViewAutomaticDimension
+    }
+  \end{minted}
+\end{listing}
+
+Calculating the height for media item cells was trivial since they have a fixed height and fixed vertical margins. Below is an example on how the height for media item cells was calculated.
+\begin{listing}[H]
+  \caption{Calculating media cell's height}
+  \begin{minted}{swift}
+    let message = self._messages[indexPath.row]
+    if let mediaItems = message.mediaItems {
+      let baseHeight = (mediaItems.count == 1) ? Pairby.MessageUI.HEIGHT_MEDIA_ONE : Pairby.MessageUI.HEIGHT_MEDIA_MULTIPLE
+      let verticalMarginsSum = (2 * Pairby.MessageUI.MARGIN_VERTICAL_WRAP)
+      return (baseHeight + verticalMarginsSum)
+    }
+  \end{minted}
+\end{listing}
+
+Calculating the height for text cells was more difficult as the text height could vary depending on the number of lines the text would require. The number of lines in turn was dependant on the length of the text and the screen width of the device. Below is an example on how to calculate the height for the text message cell from the text.
+\begin{listing}[H]
+  \caption{Calculating text cell's height}
+  \begin{minted}{swift}
+    let maximumWidth = (self._tableView.frame.size.width - (2 * Pairby.MessageUI.MARGIN_HORIZONTAL) - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_DYNAMIC - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_FIXED)
+    let verticalMarginsSum = (2 * Pairby.MessageUI.MARGIN_VERTICAL + 2 * Pairby.MessageUI.MARGIN_VERTICAL_WRAP)
+    let baseHeight = ceil(message.message!.heightWithConstrainedWidth(width: maximumWidth, font: Pairby.MessageUI.TEXT_FONT))
+    return (baseHeight + verticalMarginsSum)
+  \end{minted}
+\end{listing}
 
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Cell height caching % % REVIEWED | T:   | G:   %
