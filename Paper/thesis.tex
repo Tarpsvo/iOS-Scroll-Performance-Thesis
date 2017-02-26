@@ -413,6 +413,29 @@ Calculating the height for text cells was more difficult as the text height coul
 % Cell height caching % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Cell height caching}
+The next step after the previous optimizations of doing calculations manually was to cache the calculation results in memory. To make caching possible, another property had to be added to the Message object, called cachedHeight of CGFloat type.
+
+\subsubsection*{Theoretical benefits}
+Even though this would not change anything the first time the user scrolls the messages list, it would improve the speed of scrolling the next time they need to render the same cells again, since the calculation can be avoided.
+
+\subsubsection*{Performance changes}
+As expected, the scroll performance on the first time the user scrolls showed no change. The following scroll benchmarks displayed an increase in performance, as the height calculations were ignored.
+
+\subsubsection*{Code examples}
+The cache was a simple Dictionary where the key was the message's row index and the value was its height as a CGFloat type. Below is an example of the whole cycle of caching and using the cache. The calculations have been omitted from this code, they can be seen in section \ref{subsection:ManualCellHeightCalculations}. 
+\begin{listing}[H]
+  \caption{Caching and using cached height}
+  \begin{minted}{swift}
+    private var _heightCache: [Int: CGFloat] = [:]
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let height = self._heightCache[indexPath.row] { return height }
+        // else do the height calculations
+        self._heightCache[indexPath.row] = (Height + HeightAdd)
+        return self._heightCache[indexPath.row]!
+    }
+  \end{minted}
+\end{listing}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Optimizing image sizes % % REVIEWED | T:   | G:   %
