@@ -441,6 +441,21 @@ The cache was a simple Dictionary where the key was the message's row index and 
 % Optimizing image sizes % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Optimizing image sizes}
+The message threads can contain a large number of media items. The test data was generated with this in mind and it also contains a large number of media - both animated and static images. This raised the question: is there anything that can be done to optimize for the large number of images?
+
+Since PINRemoteImage already enabled the option to do image processing and caching of the processed images, it was decided to try and optimize the image sizes for the screen of the device they're being rendered on and the cell size. This means that when the images reach the view, they're already the exact size they should be and should not need any further processing (either up- or downscaling).
+
+However, it should be noted that this processing can only occur for static images. Processing animated images (GIFs) was too difficult to do and would require a lot of processing power, which would not be beneficial enough. Another downside to processed GIFs is the fact that multiple versions of the same GIF would be kept in he disk cache and due to their size, this would lead to a lot of the limited sized disk cache being used for only a few GIFs.
+
+\subsubsection*{Theoretical benefits}
+If the static images would no longer need any up- or downscaling in terms of processing, this should theoretically improve the rendering times of the media cells.
+
+\subsubsection*{Performance changes}
+As expected, the performace improved slightly.
+
+% TODO Graphs, analysis, whatevs
+
+\subsubsection*{Code examples}
 
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Layer rasterization % % REVIEWED | T:   | G:   %
