@@ -11,7 +11,7 @@ function generateMessages() {
     let messages = [];
     for (let i = 0; i < Config.MESSAGE_COUNT; i++) {
       // TEXT MESSAGE
-      if (Math.random() <= Config.MEDIA_MESSAGE_PROBABILITY) {
+      if (Math.random() > Config.MEDIA_MESSAGE_PROBABILITY) {
         messages.push({
           id: i,
           message: TextMessageGenerator(i),
