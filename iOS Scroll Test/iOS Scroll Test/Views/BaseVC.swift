@@ -11,6 +11,7 @@ class BaseVC: UIViewController {
     private var _scrollTimer: Timer?
     private var _benchmarkNeedsToStop: Bool = false
     private var _currentIndex: Int = 0
+    private var _increment: CGFloat = 0
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -47,9 +48,10 @@ class BaseVC: UIViewController {
     }
     
     func startBenchmark() {
+        self._increment = 100
         self._benchmarkButton.setTitle("STOP BENCHMARK", for: .normal)
         self._benchmarkRunning = true
-        self._scrollTimer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(scrollTimerActivate), userInfo: nil, repeats: true)
+        self._scrollTimer = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(scrollTimerActivate), userInfo: nil, repeats: true)
     }
     
     func stopBenchmark() {
@@ -66,12 +68,15 @@ class BaseVC: UIViewController {
         
         // calculate new data
         var contentOffset = self._tableView.contentOffset
-        contentOffset.y = (contentOffset.y + 600 + (self._tableView.contentSize.height / 50))
+        contentOffset.y = floor(contentOffset.y + 50 + self._increment)
         self._tableView.setContentOffset(contentOffset, animated: true)
         
         // calculate whether we need to stop
         let yPosition = (contentOffset.y + self._tableView.bounds.height - self._tableView.contentInset.bottom)
         if (yPosition >= self._tableView.contentSize.height) { self._benchmarkNeedsToStop = true }
+        
+        // increment
+        self._increment += 30
     }
 
 }
