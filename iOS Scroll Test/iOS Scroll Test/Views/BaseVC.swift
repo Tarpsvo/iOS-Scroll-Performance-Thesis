@@ -1,6 +1,7 @@
 import UIKit
 import SnapKit
 import JASON
+import FPSCounter
 
 class BaseVC: UIViewController {
 
@@ -12,9 +13,15 @@ class BaseVC: UIViewController {
     private var _benchmarkNeedsToStop: Bool = false
     private var _currentIndex: Int = 0
     private var _increment: CGFloat = 0
+    private var _scrollToBottomCount: Int = 0
+    private var _fpsCounter: FPSCounter?
     
     init() {
         super.init(nibName: nil, bundle: nil)
+        
+        // set up fps counter
+        self._fpsCounter = FPSCounter()
+        self._fpsCounter?.notificationDelay = 0.5
         
         // set up tableview
         self._tableView = UITableView()
@@ -48,18 +55,21 @@ class BaseVC: UIViewController {
     }
     
     func startBenchmark() {
-        self._increment = 100
+        self._resetIncrement()
         self._benchmarkButton.setTitle("STOP BENCHMARK", for: .normal)
         self._benchmarkRunning = true
+        self._fpsCounter?.startTracking()
         self._scrollTimer = Timer.scheduledTimer(timeInterval: 0.4, target: self, selector: #selector(scrollTimerActivate), userInfo: nil, repeats: true)
     }
     
     func stopBenchmark() {
         self._benchmarkButton.setTitle("START BENCHMARK", for: .normal)
         self._benchmarkRunning = false
+        self._fpsCounter?.stopTracking()
         self._scrollTimer?.invalidate()
         self._currentIndex = 0
         self._benchmarkNeedsToStop = false
+        self._scrollToBottomCount = 0
     }
     
     func scrollTimerActivate() {
@@ -73,10 +83,21 @@ class BaseVC: UIViewController {
         
         // calculate whether we need to stop
         let yPosition = (contentOffset.y + self._tableView.bounds.height - self._tableView.contentInset.bottom)
-        if (yPosition >= self._tableView.contentSize.height) { self._benchmarkNeedsToStop = true }
+        if (yPosition >= self._tableView.contentSize.height) {
+            if (self._scrollToBottomCount == 4) { self._benchmarkNeedsToStop = true }
+            else {
+                self._scrollToBottomCount += 1
+                self._resetIncrement()
+                self._tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+            }
+        }
         
         // increment
         self._increment += 30
+    }
+    
+    func _resetIncrement() {
+        self._increment = 100
     }
 
 }
