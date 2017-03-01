@@ -8,4 +8,5 @@ target 'iOS Scroll Test' do
   pod 'XCGLogger', '~> 4.0.0'
   pod 'SnapKit', '~> 3.1.2'
   pod 'JASON', '~> 3.0'
+  pod 'FPSCounter', :git => 'https://github.com/konoma/fps-counter', :branch => 'master'
 end

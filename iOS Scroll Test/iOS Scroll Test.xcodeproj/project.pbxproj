@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3D12F7691E5DD2D4000AB8D4 /* AsyncDisplayKitCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D12F7671E5DD2D4000AB8D4 /* AsyncDisplayKitCells.swift */; };
 		3D12F76A1E5DD2D4000AB8D4 /* AsyncDisplayKitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D12F7681E5DD2D4000AB8D4 /* AsyncDisplayKitVC.swift */; };
 		3D12F76C1E5DF613000AB8D4 /* MessageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D12F76B1E5DF613000AB8D4 /* MessageStore.swift */; };
 		69079163B755983E9FF8ABF5 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69079F76E0FE9708012709C7 /* Message.swift */; };
@@ -42,7 +41,6 @@
 
 /* Begin PBXFileReference section */
 		11F7F934C5823394194CDFAE /* Pods-iOS Scroll Test.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iOS Scroll Test.debug.xcconfig"; path = "Pods/Target Support Files/Pods-iOS Scroll Test/Pods-iOS Scroll Test.debug.xcconfig"; sourceTree = "<group>"; };
-		3D12F7671E5DD2D4000AB8D4 /* AsyncDisplayKitCells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncDisplayKitCells.swift; sourceTree = "<group>"; };
 		3D12F7681E5DD2D4000AB8D4 /* AsyncDisplayKitVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncDisplayKitVC.swift; sourceTree = "<group>"; };
 		3D12F76B1E5DF613000AB8D4 /* MessageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageStore.swift; sourceTree = "<group>"; };
 		3D485F6A1E5CD65F00AC21D2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -93,7 +91,6 @@
 		3D12F7661E5DD2D4000AB8D4 /* 8-AsyncDisplayKit */ = {
 			isa = PBXGroup;
 			children = (
-				3D12F7671E5DD2D4000AB8D4 /* AsyncDisplayKitCells.swift */,
 				3D12F7681E5DD2D4000AB8D4 /* AsyncDisplayKitVC.swift */,
 			);
 			path = "8-AsyncDisplayKit";
@@ -396,7 +393,6 @@
 			files = (
 				69079EDA35E564BB74FBFF07 /* AppDelegate.swift in Sources */,
 				690796AA40C4E2C0142413EB /* String.swift in Sources */,
-				3D12F7691E5DD2D4000AB8D4 /* AsyncDisplayKitCells.swift in Sources */,
 				3D12F76C1E5DF613000AB8D4 /* MessageStore.swift in Sources */,
 				69079895E51DDE81237D14A8 /* UIColor.swift in Sources */,
 				690795EC41C2CCB72980A254 /* JASON+Properties.swift in Sources */,
