@@ -187,38 +187,41 @@ A two media item message displayed the images side by side, with the image width
 A three media item message displayed the images side by side, with the image widths and heights being 90 points. The gap between the media items was 5 points.
 
 %%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Measuring performance % % REVIEWED | T:   | G:   %
+% Measuring performance % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Measuring performance}
-To be able to gather quantifiable information and not base comparison points on visual judgement, there needed to be a way to run equal and repeatable tests and gather statistics based on numbers from each test. This was achieved in two different parts: the creation of a repeatable test case and figuring out how to gather statistics from each case.
+To gather quantifiable information and not base comparison points on visual judgement, there needed to be a way to run reproducible tests and gather number based statistics from each test. This was achieved in two different parts: the creation of a repeatable test case (programmatic scrolling) and using different kinds of software to retrieve and save information about the system.
 
 \subsection{Repeatable test case}
-The repeatable test case's purpose was well defined from the start: it should simulate scrolling. And it should do it in a way that is exactly the same every time.
+The repeatable test case's purpose was to simulate scrolling and do it in the exact same way every time the test is executed.
 
-To achieve this, \mintinline{swift}{UITableView}'s \mintinline{swift}{setContentOffset(contentOffset, animated: true)} function was used along with a repeating \mintinline{swift}{Timer}. The timer fired every 0.3 seconds and forced the view to scroll, starting from the top, towards the bottom every cycle. The scrolling was purposefully not linear, every cycle would increase it by a certain amount, which depended on a fixed parameter and the amount currently scrolled. This would bring an increasing scroll speed factor into play, which serves the purpose of simulating a real user scrolling.
+To achieve this, \mintinline{swift}{UITableView}'s \mintinline{swift}{setContentOffset(contentOffset, animated: true)} function was used along with a repeating \mintinline{swift}{Timer}. The \mintinline{swift}{Timer} fired every 0.4 seconds and forced the view to scroll, starting from the top, towards the bottom. The scrolling was purposefully not linear: starting from 100 points, every time the timer fired and the view was scrolled, the scroll amount increased by 30 points. This means that the first time the timer fired, the \mintinline{swift}{setContentOffset(contentOffset, animated: true)} was fired with a 100 point increase in the vertical content offset. The next time, the increase was 130 points and after that, 160 points.
 
 \subsection{Measuring test case performance}
-The only metric behind measuring scrolling performance was framerate. Measuring the framerate with high accuracy and in a deterministic manner was the key to giving metrics to test case performance. In addition to measuring the framerate, it was decided to analyze how framerate is dependant on the resource usage, so memory and processor usage were also monitored.
+A multitude of metrics were monitored to get a good overview of the performance and efficiency of the \mintinline{swift}{UITableView}. In addition to measuring frame rates and scroll test durations, the system resource usages were monitored. The purpose of that was to reveal if and how the performance is dependant on the system's resource usage. The monitored resources were processor (CPU), graphics processor (GPU) and memory (RAM) usage.
 
-Xcode is bundled with a Instruments tool, which also includes a Core Animation statistics monitor which displays the framerate of the application it attaches itself to.
+Measuring frame rates was programmatic and handled by a custom implementation of the FPSCounter\cite{FPSCounterGithub} library. The scroll test duration was also measured programmatically.
 
-The tool was configured to extract the current framerate of the scroll view application every 1/10th of a second. The framerate numbers that were reported back while the programmatic scrolling test was running were placed into a spreadsheet and analytics were calculated based on the reported information.
+In addition to just measuring frame rate, a metric called frame rate stability was introduced. The simplified definition for that is "time spent within 20\% of the average frame rate". In the background, it was calculated as the percentage of measured frame rate points that were within 20\% of the average frame rate. The difference is that this might not directly translate into time spent in the stable zone, as frame rate measurements were taken at a 0.5 second interval.
 
-In addition to that, the tool was also configured to extract the memory and processor usage. Since precision in these metrics is not that important for our tests, the information sampling rate was set to once a second. The gathered information was also put into a spreadsheet and analytics were based on that.
-
-The tests were run on a iPod Touch 5G, as it is a good example of a low-powered device. The 5th generation iPod touch has a retina display (resolution 1136x64)\cite{AppleIPodTouch5G} while still having a very weak processor (dual core Apple A5 underclocked to 800 MHz)\cite{MacObserverUnderclock}. This means all the performance optimizations would have a strong effect that is easy to detect in the measurements.
+The rest of the metrics, namely CPU, GPU and RAM usage were measured using a third-party software called GameBench\cite{GameBenchHome}. The software required very little setup and offered very few configuration options. All that was needed was to start the monitoring process and then end it when the test was finished and it would display the measured data in an exportable form. The data included the three data set points mentioned earlier.
 
 \subsection{Analyzing gathered metrics}
-In order to get a comprehensible view of the gathered data, the large sets of data had to be trimmed down to a small number of data points. For frame rates, it was decided to use average and lowest framerate as the key indicators. For memory and processor usage, only averages were calculated.
+In order to get a comprehensible overview of the gathered data, the large sets of data had to be trimmed down to a small number of data points. For frame rates, it was decided to use average frame rates and frame rate stability. For processor, graphics processor and memory usage, only averages were calculated.
 
-This resulted with a list of the following metrics for each test:
+This resulted with a list of the following measurement points for each test:
 \begin{itemize}
-  \item Average framerate (FPS)
-  \item Lowest framerate (FPS)
-  \item Average CPU usage
-  \item Average memory consumption
+  \item Duration (seconds)
+  \item Average frame rate
+  \item Frame rate stability
+  \item Average processor usage
+  \item Average graphics processor usage
+  \item Average memory usage
 \end{itemize}
+
+\subsection{Test device}
+The tests were run on a iPod Touch 5G, as it is a good example of a low-powered device. The 5th generation iPod touch has a retina display (resolution 1136x640)\cite{AppleIPodTouch5G} while still having a very weak processor (dual core Apple A5 underclocked to 800 MHz)\cite{MacObserverUnderclock}. All of this means all the performance optimizations would have a strong effect that is easy to detect in the measured data.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Used third party libraries % % REVIEWED | T:   | G:   %
@@ -241,6 +244,9 @@ XCGLogger is a debug log framework for use in Swift projects.\cite{XCGLogger} XC
 
 \subsection{FLAnimatedImageView}
 FLAnimatedImage is a performant animated GIF engine for iOS.\cite{FLAnimatedImageView} FLAnimatedImageView does what the iOS's built in \mintinline{swift}{UIImageView} can not: play GIFs. This library is very important to both the test project and the actual Pairby application for that reason.
+
+\subsection{FPSCounter}
+FPSCounter is a small library to measure the frame rate of an iOS Application.\cite{FPSCounterGithub} It was used for that same purpose in the test project. The data gathered by it was used to analyze the performance of each optimization method (and/or test case).
 
 %%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Comparison points % % REVIEWED | T:   | G:   %
