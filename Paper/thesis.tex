@@ -99,14 +99,14 @@ Each optimization had to go through a pre-defined programmatic scrolling test wh
 The expected end result was a \mintinline{swift}{UITableView} component that is performant even when the scroll behavior exceeds the boundaries of realistic use cases.
 
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Specifications % % REVIEWED | T:   | G:   %
+% Specifications % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Specifications}
 The test project was meant to broadly mimic the user interface of the real-life iOS application of Pairby. This could only be possible if there were a number of requirements set to the project's test data and user interface.
 
 \subsection{Test data requirements}
-The test data contained 1000 message type objects. The data was stored in JSON format and saved to a file, which could then be loaded into the iOS test project.
+The test data contained 500 message type objects. The data was stored in JSON format and saved to a file which could then be loaded into the iOS test project using the XCode assets interface.
 
 \subsubsection*{Message type}
 The type definition for the Message object.
@@ -119,8 +119,8 @@ The type definition for the Message object.
     \hline
     Property & Type & Required & Description \\
     \hline
-    messageId & Integer & true & A unique identifier derived from a sequence starting at 0 with an increment of 1. \\
-    direction & String & true & Can be either "in" or "out", representing the direction of the message relative to the user. \\
+    messageId & Integer & true & A unique identifier generated from a sequence starting at 0 with an increment of 1. \\
+    direction & String & true & Can be either "in" or "out", representing the direction of the message relative to the current user. \\
     message & String & false & Text message's text. Not present in media messages. \\
     mediaItems & String[] & false & Media message's media URLs. Not present in text messages. \\
     \hline
@@ -128,63 +128,63 @@ The type definition for the Message object.
 \end{table}
 
 \subsubsection*{Text message requirements}
-Text messages can vary in both width and height. Width is purely dependant on the length of the longest line of text in the message text. The height depends on the number of lines in the text. The number of lines in turn depends on whether the text is long enough to require text wrapping or contains line breaks.
+Text messages can vary in both width and height. Width is dependant on both the length of the longest line of text in the message text and the screen width. The height depends on the number of lines in the text. The number of lines in turn depends on the screen width and whether the text is long enough to require text wrapping or contains line breaks.
 
-To simulate real life scenarios, text messages of three different widths and heights were created. These test messages consisted of short single line messages, medium two line messages and wide three line messages. To guarantee similar data rendering across different devices and screen widths, line breaks were used to create multi-line messages. The other option would have required word-wrapping, which would have depended on the width of the screen on the device and not produced the same number of lines on across all devices.
+To simulate real life scenarios, text messages of three different widths and heights were created. These test messages consisted of horizontally slim single line messages, medium width two line messages and wide three line messages. To guarantee similar data rendering across different devices and screen widths, line breaks were used to create multi-line messages. The other option would have required word-wrapping, which would have depended on the width of the screen on the device and not produced the same number of lines on across all devices.
 
 \subsubsection*{Media message requirements}
 In the Pairby real life application, media messages can contain up to 6 media items that can either be static images (JPG), animated images (GIF) or videos (MP4).
 
-Inside the messages list view, however, the media items are restricted into two different formats: static and animated images. Videos are not included as videos, when displayed as a thumbnail inside a message view, instead, a static thumbnail image is used. This reduces the required different media types down to JPG and GIF formats.
+Inside the messages list view, however, the media items are restricted into two different formats: static and animated images. Video thumbnails, which are the displayed in the message list view, are still static images. This reduces the required different media types down to static and animated images.
 
 To simplify and speed up the building of different benchmark views, the maximum number of media items in a message was reduced to 3, instead of 6. Therefore the number of media items inside a media message could be 1 to 3 (inclusive).
 
-To simulate real conditions, all media should be loaded from Pairby servers through the network.
+To simulate real conditions, all media should be loaded from Pairby servers through the network. This also raised the requirements of running all the tests on the same network, while closely monitoring the network usage (all the tests had to be run under similar network load, to not increase the number of different factors that could affect the results).
 
 \subsection{Test data generation}
-Test data for the project is generated in a separate script, which is written in JavaScript and executed in a Node.JS environment. The output of the script is a JSON file that contains an array of message type objects.
+Test data for the project was generated in a separate script, which is written in JavaScript and executed in a Node.JS environment. The output of the script was a JSON file that contained an array of message type objects.
 
 \subsubsection*{Message generation}
-The number of messages to be generated is configurable and was set to 1000 for the purposes of this test project.
+The number of messages to be generated was configurable and was set to 500 for the purposes of this test project.
 
-The type (text or media) of each message was decided using a semi-random probability technique: a random number from 0 to 1 was generated and compared against a configurable parameter called "media message probability". If the generated number was less than or equal to the "media message probability" parameter, the message type was set to be media message and therefore its "mediaItems" parameter was filled out. If the generated number happened to be larger than the previously defined parameter, then the message was set to be of text type and its "message" property was filled out.
+The type (text or media) of each message was decided using a semi-random probability technique: a random number from 0 to 1 was generated and compared against a configurable parameter called "media message probability". If the generated number was less than or equal to the "media message probability" parameter, the message type was set to be media message and therefore its "mediaItems" parameter was filled out. If the generated number happened to be larger than the previously defined parameter, then the message was set to be of text type and its "message" property was filled out. The test dataset was generated with the media message probability set to 0.25 (25\%).
 
-The message ID was simply set to the sequence number in the running loop (which started at zero and ended at the number of generated messages minus 1). For the 1000 messages generated for the purpose of this test, the IDs ranged from 0 to 999 (inclusive).
+The message ID was simply set to the sequence number in the running loop (which started at zero and ended at the number of generated messages minus 1). For the 500 messages generated for the purpose of this test, the IDs ranged from 0 to 499 (inclusive).
 
-Each message's direction was also defined through a random number generator and was set to have an equal chance of either being outbound or inbound. This process was similar to the way the message type was chosen: a random number between 0 and 1 was generated and it was compared against 0.5, if was less than or equal to it, "direction" property was set to out, otherwise it was set to "in".
+Each message's direction was also defined through a random number generator and was set to have an equal chance of either being outbound or inbound. This process was similar to the way the message type was chosen: a random number between 0 and 1 was generated and it was compared against 0.5, if was less than or equal to 0.5, "direction" property was set to out, otherwise it was set to "in". This would in theory mean that half of the messages would be outbound and the other half inbound, but not in a pre-determined order.
 
 \subsubsection*{Text message content generation}
-As defined in the specifications, there are three different text messages, that are all different in height and width. The text for each three different types is static and would not not change. Selecting one of the three was random and each message type had an equal chance of being selected. A random whole number between 1 and 3 (inclusive) was generated, if it was 1, then the one line and shortest width message was chosen. If the generated number happened to be 2, then the two line medium width text was chosen. If the number was 3, then the three line and widest text was selected.
+As defined in the specifications, there were three different text messages, all of which were different in height and width. The text for each three different types was static (pre-defined). Selecting one of the three different texts (which would determine both the width and height) was random and each message type had an equal chance of being selected. A random whole number between 1 and 3 (inclusive) was generated, if it was 1, then the short one line message was chosen. If the generated number was 2, then the two line medium width text was chosen. If the number was 3, then the three line and widest text was selected.
 
 \subsubsection*{Media message content generation}
-In order to properly mimic the real life scenarios in the message list view all media should be loaded from the Pairby media servers. This obviously ruled out the possibility of including the images locally with the iOS test project. The ability of uploading media to the Pairby media servers through the actual API was built to the data generator, which then returned the URLs to the uploaded files.
+In order to properly mimic the real life scenarios in the message list view all media had to be loaded from the Pairby media servers. The ability of uploading media to the Pairby media servers through the public Pairby API was built to the data generator, which then returned the URLs to the uploaded files.
 
 The sample media files consisted of 100 static images of JPG format and 10 animated images of GIF format. All of those images were uploaded to the Pairby media servers.
 
 The number of media items to include with a specific media message was a random number between 1 and 3 (inclusive).
 
-The URL or URLs that would represent the media items were chosen completely randomly and duplicates were not prevented. Therefore there could be media messages that contained the same item twice. Even though this would not be possible in the real life Pairby application, there was no direct reason to prevent it from happening either, for it should still work as expected.
+The URL or URLs that would represent the media items were chosen randomly and duplicates were not prevented. Therefore there could be media messages that contained the same media item multiple times. Even though this would not be possible in the real life Pairby application, there was no direct reason to prevent it from happening either, for it should still work as expected and not affect the performance that much.
 
 \subsection{User interface requirements}
-As stated in the introduction to this section, the user interface is meant to mimic Pairby iOS application's messaging user interface.
+As stated in the introduction to this section, the user interface was meant to mimic Pairby iOS application's messaging user interface.
 
 \subsubsection*{Common design elements}
-Both the text and media message views should have rounded corners and a thin border of gray colour.
+Both the text and media message views had to have rounded corners with a radius of 15 points and a border of gray colour (\mintinline{apacheconf}{#ECEFF1}) with a width of 1 point.
 
 \subsubsection*{Text message}
-The text message view should be able to handle line breaks (increase in height to display all lines). The background color for inbound and outbound messages should be different: teal for outbound, gray for inbound.
+The text message view had to be able to handle line breaks (increase in height to display all lines). The background color for inbound and outbound messages should be different: teal (\mintinline{apacheconf}{#4DB6AC}) for outbound, gray (\mintinline{apacheconf}{#ECEFF1}) for inbound.
 
 \subsubsection*{Media message}
-Media message view stylings depend on the number of images they contain.
+Media message view stylings were dependant on the number of images they contain, as is the case in the real-life Pairby iOS application.
 
 \paragraph*{1 media item}
-A single media item message should display the image with a width and height of 180 points.
+A single media item message displayed the image with a width and height of 180 points.
 
 \paragraph*{2 media items}
-A two media item message should display the images side by side, with the image widths and heights being 90 points.
+A two media item message displayed the images side by side, with the image widths and heights being 90 points. The gap between the media items was 5 points.
 
 \paragraph*{3 media items}
-A three media item message should display the images side by side, with the image widths and heights being 90 points.
+A three media item message displayed the images side by side, with the image widths and heights being 90 points. The gap between the media items was 5 points.
 
 %%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Measuring performance % % REVIEWED | T:   | G:   %
