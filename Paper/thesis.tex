@@ -76,7 +76,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Introduction % % REVIEWED | T:   | G:   %
+% Introduction % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \introduction{Introduction}
@@ -85,18 +85,18 @@ Verbal feedback from smartphone users, online studies regarding the priorities o
 Pairby's mobile applications are no exception when it comes to that good user experience requirement. Pairby, of which the author is a co-founder of, is a mobile dating service which has applications on both iOS and Android platforms. The thesis subject is directly derived from the author's interest in solving a performance issue in the iOS application.
 
 \introductionSubsection{Description of the problem}
-Pairby iOS application contains, among other views, a multitude of different vertically scrolling views, which can contain a theoretically unlimited amount of subviews. One of those vertically scrolling views is the message list view, which this thesis will focus on. The message list view's purpose is to render a list of messages using a \mintinline{swift}{UITableView} component, where each message could contain either text or images.
+Pairby iOS application contains, among other views, a multitude of different vertically scrolling views, which can contain a theoretically unlimited amount of subviews. One of those vertically scrolling views is the message list view, which this thesis will focus on. The message list view's purpose is to render a list of messages using a \mintinline{swift}{UITableView} component, in which each message could contain either text or images.
 
-Pairby iOS application's first prototype version was scratched due to a massive performance issue in the message list view. Namely, scrolling up or down at a rapid speed in that view was so resource consuming on any older Apple device it froze the whole user interface. This behavior was deemed unacceptable by the Pairby team and development of that prototype was halted. It becamse apparent to the developer that something had been done wrong both in the development of the user interface and in the handling of the data in the model.
+Pairby iOS application's first prototype version was scratched due to a massive performance issue in the message list view. Namely, scrolling up or down at a rapid speed in that view was so resource consuming on any older Apple device it froze the whole user interface. This behavior was deemed unacceptable by the Pairby team and development of that prototype was halted. It became apparent to the developer that something fundamental had been done wrong both in the development of the user interface and in the handling of the data in the model.
 
 At the time of starting the thesis test project, the development of the new iOS application for Pairby had started, but a solution to the performance issue had not yet been found.
 
 \introductionSubsection{Goal of the thesis}
-The goal of the thesis was to analyze a number of different optimizations that can be done to the \mintinline{swift}{UITableView} component and its subviews (cells) in order to reduce the resource consumption on less powerful iOS devices and through that improve the responsiveness of the user interface. All optimizations were applied in a sequence, where the next one would complement the previous one, creating a more performant view after each optimization. The user interface was designed with the Pairby real-life application in mind: visually, the test project and the real life application share many similarities.
+The goal of the thesis is to analyze a number of different optimizations that can be done to the \mintinline{swift}{UITableView} component and its subviews (cells) in order to reduce the resource consumption on less powerful iOS devices and through that improve the responsiveness of the user interface. All optimizations were applied in a sequence, where the next one would complement the previous one, creating a more performant view after each optimization. The user interface was designed with the Pairby real-life application in mind: visually, the test project and the real life application share many similarities.
 
 Each optimization had to go through a pre-defined programmatic scrolling test while different aspects of the device's were monitored. The monitoring resulted in large data sets about the frame rate, CPU usage and memory usage, which were then analyzed and combined into general data about the test. These generalized values were then compared against existing results and the optimization's effectiveness was decided based on that.
 
-The expected end result was a \mintinline{swift}{UITableView} component that is performant even when the scroll speeds exceed the boundaries of realistic use cases.
+The expected end result was a \mintinline{swift}{UITableView} component that is performant even when the scroll behavior exceeds the boundaries of realistic use cases.
 
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Specifications % % REVIEWED | T:   | G:   %
@@ -206,6 +206,8 @@ Xcode is bundled with a Instruments tool, which also includes a Core Animation s
 The tool was configured to extract the current framerate of the scroll view application every 1/10th of a second. The framerate numbers that were reported back while the programmatic scrolling test was running were placed into a spreadsheet and analytics were calculated based on the reported information.
 
 In addition to that, the tool was also configured to extract the memory and processor usage. Since precision in these metrics is not that important for our tests, the information sampling rate was set to once a second. The gathered information was also put into a spreadsheet and analytics were based on that.
+
+The tests were run on a iPod Touch 5G, as it is a good example of a low-powered device. The 5th generation iPod touch has a retina display (resolution 1136x64)\cite{AppleIPodTouch5G} while still having a very weak processor (dual core Apple A5 underclocked to 800 MHz)\cite{MacObserverUnderclock}. This means all the performance optimizations would have a strong effect that is easy to detect in the measurements.
 
 \subsection{Analyzing gathered metrics}
 In order to get a comprehensible view of the gathered data, the large sets of data had to be trimmed down to a small number of data points. For frame rates, it was decided to use average and lowest framerate as the key indicators. For memory and processor usage, only averages were calculated.
