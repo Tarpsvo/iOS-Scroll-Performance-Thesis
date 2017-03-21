@@ -253,27 +253,27 @@ FPSCounter is a small library to measure the frame rate of an iOS Application.\c
 %%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Comparison points}
-In order to be able to compare performance changes in the test project, we need some starting points. It was decided to use a best case scenario and a worst case scenario for starting points. Each of the tests should be run with the exact same data set, including the best and worst case scenario ones.
+In order to accurately compare performance changes in the test project, a set of starting points were needed. It was decided to use a best case scenario and a worst case scenario as two starting comparison points. Each of the tests had to be and were run with the exact same data set, including the best and worst case scenario ones.
 
 \subsection{Best case scenario}
-The best case scenario should have the perfect conditions for running the tests and display the maximum possible performance. To create the perfect conditions, media items were omitted from the equation and all UITableView cells were turned into text cells (built-in UITableViewCell class).
+The best case scenario had the simplest possible subviews and had to goal to display the best possible performance. To create the simplest subviews, media items were omitted from the equation and built-in \mintinline{swift}{UITableView} \mintinline{swift}{UITableViewCell} were used, all of which displayed plain text.
 
-To achieve a text-only message list, all media messages were replaced at runtime with a string \mintinline{text}{Media message with id [#1]} where \mintinline{text}{#1} would become the ID of the message. Text messages were displayed as they would be normally.
+To achieve a text-only message list, all media messages were replaced at runtime with a text message with text \mintinline{text}{Media message with ID [N]} where \mintinline{text}{N} was the ID of the message. Text messages were displayed as they would be normally.
 
-From just a glance, it was obvious that the scrolling on this view was extremely smooth and most likely a constant 60 frames per second, which is the so called iOS golden standard.\cite{IntroducingAsyncDisplayKit}
+Running the performance tests on this view yielded the following results:
+\itkIncludeImage{test-0-1}{Performance test results for the best case scenario}
 
-Running the performance benchmarks yielded the following results:
-% TODO
+As presumed before running the tests, this test case displayed the best possible performance. The test suite was run twice and the averages of the two test cases were taken as final comparable results. The average frame rate was exactly 60 frames per second, which is the iOS golden standard\cite{IntroducingAsyncDisplayKit}. Both CPU and GPU usage remained fairly low, with the averages being 16\% and 24\% respectively. This means neither of the processors were stressed when still providing the user with the smoothest possible experience.
 
 \subsection{Worst case scenario}
-The worst case scenario should have the least possible amount of optimizations and not follow any common performance boosting patterns. The data set was the same as the one provided in the best case scenario one, but media items were not been omitted in this case. All messages were displayed as was specified in the user interface specifications.
+The worst case scenario had no known optimizations applied and did not follow any common performance boosting patterns (for example cell reusing). The data set was the same as the one provided in the best case scenario one, but media items were not omitted in this case. All messages were displayed as was specified in the user interface specifications.
 
-To render both text and media message views, two different view classes that inherited from \mintinline{swift}{UITableViewCell} were created. One for displaying text messages, the second one for displaying media messages.
+To render both text and media message views, two different view classes that inherited from \mintinline{swift}{UITableViewCell} were created. One for displaying text messages, the other for displaying media messages.
 
-Scrolling in this view was noticeably slow and a lot of frames were dropped.
+Running the performance tests on this view yielded the following results:
+\itkIncludeImage{test-0-2}{Performance test results for the worst case scenario}
 
-Running the performance benchmarks yielded the following result:
-% TODO
+The test results were not surprising and accomplished the previously set goal of showing horrendous performance. The average frame rate had dropped to 26, compared to the 60 measured in the best case scenario tests. Both the processor and the graphics processor were noticeably more stressed with the average usage being 69\% and 66\% respectively. Surprisingly, the average memory usage for the application went down by 3 megabytes, even though images were brought into the tests. That can be explained by making the assumption that the images are handled by the system and do not count towards the memory usage of the application. Another theoretical explanation would be that the images are so small (around 50 kilobytes each) that they do not affect the total memory usage that much, but this is not true for GIF-s, that are about one megabyte each.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Performance optimizations % % REVIEWED | T:   | G:   %
