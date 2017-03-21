@@ -101,14 +101,11 @@
 \usepackage{float}
 \usepackage{graphicx}
 
-\def\itkIncludeImage#1#2#3{
+\def\itkIncludeImage#1#2{
 	\begin{figure}[H]
-	\begin{center}
 	\leavevmode
 	\includegraphics[width=0.8\textwidth]{#1}
-	\end{center}
 	\caption{#2}
-	\label{#3}
 	\end{figure}}
 
 %%%%%%%%%%%%%%%%%%
@@ -129,6 +126,18 @@
 \captionsetup[listing]{
   labelsep=colon,
   name=Code,
+  justification=raggedright,
+  singlelinecheck=false,
+  font=bf,
+  labelfont=bf,
+  skip=4pt}
+
+%%%%%%%%%%%%%%%%%%%
+% Figure captions %
+%%%%%%%%%%%%%%%%%%%
+\captionsetup[figure]{
+  labelsep=space,
+  name=Figure,
   justification=raggedright,
   singlelinecheck=false,
   font=bf,
