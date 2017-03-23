@@ -280,27 +280,29 @@ The test results were not surprising and accomplished the previously set goal of
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{Performance optimizations}
-Performance optimizations started by taking the code from the worst case scenario test case and applying the first optimization to it. The rest of the optimizations were then applied to one another in the same pattern.
+All performance optimizations were built on top of one another in a way that each optimization complemented the previous one. The base for that project was the worst case scenario project. 
 
 %%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Reusing cells % % REVIEWED | T:   | G:   %
+% Reusing cells % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Reusing cells}
-Cell reusing is one of the optimizations that was not necessarily easiest to implement, but was definitely the correct starting point, for this is something that requires fundamental changes to the way the views are handled.
+Reusing the cells was chosen as a so-called starting point for all the optimizations due to the fact it was one of the more widely known ones. That capability was already built into the \mintinline{swift}{UITableView} control by Apple and has been there ever since iOS 2.0.\cite{HackingWithSwiftCellReuse}
 
 \subsubsection*{Theoretical benefits}
-Reusing cells means that every time a new message enters the view, instead of creating a new instance of the cell class, an existing object created from that class is used. This will require the fundamental changes mentioned earlier: views will need to have the ability to re-adjust themselves depending on the type of message they're meant to display. Previously, views only needed to define their layout state once, upon initialization, and would no longer have to readjust themselves.
+Reusing cells means that every time a new message enters the view, instead of creating a new instance of the cell class, an existing object created from that class is used. This reuse of cell objects is a performance enhancement because it eliminates the overhead of cell creation.\cite{AppleCharacteristicsOfCellObjects}
 
-This is beneficial to scrolling performance because it removes the necessity to create new views every time a new message needs to be rendered. The system overhead from allocating memory for each subview and garbage collector having to clean up views that are no longer rendered adds up when the user is scrolling rapidly and will cause hiccups in the user interface.
+This enhancement required fundamental changes to be made to the existing cell classes. Views needed to have the ability to re-adjust themselves during runtime in order match their design to the type of message they were meant to display. Previously, views only needed to define their layout state once, upon initialization, and would no longer have to readjust themselves.
 
 \subsubsection*{Performance changes}
-Cell reusing did yield an increase in the average frame rate, as expected, but the increase was not drastic.
+Running the performance tests on this view yielded the following results:
+\itkIncludeImage{test-1}{Performance test results after applying cell reuse optimizations}
 
-% TODO Comparisons, analytics, graphs
+The optimization certainly had a positive impact on the performance of the project, compared to the worst case scenario which was the starting point. Average frame rate increased by 8.9 frames per second, while both the processor's and graphic processor's average usage decreased by 12.78 and 2.95 percent respectively. The duration for the test case also decreased from 105.5 seconds to 92.7 seconds, displaying a time decrease of 12.8 seconds. This was directly tied to the average frame rate, as all the necessary frames were rendered faster. Average memory usage did show an increase of 3 megabytes, from 28 to 31 megabytes, but this change is small enough to classify it as minor and label it as "did not change".
 
 \subsubsection*{Code examples}
-The \mintinline{swift}{UITableView} component has support for view recycling already built in, requiring very little effort from the software engineer. All the recyclable classes should be registered to the instance of the \mintinline{swift}{UITableView} class and they can be requested from the same instance later.
+Apple has already built support for cell reusing into the \mintinline{swift}{UITableView} component, meaning the implementation on the \mintinline{swift}{UITableView} side of things required little effort from the software engineer. All the reusable cell classes had to be registered to the instance of the \mintinline{swift}{UITableView} class they are meant to be reused in using the \mintinline{swift}{register(_:forCellReuseIdentifier:)} function.\cite{AppleRegisterMethod} After registering, they can be requested from the \mintinline{swift}{UITableView} instance by using the \mintinline{swift}{dequeueReusableCell(withIdentifier:)} function.\cite{AppleDequeueReusableCellMethod}
 
+\newpage % Break to new page, to keep the image and text together
 Below is an example on how to register cell classes to be reused in a specific UITableView instance.
 \begin{listing}[H]
   \caption{Registering cells to be reused on a specific UITableView instance}
@@ -310,7 +312,7 @@ Below is an example on how to register cell classes to be reused in a specific U
   \end{minted}
 \end{listing}
 
-Below is an example on how to query and use recycled cells in the same UITableView instance.
+This is an example on how to query reusable cells in the same UITableView instance.
 \begin{listing}[H]
   \caption{Using recycled cells in the test project}
   \begin{minted}{swift}
