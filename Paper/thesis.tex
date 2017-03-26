@@ -424,27 +424,42 @@ Calculating the height for th text cells was more difficult as the text height v
 \end{listing}
 
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Cell height caching % % REVIEWED | T:   | G:   %
+% Cell height caching % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Cell height caching}
-The next step after the previous optimizations of doing calculations manually was to cache the calculation results in memory. To make caching possible, another property had to be added to the Message object, called cachedHeight of CGFloat type.
+Even though the efficient manual calculations did yield a noticeable increase in performance, it was possible to improve it even further by caching the calculation results. This means the calculations for each cell should only be run once.
 
 \subsubsection*{Theoretical benefits}
-Even though this would not change anything the first time the user scrolls the messages list, it would improve the speed of scrolling the next time they need to render the same cells again, since the calculation can be avoided.
+This optimization would not provide any performance benefits the first time the user scrolls the messages list. This would, however, improve performance when the user scrolls back to regions where they have already scrolled.
 
 \subsubsection*{Performance changes}
-As expected, the scroll performance on the first time the user scrolls showed no change. The following scroll benchmarks displayed an increase in performance, as the height calculations were ignored.
+Running the performance tests yielded the following results:
+\itkIncludeImage{test-4}{Performance test results after adding caching to manual cell height calculations}
+
+As expected, the performance did improve. The average frame rate increased by 3.9 frames per second and the stability by 6.95 percent. The average processor, graphics processor and memory usage, similarly to previous tests, remained the same. The average processor usage did decrease by 1.91\%, but that deviation is too small to draw any conclusions from. In conclusion, the average frame rate increased by 8.7\%, stability by 6.95\% and the resource usage stayed the same.
 
 \subsubsection*{Code examples}
-The cache was a simple Dictionary where the key was the message's row index and the value was its height as a CGFloat type. Below is an example of the whole cycle of caching and using the cache. The calculations have been omitted from this code, they can be seen in section \ref{subsection:ManualCellHeightCalculations}. 
+The cache was a simple \mintinline{swift}{Dictionary} where the key was the cell's row index and the value was the height as a \mintinline{swift}{CGFloat}. Below is an example of the whole cycle of calculating, caching and using the cached value. The calculations have been omitted from this code, they can be seen in section \ref{subsection:ManualCellHeightCalculations}. 
 \begin{listing}[H]
   \caption{Caching and using cached height}
   \begin{minted}{swift}
     private var _heightCache: [Int: CGFloat] = [:]
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if let height = self._heightCache[indexPath.row] { return height }
-        // else do the height calculations
-        self._heightCache[indexPath.row] = (Height + HeightAdd)
+        let message = self._messages[indexPath.row]
+
+        if let mediaItems = message.mediaItems {
+            let Height = (mediaItems.count == 1) ? Pairby.MessageUI.HEIGHT_MEDIA_ONE : Pairby.MessageUI.HEIGHT_MEDIA_MULTIPLE
+            let Margins = (2 * Pairby.MessageUI.MARGIN_VERTICAL_WRAP)
+            self._heightCache[indexPath.row] = (Height + Margins)
+            return self._heightCache[indexPath.row]!
+        }
+
+        let MaxWidth = (self._tableView.frame.size.width - (2 * Pairby.MessageUI.MARGIN_HORIZONTAL) - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_DYNAMIC - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_FIXED)
+        let Margins = (2 * Pairby.MessageUI.MARGIN_VERTICAL + 2 * Pairby.MessageUI.MARGIN_VERTICAL_WRAP)
+        let Height = ceil(message.message!.heightWithConstrainedWidth(width: MaxWidth, font: Pairby.MessageUI.TEXT_FONT))
+        self._heightCache[indexPath.row] = (Height + Margins)
         return self._heightCache[indexPath.row]!
     }
   \end{minted}
