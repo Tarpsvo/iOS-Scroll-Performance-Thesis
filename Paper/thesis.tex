@@ -467,24 +467,51 @@ The cache was a simple \mintinline{swift}{Dictionary} where the key was the cell
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Optimizing image sizes % % REVIEWED | T:   | G:   %
+% Optimizing image sizes % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Optimizing image sizes}
-The message threads can contain a large number of media items. The test data was generated with this in mind and it also contains a large number of media - both animated and static images. This raised the question: is there anything that can be done to optimize for the large number of images?
+As specified in the specification section, the test data contained about 25\% of media messages, all of which contained 1 to 3 images (both static and animated). Since images make up a relatively large portion of all messages in the test data set, it was decided to look into optimizing them by resizing them to the correct size before displaying them in the user interface. The idea was a collaboration between the author and the thesis' supervisor Gary Planthaber.
 
-Since PINRemoteImage already enabled the option to do image processing and caching of the processed images, it was decided to try and optimize the image sizes for the screen of the device they're being rendered on and the cell size. This means that when the images reach the view, they're already the exact size they should be and should not need any further processing (either up- or downscaling).
-
-However, it should be noted that this processing can only occur for static images. Processing animated images (GIFs) was too difficult to do and would require a lot of processing power, which would not be beneficial enough. Another downside to processed GIFs is the fact that multiple versions of the same GIF would be kept in he disk cache and due to their size, this would lead to a lot of the limited sized disk cache being used for only a few GIFs.
+PINRemoteImage already provided the functionality to do image processing and caching of the processed images, but that was only possible for non-animated images. It was decided to not optimize the animated images optimized and let the system handle them as they are.
 
 \subsubsection*{Theoretical benefits}
-If the static images would no longer need any up- or downscaling in terms of processing, this should theoretically improve the rendering times of the media cells.
+The pre-processing should make the images the correct size before they reach the user interface and if the static images would no longer need any up- or downscaling in terms of processing, this should theoretically improve the rendering times of the media cells and the performance when the scrollable view is in motion.
 
 \subsubsection*{Performance changes}
-As expected, the performace improved slightly.
+Running the performance tests yielded the following results:
+\itkIncludeImage{test-5}{Performance test results after adding pre-processing of images}
 
-% TODO Graphs, analysis, whatevs
+The change in the average frame rate did not display a big change (improvement of 1.7 frames per second), but the frame rate stability increased by 30.5\%, which was a huge improvement. The processor and graphics processor usage did not display a noticeable change. The memory usage, however, changed dramatically. The average memory usage increased by 136\%, from 33 megabytes to 78 megabytes, compared to the previous test. This average memory increase is easily explainable by the fact that the image processing uses a lot of memory and the application had to start a lot of image processing processes when the scroll speed was nearing its maximum.
+
+The average memory usage does seem high, but since it is temporary for the duration of the fast scroll, it should definitely be worth the huge improvements in the frame rate stability.
 
 \subsubsection*{Code examples}
+Below is an example of how the image was resized to a given size, using iOS' built-in classes. The parameters of the function were the original UIImage and the expected size of the new image. Since the handled images are always square, only one dimension's length was enough to specify the size.
+\begin{listing}[H]
+  \caption{Resizing an UIImage to a specified size}
+  \begin{minted}{swift}
+    func processImage(image: UIImage, size: CGFloat) -> UIImage {
+      let scaledSize = (size * UIScreen.main.scale)
+      let imageRect = CGRect(x: 0, y: 0, width: scaledSize, height: scaledSize)
+
+      UIGraphicsBeginImageContext(imageRect.size)
+
+      let sizeMultiplier: CGFloat = (scaledSize / image.size.width)
+
+      var drawRect = CGRect(x: 0, y: 0, width: image.size.width * sizeMultiplier, height: image.size.height * sizeMultiplier)
+      if (drawRect.maxX > imageRect.maxX) { drawRect.origin.x -= (drawRect.maxX - imageRect.maxX) / 2 }
+      if (drawRect.maxY > imageRect.maxY) { drawRect.origin.y -= (drawRect.maxY - imageRect.maxY) / 2 }
+
+      image.draw(in: drawRect)
+
+      let processedImage = UIGraphicsGetImageFromCurrentImageContext()
+      UIGraphicsEndImageContext()
+
+      return processedImage!
+    }
+  \end{minted}
+\end{listing}
+
 
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Layer rasterization % % REVIEWED | T:   | G:   %
