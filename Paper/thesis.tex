@@ -294,7 +294,7 @@ Reusing cells means that every time a new message enters the view, instead of cr
 This enhancement required fundamental changes to be made to the existing cell classes. Views needed to have the ability to re-adjust themselves during runtime in order match their design to the type of message they were meant to display. Previously, views only needed to define their layout state once, upon initialization, and would no longer have to readjust themselves.
 
 \subsubsection*{Performance changes}
-Running the performance tests on this view yielded the following results:
+Running the performance tests yielded the following results:
 \itkIncludeImage{test-1}{Performance test results after applying cell reuse optimizations}
 
 The optimization certainly had a positive impact on the performance of the project, compared to the worst case scenario which was the starting point. Average frame rate increased by 8.9 frames per second, while both the processor's and graphic processor's average usage decreased by 12.78 and 2.95 percent respectively. The duration for the test case also decreased from 105.5 seconds to 92.7 seconds, displaying a time decrease of 12.8 seconds. This was directly tied to the average frame rate, as all the necessary frames were rendered faster. Average memory usage did show an increase of 3 megabytes, from 28 to 31 megabytes, but this change is small enough to classify it as minor and label it as "did not change".
