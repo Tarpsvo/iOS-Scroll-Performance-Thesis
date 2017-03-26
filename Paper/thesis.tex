@@ -372,23 +372,26 @@ Below is the new code where the 8 new views are registered in the main \mintinli
 \end{listing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Manual cell height calculations % % REVIEWED | T:   | G:   %
+% Manual cell height calculations % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Manual cell height calculations}\label{subsection:ManualCellHeightCalculations}
-So far, the cell height calculations had been done automatically. This was possible due to the \mintinline{swift}{UITableView} instance's property \mintinline{swift}{rowHeight} being set to \mintinline{swift}{UITableViewAutomaticDimension}. According to a multitude of sources, these automatic calculations are often slow and it's sensible to override them with manual calculations that will do the bare minimum.\cite{PerfectSmoothScrollingInUITableViews}\cite{HowToMakeDynamicTableViewCellHeight}
+Up to this point in the test project, the cell height calculations had been done automatically by the \mintinline{swift}{UITableView} instance's underlying logic. This was activated purposefully by setting the \mintinline{swift}{UITableView} instance's property \mintinline{swift}{rowHeight} to \mintinline{swift}{UITableViewAutomaticDimension}. According to a multitude of sources, these automatic calculations are often slow and it's sensible to override them with manual calculations that are more efficient.\cite{PerfectSmoothScrollingInUITableViews}\cite{HowToMakeDynamicTableViewCellHeight}\cite{MediumSmoothScrollPrearo}
 
 \subsubsection*{Theoretical benefits}
-Doing the cell height calculations manually using optimized calculations improves the performance when scrolling at high speeds. When doing manual calculations, it's trivial to optimize the calculations for the type of cells the application should be able to render. For example, media cells have a fixed height and calculations are actually not necessary in that case.
+Calculating the cell height manually using efficient calculations should improve the performance when scrolling at high speeds or when the whole \mintinline{swift}{UITableView} is refreshed using the \mintinline{swift}{reloadData()} function, which causes all cell heights to be calculated again.
+
+When doing manual calculations, it was trivial to optimize the calculations for the type of cells the application should be able to render. For example, media cells had a fixed height and calculations were not necessary in that case, as the pre-defined constant could be returned instead (the vertical margins should still be added to it).
 
 \subsubsection*{Performance changes}
-Manual cell height calculations improved the performance of rapid scrolling.
+Running the performance tests yielded the following results:
+\itkIncludeImage{test-3}{Performance test results after migrating to manual cell height calculations}
 
-% TODO Analysis, tests, graphs
+The manual cell height calculations increased the average frame rate by 4.3 frames per second and the frame rate stability by 7.5 percent while keeping the resource usage the same. The optimization can be counted as a huge success as there was another 10.6\% increase in the average frame rate without affect the resource usage. 
 
 \subsubsection*{Code examples}
-The cell height calculations overwriting has to occur in the function displayed below.
+The cell height calculations overwriting had to occur in the function displayed below (this example shows how it was previously when automatic calculations were used).
 \begin{listing}[H]
-  \caption{Overwriting cell height calculations}
+  \caption{Interface function for overwriting cell height calculations}
   \begin{minted}{swift}
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
       return UITableViewAutomaticDimension
@@ -396,9 +399,9 @@ The cell height calculations overwriting has to occur in the function displayed 
   \end{minted}
 \end{listing}
 
-Calculating the height for media item cells was trivial since they have a fixed height and fixed vertical margins. Below is an example on how the height for media item cells was calculated.
+Calculating the height for media item cells was trivial as they had a fixed height and fixed vertical margins. Below is an example on how the height for media item cells was calculated.
 \begin{listing}[H]
-  \caption{Calculating media cell's height}
+  \caption{Calculating media cell's height manually}
   \begin{minted}{swift}
     let message = self._messages[indexPath.row]
     if let mediaItems = message.mediaItems {
@@ -409,9 +412,9 @@ Calculating the height for media item cells was trivial since they have a fixed 
   \end{minted}
 \end{listing}
 
-Calculating the height for text cells was more difficult as the text height could vary depending on the number of lines the text would require. The number of lines in turn was dependant on the length of the text and the screen width of the device. Below is an example on how to calculate the height for the text message cell from the text.
+Calculating the height for th text cells was more difficult as the text height varied depending on the number of lines in the text. The number of lines was dependant on the length of the text and the width of the screen, as described in the specification. Below is an example on how to calculate the height for the text message cell from the text.
 \begin{listing}[H]
-  \caption{Calculating text cell's height}
+  \caption{Calculating text cell's height manually}
   \begin{minted}{swift}
     let maximumWidth = (self._tableView.frame.size.width - (2 * Pairby.MessageUI.MARGIN_HORIZONTAL) - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_DYNAMIC - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_FIXED)
     let verticalMarginsSum = (2 * Pairby.MessageUI.MARGIN_VERTICAL + 2 * Pairby.MessageUI.MARGIN_VERTICAL_WRAP)
