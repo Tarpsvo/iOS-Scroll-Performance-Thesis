@@ -327,10 +327,10 @@ This is an example on how to query reusable cells in the same UITableView instan
 \end{listing}
 
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Static layouts % % REVIEWED | T:   | G:   %
+% Static layouts % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Making cell views' layout static}
-Changing views by creating and removing both views and constraints was the next obvious performance degrader. The solution to this problem was simple: create specific views for each different view and only change their content. This meant that instead of the two different table cell views that existed at that point, there would be eight different views. These new views would technically have a static layout.
+\subsection{Making cell views' layouts static}
+Making cell views' layouts static was an idea proposed by this thesis' supervisor Gary Planthaber. The idea behind it was that instead of two different cell classes that display mutating views which adjust themselves to display all the different message types there would be eight different cell classes that would display statically laid out views.
 
 List of necessary cell views to make views with a static layout possible:
 \begin{itemize}
@@ -345,19 +345,20 @@ List of necessary cell views to make views with a static layout possible:
 \end{itemize}
 
 \subsubsection*{Theoretical benefits}
-The most straightforward benefit is the fact that this solution would remove the overhead of adding and removing of both subviews and their constraints. This is similar to the previous optimization, but on a smaller scale. In this case, the inner views were being removed and recreated every time a cell needed to be displayed. 
+The theoretical performance enhancing effect of this optimization was eliminating the overhead of creating and disposing of both subviews and layout constraints. This optimization complements the previous one, as they both work towards the same goal of removing unnecessary view creations, mutations and deletions. When the previous optimization only recycled the larger parent (cell) views, this change has the goal to also optimize all of the inner views and constraints.
 
 \subsubsection*{Performance changes}
-Making the views' layout static yielded a more significant increase in the scroll performance compared to the cell reusing optimization. The increase in performance was expected.
+Running the performance tests yielded the following results:
+\itkIncludeImage{test-2}{Performance test results after making cell views' layouts static}
 
-% TODO Comparisons, analytics, graphs
+The optimization had a strong effect on the average frame rate which increased by 5.7 frames per second. The frame rate stability also saw an increase of 6.4 percent. The changes in the average processor, graphics processor and memory usage were so slight, they can be classified as staying the same. Overall, this optimization increased the frame rate by 16\% and frame rate stability by 6.4\% without affecting the resource usage.
 
 \subsubsection*{Code examples}
 This also changed the code for reusing the cells. After re-working the cell views, 8 different views needed to be registered to be recycled and that in turn made the logic of querying reusable cells a bit more difficult.
 
 Below is the new code where the 8 new views are registered in the main \mintinline{swift}{UITableView} instance:
 \begin{listing}[H]
-  \caption{Using recycled cells in the test project}
+  \caption{Registering static cell views to a UITableView instance}
   \begin{minted}{swift}
     self._tableView.register(StaticCells_TextCell_In.self, forCellReuseIdentifier: "StaticCells_TextCell_In")
     self._tableView.register(StaticCells_TextCell_Out.self, forCellReuseIdentifier: "StaticCells_TextCell_Out")
