@@ -590,23 +590,30 @@ In order to work around using CALayer's corner radius when drawing text cell vie
 
 
 %%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% AsyncDisplayKit % % REVIEWED | T:   | G:   %
+% AsyncDisplayKit % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{ASyncDisplayKit}
-AsyncDisplayKit is an iOS framework built on top of UIKit that keeps even the most complex user interfaces smooth and responsive.\cite{IntroducingAsyncDisplayKit} This library's goal was to make even the most complex views have a 60 frames per second performance in iOS applications by moving the rendering off the main threads.
+\subsection{AsyncDisplayKit}
+AsyncDisplayKit is an iOS framework built on top of UIKit that keeps even the most complex user interfaces smooth and responsive.\cite{IntroducingAsyncDisplayKit} The library's goal was to make even the most complex views have a 60 frames per second rendering in iOS applications by moving the rendering off the main thread.
 
-In order to test this out, a best case scenario view was built, just like it was built with UIKit, but instead, AsyncDisplayKit's classes and methodologies were used.
+In order to test this out, a replica of the best case scenario view was built, identical to the one built with UIKit. This meant only having text message views. Media messages were replaced with text. Instead of UIKit classes, AsyncDisplayKit's classes and methodologies were used.
 
 \subsubsection*{Theoretical benefits}
-The theoretical result for using ASyncDisplayKit would be the same as their purpose: providing the user with a smooth, constant 60 frames per second user interface.
+The expected test results after applying AsyncDisplayKit's classes and methodologies was performance at least equivalent to that of UIKit's best case scenario. The expected benefits would be less resources consumed due to the better use of threads.
 
 \subsubsection*{Performance changes}
-The performance for ASyncDisplayKit was very bad and comparably worse than that of iOS's built in UIKit's worst case scenario.
+Running the performance tests yielded the following results:
+\itkIncludeImage{test-8}{Performance test results with AsyncDisplayKit's classes and methodologies}
+
+Not only was the performance noticeably worse compared to the UIKit's best case scenario, the time it took to open the view initially was unacceptable (more than 10 seconds to load all the AsyncDisplayKit's classes and views). UIKit's best case scenario view opened instantly, with no main thread holdups.
+
+Scrolling performance wise, it performed much worse than UIKit's \mintinline{swift}{UITableView}. The average frame rate did not meet the 60 frames per second expectation. The frame rate stability was also not a solid 100 percent. The actual recorded values were 58.5 frames per second and 97.5\% respectively. CPU usage was 26\% higher than that of UIKit's best case scenario. Graphics processor and memory usage did not change notably.
+
+Due to the best case scenario results being so poor, it was decided not to continue trying to make AsyncDisplayKit work as an optimization.
 
 \subsubsection*{Code examples}
-Below is a code example of how cells were created and returned to be used in the user interface, following AsyncDisplayKit's concentions.
+Below is a code example of how cells were created and returned to be used in the user interface using AsyncDisplayKit's classes and functions.
 \begin{listing}[H]
-  \caption{Creating and using cells with AsyncDisplayKit's classes}
+  \caption{Creation and use of AsyncDisplayKit's cell views}
   \begin{minted}{swift}
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
       let message = self._messages[indexPath.row]
