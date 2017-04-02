@@ -556,7 +556,8 @@ In order to reap full benefits from rasterization of the layers, all other direc
 The main benefit for this is to avoid unnecessary work on the CPU and GPU when rendering views, which should lead to a much faster UI when scrolling. 
 
 \subsubsection*{Performance changes}
-Performance increase significantly!
+Running the performance tests yielded the following results:
+\itkIncludeImage{test-7}{Performance test results after minimizing offscreen rendering}
 
 \subsubsection*{Code examples}
 In order to work around using CALayer's corner radius when drawing text cell views, the background with a corner radius could be drawn manually. This was achieved by creating a custom wrapper view for the text that knows how to draw the background efficiently. Below is the code for that view, which shows the background color being customizable and the draw method being only aware of drawing a rectangle with rounded corners.
