@@ -541,26 +541,28 @@ Enabling the rasterization of the cell views required adding only two lines of c
 \end{listing}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Avoiding offscreen rendering % % REVIEWED | T:   | G:   %
+% Avoiding offscreen rendering % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Avoiding unnecessary offscreen rendering}
-Offscreen rendering renders the required view into a new buffer (bitmap cache) which is offscreen (not on the screen) and then that buffer is drawn onto the screen. Compared to the conventional way of drawing the views piece by piece on the screen. For example, rasterization takes place offscreen as the view is composed into a bitmap and then the bitmap is drawn onto the screen.
+Offscreen rendering means drawing the view into a new buffer (bitmap cache) which is offscreen (not on the screen) before drawing that buffer on the screen. The conventional way of drawing views is to draw them subview by subview directly onto the screen.\cite{MovingPixelsOntoTheScreen}
 
-Offscreen rendering is only beneficial to performance if the GPU can use the composed bitmap later on as well. This is only the case for  views containing static images and text. For views containing animated images, offscreen rendering would only add unnecessary strain on the GPU.
+Offscreen rendering consumes more resources and is slower than conventional rendering, but it can be beneficial to performance due to the fact that the resulting bitmap can be cached and reused. The caching and reusing will only work and improve performance when the view does not change that often. The ideal case would be a view that never changes (is immutable). If a view were to change often, for example a view containing an animated image (GIF), then the drawing to bitmap would have had to be done every time the animated image's frame changed and none of the cached buffers could be reused.
 
-Layer rasterization was one way of manually triggering offscreen rendering. Offscreen rendering can also be triggered automatically by Core Animation. This would happen for example when a mask is directly or indirectly applied to a layer. That would force Core Animation to do offscreen rendering in order to apply that mask. This will in turn, as stated earlier, put unnecessary burden on the GPU.\cite{MovingPixelsOntoTheScreen}
+Layer rasterization was one example of manually triggering offscreen rendering on a whole view. Offscreen rendering can also be triggered automatically by Core Animation. This would happen for example when a mask is directly or indirectly applied to a layer. That would also force the graphics processor to do offscreen rendering in order to apply that mask. This will in turn, as stated earlier, put unnecessary burden on the GPU.\cite{MovingPixelsOntoTheScreen}
 
-In order to reap full benefits from rasterization of the layers, all other direct or indirect causes of offscreen rendering should be avoided. For example indirect causes for offscreen rendering are applying shadows and corner radiuses to the layer, the latter of which the test project does for all cells to create the chat bubble effect.\cite{MovingPixelsOntoTheScreen}
+In order to get benefits from the rasterization of layers, all other direct or indirect causes of offscreen rendering should be avoided. This is theoretically why the previous optimization did not work - some indirect causes of offscreen rendering were invalidating the rasterization cached bitmap. For example, some indirect causes of offscreen rendering are applying shadows and corner radiuses to the layer, the latter of which the test project does for all cells to create the chat bubble effect.\cite{MovingPixelsOntoTheScreen}
 
 \subsubsection*{Theoretical benefits}
-The main benefit for this is to avoid unnecessary work on the CPU and GPU when rendering views, which should lead to a much faster UI when scrolling. 
+The theoretical benefits were reduced resource usage and increased performance (better average frame rate, higher frame rate stability). These should have also resulted in smoother scrolling.
 
 \subsubsection*{Performance changes}
 Running the performance tests yielded the following results:
-\itkIncludeImage{test-7}{Performance test results after minimizing offscreen rendering}
+\itkIncludeImage{test-7}{Performance test results after removing unnecessary offscreen rendering}
+
+Avoiding unnecessary offscreen rendering proved to be beneficial to performance and graphics processor usage. The average frame rate increased by 3.1 and the stability increased by almost 10\%. While the average processor usage did not change much, the average graphics processor usage showed a huge drop of 29\%. The average memory usage, however, increased by a whopping 30\% (from 78 megabytes to 101.5 megabytes). 
 
 \subsubsection*{Code examples}
-In order to work around using CALayer's corner radius when drawing text cell views, the background with a corner radius could be drawn manually. This was achieved by creating a custom wrapper view for the text that knows how to draw the background efficiently. Below is the code for that view, which shows the background color being customizable and the draw method being only aware of drawing a rectangle with rounded corners.
+In order to work around using \mintinline{swift}{CALayer}'s corner radius when drawing text cell views, the background with a corner radius was drawn manually. This was done by creating a custom wrapper view for the text that was able draw the rounded corner background efficiently. Below is the code for that view, which shows the background color being customizable and the draw method being only aware of drawing a rectangle with rounded corners.
 \begin{listing}[H]
   \caption{Custom wrapper view for text message view with rounded corners that avoids offscreen rendering}
   \begin{minted}{swift}
