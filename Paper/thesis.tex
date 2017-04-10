@@ -256,6 +256,7 @@ FPSCounter is a small library to measure the frame rate of an iOS Application.\c
 In order to accurately compare performance changes in the test project, a set of starting points were needed. It was decided to use a best case scenario and a worst case scenario as two starting comparison points. Each of the tests had to be and were run with the exact same data set, including the best and worst case scenario ones.
 
 \subsection{Best case scenario}
+\label{sec:best-case-scenario}
 The best case scenario had the simplest possible subviews and had to goal to display the best possible performance. To create the simplest subviews, media items were omitted from the equation and built-in \mintinline{swift}{UITableView} \mintinline{swift}{UITableViewCell} were used, all of which displayed plain text.
 
 To achieve a text-only message list, all media messages were replaced at runtime with a text message with text \mintinline{text}{Media message with ID [N]} where \mintinline{text}{N} was the ID of the message. Text messages were displayed as they would be normally.
@@ -266,6 +267,7 @@ Running the performance tests on this view yielded the following results:
 As presumed before running the tests, this test case displayed the best possible performance. The test suite was run twice and the averages of the two test cases were taken as final comparable results. The average frame rate was exactly 60 frames per second, which is the iOS golden standard\cite{IntroducingAsyncDisplayKit}. Both CPU and GPU usage remained fairly low, with the averages being 16\% and 24\% respectively. This means neither of the processors were stressed when still providing the user with the smoothest possible experience.
 
 \subsection{Worst case scenario}
+\label{sec:worst-case-scenario}
 The worst case scenario had no known optimizations applied and did not follow any common performance boosting patterns (for example cell reusing). The data set was the same as the one provided in the best case scenario one, but media items were not omitted in this case. All messages were displayed as was specified in the user interface specifications.
 
 To render both text and media message views, two different view classes that inherited from \mintinline{swift}{UITableViewCell} were created. One for displaying text messages, the other for displaying media messages.
@@ -470,6 +472,7 @@ The cache was a simple \mintinline{swift}{Dictionary} where the key was the cell
 % Optimizing image sizes % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Optimizing image sizes}
+\label{sec:optimizing-image-sizes}
 As specified in the specification section, the test data contained about 25\% of media messages, all of which contained 1 to 3 images (both static and animated). Since images make up a relatively large portion of all messages in the test data set, it was decided to look into optimizing them by resizing them to the correct size before displaying them in the user interface. The idea was a collaboration between the author and the thesis' supervisor Gary Planthaber.
 
 PINRemoteImage already provided the functionality to do image processing and caching of the processed images, but that was only possible for non-animated images. It was decided to not optimize the animated images optimized and let the system handle them as they are.
@@ -544,6 +547,7 @@ Enabling the rasterization of the cell views required adding only two lines of c
 % Avoiding offscreen rendering % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Avoiding unnecessary offscreen rendering}
+\label{sec:avoiding-unnecessary-offscreen-rendering}
 Offscreen rendering means drawing the view into a new buffer (bitmap cache) which is offscreen (not on the screen) before drawing that buffer on the screen. The conventional way of drawing views is to draw them subview by subview directly onto the screen.\cite{MovingPixelsOntoTheScreen}
 
 Offscreen rendering consumes more resources and is slower than conventional rendering, but it can be beneficial to performance due to the fact that the resulting bitmap can be cached and reused. The caching and reusing will only work and improve performance when the view does not change that often. The ideal case would be a view that never changes (is immutable). If a view were to change often, for example a view containing an animated image (GIF), then the drawing to bitmap would have had to be done every time the animated image's frame changed and none of the cached buffers could be reused.
@@ -639,9 +643,38 @@ Below is a code example of how cells were created and returned to be used in the
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
 \section{End result}
-\subsection{Compared to the best case scenario}
+The end result was considered to be the result of applying all the optimizations cumulatively from recycling cells to avoiding unnecessary offscreen rendering. The optimizations included reusing cells, using static views, manual height calculations, height caching, image optimizations and avoiding unnecessary offscreen rendering. This meant considering the end result to be the product of \autoref{sec:avoiding-unnecessary-offscreen-rendering}.
 
 \subsection{Compared to the worst case scenario}
+To better compare the end result against the worst case scenario, a table comparing the worst case scenario results from \autoref{sec:worst-case-scenario} against the results from \autoref{sec:avoiding-unnecessary-offscreen-rendering} was created and is displayed below.
+\itkIncludeImage{worst-vs-end}{Worst case scenario results compared against the end result's test results}
+
+The duration of the test decreased from 105.5 seconds to 87.4, which is a 17\% decrease. This can be explained by the increased performance (better frame rate), as the processors could finish rendering all the required frames faster.
+
+The average frame rate increased from 26.0 to 53.4, which is a tremendous 105\% increase, effectively doubling the number of frames each second. The cap and goal of 60 frames per second was not achieved.
+
+The frame rate stability index improved more than 2.6 times, from the starting value of 23.6\% to 87.1\%. This custom measurement point effectively showed that not only did the average frame rate increase, the time spent within 20 percent of that average also increased by a big margin.
+
+Average processor and graphics processor both decreased by a noticeable margin. Average processor usage went from 69.4\% to 57.8\%, which is a 11\% decrease (comparative decrease of 16\%). Graphics processor's average usage decreased from 65.7\% to 40.1\% (comparative decrease of 38.9\%). Processors' usages went down while performance improved, which was the goal.
+
+Average memory usage increased by 2.6 times, from an average of 28 megabytes to 101.5 megabytes. The main reason for this increase was image processing. The biggest increase in average memory usage can be traced to \autoref{sec:optimizing-image-sizes}, where image optimizations were introduced. The mentioned optimizations increased average frame rate and frame rate stability while sacrificing memory usage. The memory usage increase is temporary, while the processing is first done and after properly caching the processed images, the memory usage will decrease.
+
+To conclude the comparison between the worst case scenario and the end result, it can be said that the optimizations were a success. The average frame rate more than doubled and the frame rate stability almost quadrupled. Average usages of both the graphics processor and the central processor decreased. Memory usage did increase by a large margin, but as the increase is temporary and will not affect the application's memory usage for the whole duration of the application's life, its importance can be disregarded. The optimizations can be called useful, when comparing them against the worst case scenario, as the performance improved while resource usage decreased.
+
+\newpage
+\subsection{Compared to the best case scenario}
+To compare the end result against the goal, which was the best case scenario, another table was created. The table displayed the differences between the test results from \autoref{sec:best-case-scenario} against the results from \autoref{sec:avoiding-unnecessary-offscreen-rendering}. The created table, which also contains comparative percentages, is displayed below.
+\itkIncludeImage{best-vs-end}{Best case scenario results compared against the end result's test results}
+
+The duration of the end result was still 21 seconds longer than that of best case scenario's. As was the case with the worst case scenario, this can be explained by the changes in performance. When the necessary frames are rendered faster, the duration will be less. This in turn is caused by the fact that the test ends when the scroll reaches the bottom.
+
+The best case scenario's average frame rate displayed that the cap is 60 frames per second and it is possible to achieve it with views that have very little complexity. The end result did not achieve the same average frame rate. Instead, the tests recorded the average frame rate to be 53.4. Even though it was proven that 60 frames per second can be achieved, the end result with all known optimizations could not reach it.
+
+The frame rate stability for the best case scenario proved the possibility of having a stability index of 100 percent. The end result did not manage to reach the 100 percent. Instead, the tests recorded a result of 87.1\%. As explained previously, this means that 87\% of the time was spent within 20 percent of the average frame rate, which was 53.4 frames per second. The 87.1\% stability was still an acceptably good result.
+
+Comparing the average central processor and graphics processor usage's in the best case scenario and end product's test results showed a shocking difference. Average processor usage was only 16\% in the best case scenario, but 57.8\% in the end result, which is about 3.5 times higher. The change was less drastic for the average graphics processor usage. It only increased from 23.8\% to 40\%, which is still quite an increase, but nothing worrying. These changes can be explained by the fact that the best case scenario did not have any complex views nor images in it. The processors' average usages did increase by a noticeable amount, but still stayed within reasonable bounds and did not come close to their upper limit.
+
+The average memory usage for the best case scenario was about the same as for all the optimizations until \autoref{sec:optimizing-image-sizes}, where image optimizations were introduced. After that point, the memory usage increased and the effect was worsened by the additional image processing introduced in \autoref{sec:avoiding-unnecessary-offscreen-rendering}. The average memory usage hovered near 101 megabytes after these optimizations, compared to the original 31 megabytes, as recorded in the best case scenario. As also mentioned in the previous subsection, end result compared to the worst case scenario, the memory usage would not stay at that recorded point, it would eventually settle down back to 31 megabytes when all the image processing is done. The average memory usage increased more than 3 times, but due to the fact that it is a temporary state, it is not considered a deal breaker.
 
 %%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Conclusions % % REVIEWED | T:   | G:   %
