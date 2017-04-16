@@ -38,62 +38,62 @@
 \def\enditkTitlePage{\itkMakeTitlePage}
 
 \def\itkMakeTitlePage{
-	\thispagestyle{empty}
-	\centering
+  \thispagestyle{empty}
+  \centering
 
-	{\LARGE\MakeUppercase {\university} \par}
-	\vskip2in
-	{\Large \@author \par}
-	{\LARGE\MakeUppercase {\@title} \par}
-	\vskip.5in
-	{\Large {\@paper} \par}
-	\vskip.5in
-	{\large\textbf {\MakeUppercase \@curriculum} \par}
-	\vfill
-	\begin{flushright}
-		{\large Supervisor: \@supervisor \par}
-		{\large Consultant: \@consultant \par}
-	\end{flushright}
-	\vfill
-	{\large {Tallinn \the\year} \par}}
+  {\LARGE\MakeUppercase {\university} \par}
+  \vskip2in
+  {\Large \@author \par}
+  {\LARGE\MakeUppercase {\@title} \par}
+  \vskip.5in
+  {\Large {\@paper} \par}
+  \vskip.5in
+  {\large\textbf {\MakeUppercase \@curriculum} \par}
+  \vfill
+  \begin{flushright}
+    {\large Supervisor: \@supervisor \par}
+    {\large Consultant: \@consultant \par}
+  \end{flushright}
+  \vfill
+  {\large {Tallinn \the\year} \par}}
 
 %%%%%%%%%%%%%%%%%%%%%%
 % Author declaration %
 %%%%%%%%%%%%%%%%%%%%%%
 \def\itkMakeAuthorDeclaration{
-	\newpage
-	\thispagestyle{empty}
+  \newpage
+  \thispagestyle{empty}
 
-	{\Large\textbf {\centerline {AUTORIDEKLARATSIOON}} \par}
+  {\Large\textbf {\centerline {AUTORIDEKLARATSIOON}} \par}
 
-	\vskip.5in
+  \vskip.5in
 
-	\begin{flushleft}
-		Deklareerin, et käesolev diplomitöö, mis on minu iseseisva töö tulemus, on esitatud Eesti Infotehnoloogia Kolledžile lõpudiplomi taotlemiseks IT Süsteemide arendamise erialal.  Diplomitöö alusel ei ole varem eriala lõpudiplomit taotletud.
-	\end{flushleft}
+  \begin{flushleft}
+    Deklareerin, et käesolev diplomitöö, mis on minu iseseisva töö tulemus, on esitatud Eesti Infotehnoloogia Kolledžile lõpudiplomi taotlemiseks IT Süsteemide arendamise erialal.  Diplomitöö alusel ei ole varem eriala lõpudiplomit taotletud.
+  \end{flushleft}
 
-	\vskip1.5in
+  \vskip1.5in
 
-	\begin{flushleft}
-		\begin{tabular}{p{8.0cm}p{4.0cm}}
-			Autor: \@author & ..............................\\
-			& (allkiri ja kuupäev)  \\
-			Töö vastab kehtivatele nõuetele &  \\	
-			Juhendaja: \@supervisor & ..............................\\
-			& (allkiri ja kuupäev) \\
-		\end{tabular}
-	\end{flushleft}}
+  \begin{flushleft}
+    \begin{tabular}{p{8.0cm}p{4.0cm}}
+      Autor: \@author & ..............................\\
+      & (allkiri ja kuupäev)  \\
+      Töö vastab kehtivatele nõuetele &  \\	
+      Juhendaja: \@supervisor & ..............................\\
+      & (allkiri ja kuupäev) \\
+    \end{tabular}
+  \end{flushleft}}
 
 %%%%%%%%%%%%%%%%%%%%%
 % Introduction page %
 %%%%%%%%%%%%%%%%%%%%%
 \def\introduction#1{
-	\section*{#1}
-	\addcontentsline{toc}{section}{#1}}
+  \section*{#1}
+  \addcontentsline{toc}{section}{#1}}
 
 \def\introductionSubsection#1{
-	\subsection*{#1}
-	\addcontentsline{toc}{subsection}{#1}}
+  \subsection*{#1}
+  \addcontentsline{toc}{subsection}{#1}}
 
 %%%%%%%%%%%%%%%%%%%
 % Image inclusion %
@@ -102,12 +102,12 @@
 \usepackage{graphicx}
 
 \def\itkIncludeImage#1#2{
-	\begin{figure}[H]
-	\leavevmode
-	\includegraphics[width=0.8\textwidth]{#1}
-	\caption{#2}
+  \begin{figure}[H]
+  \leavevmode
+  \includegraphics[width=0.8\textwidth]{#1}
+  \caption{#2}
   \label{#1}
-	\end{figure}}
+  \end{figure}}
 
 %%%%%%%%%%%%%%%%%%
 % Table captions %
