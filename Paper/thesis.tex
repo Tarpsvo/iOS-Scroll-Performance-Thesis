@@ -196,7 +196,7 @@ To gather quantifiable information and not base comparison points on visual judg
 \subsection{Repeatable test case}
 The repeatable test case's purpose was to simulate scrolling and do it in the exact same way every time the test is executed.
 
-To achieve this, UITableView's \mintinline{swift}{setContentOffset(contentOffset, animated: true)} function was used along with a repeating \mintinline{swift}{Timer}. The \mintinline{swift}{Timer} fired every 0.4 seconds and forced the view to scroll, starting from the top, towards the bottom. The scrolling was purposefully not linear: starting from 100 points, every time the timer fired and the view was scrolled, the scroll amount increased by 30 points. This means that the first time the timer fired, the \mintinline{swift}{setContentOffset(contentOffset, animated: true)} was fired with a 100 point increase in the vertical content offset. The next time, the increase was 130 points and after that, 160 points.
+To achieve this, UITableView's \mintinline{swift}{setContentOffset(contentOffset, animated: true)} function was used along with a repeating Timer. The Timer fired every 0.4 seconds and forced the view to scroll, starting from the top, towards the bottom. The scrolling was purposefully not linear: starting from 100 points, every time the timer fired and the view was scrolled, the scroll amount increased by 30 points. This means that the first time the timer fired, the \mintinline{swift}{setContentOffset(contentOffset, animated: true)} was fired with a 100 point increase in the vertical content offset. The next time, the increase was 130 points and after that, 160 points.
 
 \subsection{Measuring test case performance}
 A multitude of metrics were monitored to get a good overview of the performance and efficiency of the UITableView. In addition to measuring frame rates and scroll test durations, the system resource usages were monitored. The purpose of that was to reveal if and how the performance is dependant on the system's resource usage. The monitored resources were processor (CPU), graphics processor (GPU) and memory (RAM) usage.
@@ -243,7 +243,7 @@ PINRemoteImage, also known as PINRemoteImageManager, is an image downloading, pr
 XCGLogger is a debug log framework for use in Swift projects.\cite{XCGLogger} XCGLogger improved Swift's built-in logging mechanism by adding a lot of useful, yet optional, information about every log statement. For example, it displayed the thread name on which the log statement was executed on, without forcing the engineer to explicitly print out the thread name. The exact same went for function names, file names and line numbers. Its uses and benefits in the test project are the same as the examples brought out previously (such as the identification of threads and functions).
 
 \subsection{FLAnimatedImageView}
-FLAnimatedImage is a performant animated GIF engine for iOS.\cite{FLAnimatedImageView} FLAnimatedImageView does one thing that the iOS's built in \mintinline{swift}{UIImageView} was not able to do: play GIFs. This library was very important to both the test project and the actual Pairby application for that exact reason.
+FLAnimatedImage is a performant animated GIF engine for iOS.\cite{FLAnimatedImageView} FLAnimatedImageView does one thing that the iOS's built in UIImageView was not able to do: play GIFs. This library was very important to both the test project and the actual Pairby application for that exact reason.
 
 \subsection{FPSCounter}
 FPSCounter is a small library to measure the frame rate of an iOS Application.\cite{FPSCounterGithub} It was used for that same purpose in the test project. The data gathered by it was used to analyze the performance of each optimization method (and/or test case).
@@ -257,9 +257,9 @@ In order to accurately compare performance changes in the test project, a set of
 
 \subsection{Best case scenario}
 \label{sec:best-case-scenario}
-The best case scenario had the simplest possible subviews and had to goal to display the best possible performance. To create the simplest subviews, media items were omitted from the equation and built-in UITableView \mintinline{swift}{UITableViewCell} were used, all of which displayed plain text.
+The best case scenario had the simplest possible subviews and had to goal to display the best possible performance. To create the simplest subviews, media items were omitted from the equation and built-in UITableViewCell class instances were used, all of which displayed plain text.
 
-To achieve a text-only message list, all media messages were replaced at runtime with a text message with text \mintinline{text}{Media message with ID [N]} where \mintinline{text}{N} was the ID of the message. Text messages were displayed as they would be normally.
+To achieve a text-only message list, all media messages were replaced at runtime with a text message with the text \mintinline{text}{Media message with ID [N]} where \mintinline{text}{N} was the ID of the message. Text messages were displayed as they would be normally.
 
 Running the performance tests on this view yielded the following results:
 \itkIncludeImage{test-0-1}{Performance test results for the best case scenario}
@@ -270,7 +270,7 @@ As presumed before running the tests, this test case displayed the best possible
 \label{sec:worst-case-scenario}
 The worst case scenario had no known optimizations applied and did not follow any common performance boosting patterns (for example cell reusing). The data set was the same as the one provided in the best case scenario one, but media items were not omitted in this case. All messages were displayed as was specified in the user interface specifications.
 
-To render both text and media message views, two different view classes that inherited from \mintinline{swift}{UITableViewCell} were created. One for displaying text messages, the other for displaying media messages.
+To render both text and media message views, two different view classes that inherited from UITableViewCell were created. One for displaying text messages, the other for displaying media messages.
 
 Running the performance tests on this view yielded the following results:
 \itkIncludeImage{test-0-2}{Performance test results for the worst case scenario}
@@ -441,7 +441,7 @@ Running the performance tests yielded the following results:
 As expected, the performance did improve. The average frame rate increased by 3.9 frames per second and the stability by 6.95 percent. The average processor, graphics processor and memory usage, similarly to previous tests, remained the same. The average processor usage did decrease by 1.91\%, but that deviation is too small to draw any conclusions from. In conclusion, the average frame rate increased by 8.7\%, stability by 6.95\% and the resource usage stayed the same.
 
 \subsubsection*{Code examples}
-The cache was a simple \mintinline{swift}{Dictionary} where the key was the cell's row index and the value was the height as a \mintinline{swift}{CGFloat}. Below is an example of the whole cycle of calculating, caching and using the cached value. The calculations have been omitted from this code, they can be seen in section \ref{subsection:ManualCellHeightCalculations}. 
+The cache was a simple Dictionary where the key was the cell's row index and the value was the height as a CGFloat. Below is an example of the whole cycle of calculating, caching and using the cached value. The calculations have been omitted from this code, they can be seen in section \ref{subsection:ManualCellHeightCalculations}. 
 \begin{listing}[H]
   \caption{Caching and using cached height}
   \begin{minted}{swift}
@@ -520,7 +520,7 @@ Below is an example of how the image was resized to a given size, using iOS' bui
 % Layer rasterization % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Rasterization of cell layers}
-Rasterization in the iOS view rendering context means turning the view into a cacheable bitmap that can be used in later rendering more efficiently. Rasterization of views was a built in feature of the \mintinline{swift}{CALayer} class. Every view has a \mintinline{swift}{CALayer} instance, accessible through the \mintinline{swift}{layer} property. That property is inherited from the \mintinline{swift}{UIView} base class.
+Rasterization in the iOS view rendering context means turning the view into a cacheable bitmap that can be used in later rendering more efficiently. Rasterization of views was a built in feature of the CALayer class. Every view has a CALayer instance, accessible through the \mintinline{swift}{layer} property. That property is inherited from the UIView base class.
 
 \subsubsection*{Theoretical benefits}
 All the views except the ones containing animated images are static once rendered and will not change in the UI. This was one of the requirements to reap benefits from layer rasterization. Rasterization process consumes more resources and time than regular rendering at first, but once done, the view would be handled much more efficiently by the rendering engine due to the fact that the graphics processor can use the cached bitmap instead of re-drawing the view.\cite{MovingPixelsOntoTheScreen}
@@ -566,7 +566,7 @@ Running the performance tests yielded the following results:
 Avoiding unnecessary offscreen rendering proved to be beneficial to performance and graphics processor usage. The average frame rate increased by 3.1 and the stability increased by almost 10\%. While the average processor usage did not change much, the average graphics processor usage showed a huge drop of 29\%. The average memory usage, however, increased by a whopping 30\% (from 78 megabytes to 101.5 megabytes). 
 
 \subsubsection*{Code examples}
-In order to work around using \mintinline{swift}{CALayer}'s corner radius when drawing text cell views, the background with a corner radius was drawn manually. This was done by creating a custom wrapper view for the text that was able draw the rounded corner background efficiently. Below is the code for that view, which shows the background color being customizable and the draw method being only aware of drawing a rectangle with rounded corners.
+In order to work around using CALayer's corner radius when drawing text cell views, the background with a corner radius was drawn manually. This was done by creating a custom wrapper view for the text that was able draw the rounded corner background efficiently. Below is the code for that view, which shows the background color being customizable and the draw method being only aware of drawing a rectangle with rounded corners.
 \begin{listing}[H]
   \caption{Custom wrapper view for text message view with rounded corners that avoids offscreen rendering}
   \begin{minted}{swift}
