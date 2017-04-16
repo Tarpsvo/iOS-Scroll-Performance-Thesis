@@ -85,18 +85,18 @@ Verbal feedback from smartphone users, online studies regarding the priorities o
 Pairby's mobile applications are no exception when it comes to that good user experience requirement. Pairby, of which the author is a co-founder of, is a mobile dating service which has applications on both iOS and Android platforms. The thesis subject is directly derived from the author's interest in solving a performance issue in the iOS application.
 
 \introductionSubsection{Description of the problem}
-Pairby iOS application contains, among other views, a multitude of different vertically scrolling views, which can contain a theoretically unlimited amount of subviews. One of those vertically scrolling views is the message list view, which this thesis will focus on. The message list view's purpose is to render a list of messages using a \mintinline{swift}{UITableView} component, in which each message could contain either text or images.
+Pairby iOS application contains, among other views, a multitude of different vertically scrolling views, which can contain a theoretically unlimited amount of subviews. One of those vertically scrolling views is the message list view, which this thesis will focus on. The message list view's purpose is to render a list of messages using a UITableView component, in which each message could contain either text or images.
 
 Pairby iOS application's first prototype version was scratched due to a massive performance issue in the message list view. Namely, scrolling up or down at a rapid speed in that view was so resource consuming on any older Apple device it froze the whole user interface. This behavior was deemed unacceptable by the Pairby team and development of that prototype was halted. It became apparent to the developer that something fundamental had been done wrong both in the development of the user interface and in the handling of the data in the model.
 
 At the time of starting the thesis test project, the development of the new iOS application for Pairby had started, but a solution to the performance issue had not yet been found.
 
 \introductionSubsection{Goal of the thesis}
-The goal of the thesis was to analyze a number of different optimizations that can be applied to the \mintinline{swift}{UITableView} component and its subviews in order to improve the responsiveness of the user interface and through that make the application offer a good user experience. All optimizations were applied in a sequence, where the next one would complement the previous one, creating a more performant view after each optimization. The user interface was designed with the Pairby real-life application in mind: visually, the test project and the real life application share many similarities.
+The goal of the thesis was to analyze a number of different optimizations that can be applied to the UITableView component and its subviews in order to improve the responsiveness of the user interface and through that make the application offer a good user experience. All optimizations were applied in a sequence, where the next one would complement the previous one, creating a more performant view after each optimization. The user interface was designed with the Pairby real-life application in mind: visually, the test project and the real life application share many similarities.
 
 Each optimization had to go through a pre-defined programmatic scrolling test while different aspects of the device's were monitored. The monitoring resulted in large data sets about the frame rate, CPU usage and memory usage, which were then analyzed and combined into general data about the test. These generalized values were then compared against existing results and the optimization's effectiveness was decided based on that.
 
-The expected end result was a \mintinline{swift}{UITableView} component that is performant even when the scroll behavior exceeds the boundaries of realistic use cases.
+The expected end result was a UITableView component that is performant even when the scroll behavior exceeds the boundaries of realistic use cases.
 
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Specifications % % REVIEWED | T: + | G:   %
@@ -196,10 +196,10 @@ To gather quantifiable information and not base comparison points on visual judg
 \subsection{Repeatable test case}
 The repeatable test case's purpose was to simulate scrolling and do it in the exact same way every time the test is executed.
 
-To achieve this, \mintinline{swift}{UITableView}'s \mintinline{swift}{setContentOffset(contentOffset, animated: true)} function was used along with a repeating \mintinline{swift}{Timer}. The \mintinline{swift}{Timer} fired every 0.4 seconds and forced the view to scroll, starting from the top, towards the bottom. The scrolling was purposefully not linear: starting from 100 points, every time the timer fired and the view was scrolled, the scroll amount increased by 30 points. This means that the first time the timer fired, the \mintinline{swift}{setContentOffset(contentOffset, animated: true)} was fired with a 100 point increase in the vertical content offset. The next time, the increase was 130 points and after that, 160 points.
+To achieve this, UITableView's \mintinline{swift}{setContentOffset(contentOffset, animated: true)} function was used along with a repeating \mintinline{swift}{Timer}. The \mintinline{swift}{Timer} fired every 0.4 seconds and forced the view to scroll, starting from the top, towards the bottom. The scrolling was purposefully not linear: starting from 100 points, every time the timer fired and the view was scrolled, the scroll amount increased by 30 points. This means that the first time the timer fired, the \mintinline{swift}{setContentOffset(contentOffset, animated: true)} was fired with a 100 point increase in the vertical content offset. The next time, the increase was 130 points and after that, 160 points.
 
 \subsection{Measuring test case performance}
-A multitude of metrics were monitored to get a good overview of the performance and efficiency of the \mintinline{swift}{UITableView}. In addition to measuring frame rates and scroll test durations, the system resource usages were monitored. The purpose of that was to reveal if and how the performance is dependant on the system's resource usage. The monitored resources were processor (CPU), graphics processor (GPU) and memory (RAM) usage.
+A multitude of metrics were monitored to get a good overview of the performance and efficiency of the UITableView. In addition to measuring frame rates and scroll test durations, the system resource usages were monitored. The purpose of that was to reveal if and how the performance is dependant on the system's resource usage. The monitored resources were processor (CPU), graphics processor (GPU) and memory (RAM) usage.
 
 Measuring frame rates was programmatic and handled by a custom implementation of the FPSCounter\cite{FPSCounterGithub} library. The scroll test duration was also measured programmatically.
 
@@ -257,7 +257,7 @@ In order to accurately compare performance changes in the test project, a set of
 
 \subsection{Best case scenario}
 \label{sec:best-case-scenario}
-The best case scenario had the simplest possible subviews and had to goal to display the best possible performance. To create the simplest subviews, media items were omitted from the equation and built-in \mintinline{swift}{UITableView} \mintinline{swift}{UITableViewCell} were used, all of which displayed plain text.
+The best case scenario had the simplest possible subviews and had to goal to display the best possible performance. To create the simplest subviews, media items were omitted from the equation and built-in UITableView \mintinline{swift}{UITableViewCell} were used, all of which displayed plain text.
 
 To achieve a text-only message list, all media messages were replaced at runtime with a text message with text \mintinline{text}{Media message with ID [N]} where \mintinline{text}{N} was the ID of the message. Text messages were displayed as they would be normally.
 
@@ -288,7 +288,7 @@ All performance optimizations were built on top of one another in a way that eac
 % Reusing cells % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Reusing cells}
-Reusing the cells was chosen as a so-called starting point for all the optimizations due to the fact it was one of the more widely known ones. That capability was already built into the \mintinline{swift}{UITableView} control by Apple and has been there ever since iOS 2.0.\cite{HackingWithSwiftCellReuse}
+Reusing the cells was chosen as a so-called starting point for all the optimizations due to the fact it was one of the more widely known ones. That capability was already built into the UITableView control by Apple and has been there ever since iOS 2.0.\cite{HackingWithSwiftCellReuse}
 
 \subsubsection*{Theoretical benefits}
 Reusing cells means that every time a new message enters the view, instead of creating a new instance of the cell class, an existing object created from that class is used. This reuse of cell objects is a performance enhancement because it eliminates the overhead of cell creation.\cite{AppleCharacteristicsOfCellObjects}
@@ -302,7 +302,7 @@ Running the performance tests yielded the following results:
 The optimization certainly had a positive impact on the performance of the project, compared to the worst case scenario which was the starting point. Average frame rate increased by 8.9 frames per second, while both the processor's and graphic processor's average usage decreased by 12.78 and 2.95 percent respectively. The duration for the test case also decreased from 105.5 seconds to 92.7 seconds, displaying a time decrease of 12.8 seconds. This was directly tied to the average frame rate, as all the necessary frames were rendered faster. Average memory usage did show an increase of 3 megabytes, from 28 to 31 megabytes, but this change is small enough to classify it as minor and label it as "did not change".
 
 \subsubsection*{Code examples}
-Apple has already built support for cell reusing into the \mintinline{swift}{UITableView} component, meaning the implementation on the \mintinline{swift}{UITableView} side of things required little effort from the software engineer. All the reusable cell classes had to be registered to the instance of the \mintinline{swift}{UITableView} class they are meant to be reused in using the \mintinline{swift}{register(_:forCellReuseIdentifier:)} function.\cite{AppleRegisterMethod} After registering, they can be requested from the \mintinline{swift}{UITableView} instance by using the \mintinline{swift}{dequeueReusableCell(withIdentifier:)} function.\cite{AppleDequeueReusableCellMethod}
+Apple has already built support for cell reusing into the UITableView component, meaning the implementation on the UITableView side of things required little effort from the software engineer. All the reusable cell classes had to be registered to the instance of the UITableView class they are meant to be reused in using the \mintinline{swift}{register(_:forCellReuseIdentifier:)} function.\cite{AppleRegisterMethod} After registering, they can be requested from the UITableView instance by using the \mintinline{swift}{dequeueReusableCell(withIdentifier:)} function.\cite{AppleDequeueReusableCellMethod}
 
 \newpage % Break to new page, to keep the image and text together
 Below is an example on how to register cell classes to be reused in a specific UITableView instance.
@@ -358,7 +358,7 @@ The optimization had a strong effect on the average frame rate which increased b
 \subsubsection*{Code examples}
 This also changed the code for reusing the cells. After re-working the cell views, 8 different views needed to be registered to be recycled and that in turn made the logic of querying reusable cells a bit more difficult.
 
-Below is the new code where the 8 new views are registered in the main \mintinline{swift}{UITableView} instance:
+Below is the new code where the 8 new views are registered in the main UITableView instance:
 \begin{listing}[H]
   \caption{Registering static cell views to a UITableView instance}
   \begin{minted}{swift}
@@ -377,10 +377,10 @@ Below is the new code where the 8 new views are registered in the main \mintinli
 % Manual cell height calculations % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Manual cell height calculations}\label{subsection:ManualCellHeightCalculations}
-Up to this point in the test project, the cell height calculations had been done automatically by the \mintinline{swift}{UITableView} instance's underlying logic. This was activated purposefully by setting the \mintinline{swift}{UITableView} instance's property \mintinline{swift}{rowHeight} to \mintinline{swift}{UITableViewAutomaticDimension}. According to a multitude of sources, these automatic calculations are often slow and it's sensible to override them with manual calculations that are more efficient.\cite{PerfectSmoothScrollingInUITableViews}\cite{HowToMakeDynamicTableViewCellHeight}\cite{MediumSmoothScrollPrearo}
+Up to this point in the test project, the cell height calculations had been done automatically by the UITableView instance's underlying logic. This was activated purposefully by setting the UITableView instance's property \mintinline{swift}{rowHeight} to \mintinline{swift}{UITableViewAutomaticDimension}. According to a multitude of sources, these automatic calculations are often slow and it's sensible to override them with manual calculations that are more efficient.\cite{PerfectSmoothScrollingInUITableViews}\cite{HowToMakeDynamicTableViewCellHeight}\cite{MediumSmoothScrollPrearo}
 
 \subsubsection*{Theoretical benefits}
-Calculating the cell height manually using efficient calculations should improve the performance when scrolling at high speeds or when the whole \mintinline{swift}{UITableView} is refreshed using the \mintinline{swift}{reloadData()} function, which causes all cell heights to be calculated again.
+Calculating the cell height manually using efficient calculations should improve the performance when scrolling at high speeds or when the whole UITableView is refreshed using the \mintinline{swift}{reloadData()} function, which causes all cell heights to be calculated again.
 
 When doing manual calculations, it was trivial to optimize the calculations for the type of cells the application should be able to render. For example, media cells had a fixed height and calculations were not necessary in that case, as the pre-defined constant could be returned instead (the vertical margins should still be added to it).
 
@@ -618,7 +618,7 @@ Running the performance tests yielded the following results:
 
 Not only was the performance noticeably worse compared to the UIKit's best case scenario, the time it took to open the view initially was unacceptable (more than 10 seconds to load all the AsyncDisplayKit's classes and views). UIKit's best case scenario view opened instantly, with no main thread holdups.
 
-Scrolling performance wise, it performed much worse than UIKit's \mintinline{swift}{UITableView}. The average frame rate did not meet the 60 frames per second expectation. The frame rate stability was also not a solid 100 percent. The actual recorded values were 58.5 frames per second and 97.5\% respectively. CPU usage was 26\% higher than that of UIKit's best case scenario. Graphics processor and memory usage did not change notably.
+Scrolling performance wise, it performed much worse than UIKit's UITableView. The average frame rate did not meet the 60 frames per second expectation. The frame rate stability was also not a solid 100 percent. The actual recorded values were 58.5 frames per second and 97.5\% respectively. CPU usage was 26\% higher than that of UIKit's best case scenario. Graphics processor and memory usage did not change notably.
 
 Due to the best case scenario results being so poor, it was decided not to continue trying to make AsyncDisplayKit work as an optimization.
 
