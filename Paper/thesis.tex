@@ -92,7 +92,7 @@ Pairby iOS application's first prototype version was scratched due to a massive 
 At the time of starting the thesis test project, the development of the new iOS application for Pairby had started, but a solution to the performance issue had not yet been found.
 
 \introductionSubsection{Goal of the thesis}
-The goal of the thesis is to analyze a number of different optimizations that can be done to the \mintinline{swift}{UITableView} component and its subviews (cells) in order to reduce the resource consumption on less powerful iOS devices and through that improve the responsiveness of the user interface. All optimizations were applied in a sequence, where the next one would complement the previous one, creating a more performant view after each optimization. The user interface was designed with the Pairby real-life application in mind: visually, the test project and the real life application share many similarities.
+The goal of the thesis was to analyze a number of different optimizations that can be applied to the \mintinline{swift}{UITableView} component and its subviews in order to improve the responsiveness of the user interface and through that make the application offer a good user experience. All optimizations were applied in a sequence, where the next one would complement the previous one, creating a more performant view after each optimization. The user interface was designed with the Pairby real-life application in mind: visually, the test project and the real life application share many similarities.
 
 Each optimization had to go through a pre-defined programmatic scrolling test while different aspects of the device's were monitored. The monitoring resulted in large data sets about the frame rate, CPU usage and memory usage, which were then analyzed and combined into general data about the test. These generalized values were then compared against existing results and the optimization's effectiveness was decided based on that.
 
@@ -676,11 +676,26 @@ Comparing the average central processor and graphics processor usage's in the be
 
 The average memory usage for the best case scenario was about the same as for all the optimizations until \autoref{sec:optimizing-image-sizes}, where image optimizations were introduced. After that point, the memory usage increased and the effect was worsened by the additional image processing introduced in \autoref{sec:avoiding-unnecessary-offscreen-rendering}. The average memory usage hovered near 101 megabytes after these optimizations, compared to the original 31 megabytes, as recorded in the best case scenario. As also mentioned in the previous subsection, end result compared to the worst case scenario, the memory usage would not stay at that recorded point, it would eventually settle down back to 31 megabytes when all the image processing is done. The average memory usage increased more than 3 times, but due to the fact that it is a temporary state, it is not considered a deal breaker.
 
-%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Conclusions % % REVIEWED | T:   | G:   %
-%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Summary % % REVIEWED | T: + | G:   %
+%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\section{Conclusions}
+\section{Summary}
+The goal of the thesis was to find optimizations that would improve the Pairby iOS application's message list view's UITableView component's performance. In total, 8 different optimization methods were realized and benchmarked. 6 of the found optimizations had the expected performance boosting effect. 2 of the optimizations did not provide the expected performance enhancing benefits, but were still included in this thesis since their failure reasons became a basis for the next optimizations.
+
+The practical part of the thesis started by creating two benchmarking points called the worst case scenario and the best case scenario. Their goal was to represent the worst possible performance and the best possible performance. The worst case scenario with its  view became the starting point for all optimizations while the 60 frame per second performance recorded in best case scenario view became the ultimate goal.
+
+The whole optimization process was split into sections, each covering one specific optimization technique. Each section had three subsections in addition to the short introduction: theoretical benefits, performance changes and code examples. This structure allowed each technique to be explained in adequate depth in a similar manner across all sections.
+
+Even though the optimizations were handled individually per section, all optimizations were applied accumulatively to the main project throughout the optimization process. The purpose of that was to ultimately create a view which had all the optimizations and eventually mark it as the end result.
+
+To draw conclusions from done work, the end result, which was a result of all found and applied optimizations, was compared to the worst and best case scenarios.
+
+Compared to the worst case scenario, the improvements were huge. The average frame rate increased by 105\% and ended up at a measured value of 53.4 frames per second. The frame rate stability (time spent within 20\% of the average frame rate) increased from 23\% to 87\%, which is a huge improvement. The average central processor and graphics processor usages decreased by 11.5\% and 25.6\% respectively. The respective values for the average CPU and GPU usages measured for the end result were 57.9\% and 40.2\%. The average memory usage showed a huge increase from 28.0 megabytes to 101.5 megabytes. That increase can be explained by the addition of image processing, which improved average frame rates and frame rate stability at the cost of temporarily using more memory. When comparing the end result to the worst case scenario, all the performance related parameters increased by more than two times while the average CPU and GPU usage went down and the memory usage showed a temporary increase.
+
+The end result did not achieve the performance numbers measured and set as a goal in the best case scenario tests. The best case scenario showed that an average frame rate 60 frames per second and a frame rate stability of 100\% is the best possible performance. The end result benchmarks recorded an average frame rate of 53.4 frames per second and a frame rate stability of 87.1\%. Both of those metrics came close to 90\% of the goal, which can be counted as a success. The average CPU, GPU and memory usages increased by a lot. Average CPU usage increased from 16.1\% to 57.9\%, GPU usage from 23.9\% to 40.2\% and memory usage from 31.0 to 101.5 megabytes. When comparing the end result to the set goal, about 90\% of the performance goal was achieved, which can be counted as a success.
+
+The author finds that the user experience provided by the end result is great. The end result offered about 90\% of the best possible performance and the author finds that a frame rate of 53.4 frames per second is indistinguishable from 60 frames per second by an average user. This means that the goal of the thesis, which was to offer a good user experience related to scroll performance, was achieved.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% After-content sections %%%%
