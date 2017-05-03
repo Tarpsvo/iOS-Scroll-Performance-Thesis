@@ -643,10 +643,10 @@ Below is a code example of how cells were created and returned to be used in the
 % End result comparisons % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
-\section{End result}
+\section{Findings}
 The end result was considered to be the result of applying all the optimizations cumulatively from recycling cells to avoiding unnecessary offscreen rendering. The optimizations included reusing cells, using static views, manual height calculations, height caching, image optimizations and avoiding unnecessary offscreen rendering. This meant considering the end result to be the product of \autoref{sec:avoiding-unnecessary-offscreen-rendering}.
 
-\subsection{Compared to the worst case scenario}
+\subsection{Performance relative to worst case scenario}
 To better compare the end result against the worst case scenario, a table comparing the worst case scenario results from \autoref{sec:worst-case-scenario} against the results from \autoref{sec:avoiding-unnecessary-offscreen-rendering} was created and is displayed below.
 \itkIncludeImage{worst-vs-end}{Worst case scenario results compared against the end result's test results}
 
@@ -663,7 +663,7 @@ Average memory usage increased by 2.6 times, from an average of 28 megabytes to 
 To conclude the comparison between the worst case scenario and the end result, it can be said that the optimizations were a success. The average frame rate more than doubled and the frame rate stability almost quadrupled. Average usages of both the graphics processor and the central processor decreased. Memory usage did increase by a large margin, but as the increase is temporary and will not affect the application's memory usage for the whole duration of the application's life, its importance can be disregarded. The optimizations can be called useful, when comparing them against the worst case scenario, as the performance improved while resource usage decreased.
 
 \newpage
-\subsection{Compared to the best case scenario}
+\subsection{Performance relative to best case scenario}
 To compare the end result against the goal, which was the best case scenario, another table was created. The table displayed the differences between the test results from \autoref{sec:best-case-scenario} against the results from \autoref{sec:avoiding-unnecessary-offscreen-rendering}. The created table, which also contains comparative percentages, is displayed below.
 \itkIncludeImage{best-vs-end}{Best case scenario results compared against the end result's test results}
 
