@@ -66,6 +66,7 @@
 %%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \thispagestyle{empty}
+\setcounter{tocdepth}{2}
 \tableofcontents
 \newpage
 
@@ -108,7 +109,7 @@ The test project was meant to broadly mimic the user interface of the real-life 
 \subsection{Test data requirements}
 The test data contained 500 message type objects. The data was stored in JSON format and saved to a file which could then be loaded into the iOS test project using the XCode assets interface.
 
-\subsubsection*{Message type}
+\subsubsection{Message type}
 The type definition for the Message object.
 
 \vskip.2in
@@ -127,12 +128,12 @@ The type definition for the Message object.
   \end{tabularx}
 \end{table}
 
-\subsubsection*{Text message requirements}
+\subsubsection{Text message requirements}
 Text messages can vary in both width and height. Width is dependant on both the length of the longest line of text in the message text and the screen width. The height depends on the number of lines in the text. The number of lines in turn depends on the screen width and whether the text is long enough to require text wrapping or contains line breaks.
 
 To simulate real life scenarios, text messages of three different widths and heights were created. These test messages consisted of horizontally slim single line messages, medium width two line messages and wide three line messages. To guarantee similar data rendering across different devices and screen widths, line breaks were used to create multi-line messages. The other option would have required word-wrapping, which would have depended on the width of the screen on the device and not produced the same number of lines on across all devices.
 
-\subsubsection*{Media message requirements}
+\subsubsection{Media message requirements}
 In the Pairby real life application, media messages can contain up to 6 media items that can either be static images (JPG), animated images (GIF) or videos (MP4).
 
 Inside the messages list view, however, the media items are restricted into two different formats: static and animated images. Video thumbnails, which are the displayed in the message list view, are still static images. This reduces the required different media types down to static and animated images.
@@ -144,7 +145,7 @@ To simulate real conditions, all media should be loaded from Pairby servers thro
 \subsection{Test data generation}
 Test data for the project was generated in a separate script, which is written in JavaScript and executed in a Node.JS environment. The output of the script was a JSON file that contained an array of message type objects.
 
-\subsubsection*{Message generation}
+\subsubsection{Message generation}
 The number of messages to be generated was configurable and was set to 500 for the purposes of this test project.
 
 The type (text or media) of each message was decided using a semi-random probability technique: a random number from 0 to 1 was generated and compared against a configurable parameter called "media message probability". If the generated number was less than or equal to the "media message probability" parameter, the message type was set to be media message and therefore its "mediaItems" parameter was filled out. If the generated number happened to be larger than the previously defined parameter, then the message was set to be of text type and its "message" property was filled out. The test dataset was generated with the media message probability set to 0.25 (25\%).
@@ -153,10 +154,10 @@ The message ID was simply set to the sequence number in the running loop (which 
 
 Each message's direction was also defined through a random number generator and was set to have an equal chance of either being outbound or inbound. This process was similar to the way the message type was chosen: a random number between 0 and 1 was generated and it was compared against 0.5, if was less than or equal to 0.5, "direction" property was set to out, otherwise it was set to "in". This would in theory mean that half of the messages would be outbound and the other half inbound, but not in a pre-determined order.
 
-\subsubsection*{Text message content generation}
+\subsubsection{Text message content generation}
 As defined in the specifications, there were three different text messages, all of which were different in height and width. The text for each three different types was static (pre-defined). Selecting one of the three different texts (which would determine both the width and height) was random and each message type had an equal chance of being selected. A random whole number between 1 and 3 (inclusive) was generated, if it was 1, then the short one line message was chosen. If the generated number was 2, then the two line medium width text was chosen. If the number was 3, then the three line and widest text was selected.
 
-\subsubsection*{Media message content generation}
+\subsubsection{Media message content generation}
 In order to properly mimic the real life scenarios in the message list view all media had to be loaded from the Pairby media servers. The ability of uploading media to the Pairby media servers through the public Pairby API was built to the data generator, which then returned the URLs to the uploaded files.
 
 The sample media files consisted of 100 static images of JPG format and 10 animated images of GIF format. All of those images were uploaded to the Pairby media servers.
@@ -168,13 +169,13 @@ The URL or URLs that would represent the media items were chosen randomly and du
 \subsection{User interface requirements}
 As stated in the introduction to this section, the user interface was meant to mimic Pairby iOS application's messaging user interface.
 
-\subsubsection*{Common design elements}
+\subsubsection{Common design elements}
 Both the text and media message views had to have rounded corners with a radius of 15 points and a border of gray colour (\mintinline{apacheconf}{#ECEFF1}) with a width of 1 point.
 
-\subsubsection*{Text message}
+\subsubsection{Text message}
 The text message view had to be able to handle line breaks (increase in height to display all lines). The background color for inbound and outbound messages should be different: teal (\mintinline{apacheconf}{#4DB6AC}) for outbound, gray (\mintinline{apacheconf}{#ECEFF1}) for inbound.
 
-\subsubsection*{Media message}
+\subsubsection{Media message}
 Media message view stylings were dependant on the number of images they contain, as is the case in the real-life Pairby iOS application.
 
 \paragraph*{1 media item}
@@ -290,18 +291,18 @@ All performance optimizations were built on top of one another in a way that eac
 \subsection{Reusing cells}
 Reusing the cells was chosen as a so-called starting point for all the optimizations due to the fact it was one of the more widely known ones. That capability was already built into the UITableView control by Apple and has been there ever since iOS 2.0.\cite{HackingWithSwiftCellReuse}
 
-\subsubsection*{Theoretical benefits}
+\subsubsection{Theoretical benefits}
 Reusing cells means that every time a new message enters the view, instead of creating a new instance of the cell class, an existing object created from that class is used. This reuse of cell objects is a performance enhancement because it eliminates the overhead of cell creation.\cite{AppleCharacteristicsOfCellObjects}
 
 This enhancement required fundamental changes to be made to the existing cell classes. Views needed to have the ability to re-adjust themselves during runtime in order match their design to the type of message they were meant to display. Previously, views only needed to define their layout state once, upon initialization, and would no longer have to readjust themselves.
 
-\subsubsection*{Performance changes}
+\subsubsection{Performance changes}
 Running the performance tests yielded the following results:
 \itkIncludeImage{test-1}{Performance test results after applying cell reuse optimizations}
 
 The optimization certainly had a positive impact on the performance of the project, compared to the worst case scenario which was the starting point. Average frame rate increased by 8.9 frames per second, while both the processor's and graphic processor's average usage decreased by 12.78 and 2.95 percent respectively. The duration for the test case also decreased from 105.5 seconds to 92.7 seconds, displaying a time decrease of 12.8 seconds. This was directly tied to the average frame rate, as all the necessary frames were rendered faster. Average memory usage did show an increase of 3 megabytes, from 28 to 31 megabytes, but this change is small enough to classify it as minor and label it as "did not change".
 
-\subsubsection*{Code examples}
+\subsubsection{Code examples}
 Apple has already built support for cell reusing into the UITableView component, meaning the implementation on the UITableView side of things required little effort from the software engineer. All the reusable cell classes had to be registered to the instance of the UITableView class they are meant to be reused in using the \mintinline{swift}{register(_:forCellReuseIdentifier:)} function.\cite{AppleRegisterMethod} After registering, they can be requested from the UITableView instance by using the \mintinline{swift}{dequeueReusableCell(withIdentifier:)} function.\cite{AppleDequeueReusableCellMethod}
 
 \newpage % Break to new page, to keep the image and text together
@@ -346,16 +347,16 @@ List of necessary cell views to make views with a static layout possible:
   \item Outbound media item view (3 media items)
 \end{itemize}
 
-\subsubsection*{Theoretical benefits}
+\subsubsection{Theoretical benefits}
 The theoretical performance enhancing effect of this optimization was eliminating the overhead of creating and disposing of both subviews and layout constraints. This optimization complements the previous one, as they both work towards the same goal of removing unnecessary view creations, mutations and deletions. When the previous optimization only recycled the larger parent (cell) views, this change has the goal to also optimize all of the inner views and constraints.
 
-\subsubsection*{Performance changes}
+\subsubsection{Performance changes}
 Running the performance tests yielded the following results:
 \itkIncludeImage{test-2}{Performance test results after making cell views' layouts static}
 
 The optimization had a strong effect on the average frame rate which increased by 5.7 frames per second. The frame rate stability also saw an increase of 6.4 percent. The changes in the average processor, graphics processor and memory usage were so slight, they can be classified as staying the same. Overall, this optimization increased the frame rate by 16\% and frame rate stability by 6.4\% without affecting the resource usage.
 
-\subsubsection*{Code examples}
+\subsubsection{Code examples}
 This also changed the code for reusing the cells. After re-working the cell views, 8 different views needed to be registered to be recycled and that in turn made the logic of querying reusable cells a bit more difficult.
 
 Below is the new code where the 8 new views are registered in the main UITableView instance:
@@ -379,18 +380,18 @@ Below is the new code where the 8 new views are registered in the main UITableVi
 \subsection{Manual cell height calculations}\label{subsection:ManualCellHeightCalculations}
 Up to this point in the test project, the cell height calculations had been done automatically by the UITableView instance's underlying logic. This was activated purposefully by setting the UITableView instance's property \mintinline{swift}{rowHeight} to \mintinline{swift}{UITableViewAutomaticDimension}. According to a multitude of sources, these automatic calculations are often slow and it's sensible to override them with manual calculations that are more efficient.\cite{PerfectSmoothScrollingInUITableViews}\cite{HowToMakeDynamicTableViewCellHeight}\cite{MediumSmoothScrollPrearo}
 
-\subsubsection*{Theoretical benefits}
+\subsubsection{Theoretical benefits}
 Calculating the cell height manually using efficient calculations should improve the performance when scrolling at high speeds or when the whole UITableView is refreshed using the \mintinline{swift}{reloadData()} function, which causes all cell heights to be calculated again.
 
 When doing manual calculations, it was trivial to optimize the calculations for the type of cells the application should be able to render. For example, media cells had a fixed height and calculations were not necessary in that case, as the pre-defined constant could be returned instead (the vertical margins should still be added to it).
 
-\subsubsection*{Performance changes}
+\subsubsection{Performance changes}
 Running the performance tests yielded the following results:
 \itkIncludeImage{test-3}{Performance test results after migrating to manual cell height calculations}
 
 The manual cell height calculations increased the average frame rate by 4.3 frames per second and the frame rate stability by 7.5 percent while keeping the resource usage the same. The optimization can be counted as a huge success as there was another 10.6\% increase in the average frame rate without affect the resource usage. 
 
-\subsubsection*{Code examples}
+\subsubsection{Code examples}
 The cell height calculations overwriting had to occur in the function displayed below (this example shows how it was previously when automatic calculations were used).
 \begin{listing}[H]
   \caption{Interface function for overwriting cell height calculations}
@@ -431,16 +432,16 @@ Calculating the height for th text cells was more difficult as the text height v
 \subsection{Cell height caching}
 Even though the efficient manual calculations did yield a noticeable increase in performance, it was possible to improve it even further by caching the calculation results. This means the calculations for each cell should only be run once.
 
-\subsubsection*{Theoretical benefits}
+\subsubsection{Theoretical benefits}
 This optimization would not provide any performance benefits the first time the user scrolls the messages list. This would, however, improve performance when the user scrolls back to regions where they have already scrolled.
 
-\subsubsection*{Performance changes}
+\subsubsection{Performance changes}
 Running the performance tests yielded the following results:
 \itkIncludeImage{test-4}{Performance test results after adding caching to manual cell height calculations}
 
 As expected, the performance did improve. The average frame rate increased by 3.9 frames per second and the stability by 6.95 percent. The average processor, graphics processor and memory usage, similarly to previous tests, remained the same. The average processor usage did decrease by 1.91\%, but that deviation is too small to draw any conclusions from. In conclusion, the average frame rate increased by 8.7\%, stability by 6.95\% and the resource usage stayed the same.
 
-\subsubsection*{Code examples}
+\subsubsection{Code examples}
 The cache was a simple Dictionary where the key was the cell's row index and the value was the height as a CGFloat. Below is an example of the whole cycle of calculating, caching and using the cached value. The calculations have been omitted from this code, they can be seen in section \ref{subsection:ManualCellHeightCalculations}. 
 \begin{listing}[H]
   \caption{Caching and using cached height}
@@ -477,10 +478,10 @@ As specified in the specification section, the test data contained about 25\% of
 
 PINRemoteImage already provided the functionality to do image processing and caching of the processed images, but that was only possible for non-animated images. It was decided to not optimize the animated images optimized and let the system handle them as they are.
 
-\subsubsection*{Theoretical benefits}
+\subsubsection{Theoretical benefits}
 The pre-processing should make the images the correct size before they reach the user interface and if the static images would no longer need any up- or downscaling in terms of processing, this should theoretically improve the rendering times of the media cells and the performance when the scrollable view is in motion.
 
-\subsubsection*{Performance changes}
+\subsubsection{Performance changes}
 Running the performance tests yielded the following results:
 \itkIncludeImage{test-5}{Performance test results after adding pre-processing of images}
 
@@ -488,7 +489,7 @@ The change in the average frame rate did not display a big change (improvement o
 
 The average memory usage does seem high, but since it is temporary for the duration of the fast scroll, it should definitely be worth the huge improvements in the frame rate stability.
 
-\subsubsection*{Code examples}
+\subsubsection{Code examples}
 Below is an example of how the image was resized to a given size, using iOS' built-in classes. The parameters of the function were the original UIImage and the expected size of the new image. Since the handled images are always square, only one dimension's length was enough to specify the size.
 \begin{listing}[H]
   \caption{Resizing an UIImage to a specified size}
@@ -522,10 +523,10 @@ Below is an example of how the image was resized to a given size, using iOS' bui
 \subsection{Rasterization of cell layers}
 Rasterization in the iOS view rendering context means turning the view into a cacheable bitmap that can be used in later rendering more efficiently. Rasterization of views was a built in feature of the CALayer class. Every view has a CALayer instance, accessible through the \mintinline{swift}{layer} property. That property is inherited from the UIView base class.
 
-\subsubsection*{Theoretical benefits}
+\subsubsection{Theoretical benefits}
 All the views except the ones containing animated images are static once rendered and will not change in the UI. This was one of the requirements to reap benefits from layer rasterization. Rasterization process consumes more resources and time than regular rendering at first, but once done, the view would be handled much more efficiently by the rendering engine due to the fact that the graphics processor can use the cached bitmap instead of re-drawing the view.\cite{MovingPixelsOntoTheScreen}
 
-\subsubsection*{Performance changes}
+\subsubsection{Performance changes}
 Running the performance tests yielded the following results:
 \itkIncludeImage{test-6}{Performance test results after enabling rasterization of the views}
 
@@ -533,7 +534,7 @@ Cell rasterization did not provide any of the expected performance improvements.
 
 This shocking result confirmed that more research needed to be done about the proper usage of rasterization. These benefits are investigated in the next section.
 
-\subsubsection*{Code examples}
+\subsubsection{Code examples}
 Enabling the rasterization of the cell views required adding only two lines of code. There is an example of the two lines below. The first one enabled rasterization and the second one told the rasterization mechanism to use a certain scale to compensate for the fact that some devices are using retina screens and require scaling when being rasterized.
 \begin{listing}[H]
   \caption{Rasterizing views}
@@ -556,16 +557,16 @@ Layer rasterization was one example of manually triggering offscreen rendering o
 
 In order to get benefits from the rasterization of layers, all other direct or indirect causes of offscreen rendering should be avoided. This is theoretically why the previous optimization did not work - some indirect causes of offscreen rendering were invalidating the rasterization cached bitmap. For example, some indirect causes of offscreen rendering are applying shadows and corner radiuses to the layer, the latter of which the test project does for all cells to create the chat bubble effect.\cite{MovingPixelsOntoTheScreen}
 
-\subsubsection*{Theoretical benefits}
+\subsubsection{Theoretical benefits}
 The theoretical benefits were reduced resource usage and increased performance (better average frame rate, higher frame rate stability). These should have also resulted in smoother scrolling.
 
-\subsubsection*{Performance changes}
+\subsubsection{Performance changes}
 Running the performance tests yielded the following results:
 \itkIncludeImage{test-7}{Performance test results after removing unnecessary offscreen rendering}
 
 Avoiding unnecessary offscreen rendering proved to be beneficial to performance and graphics processor usage. The average frame rate increased by 3.1 and the stability increased by almost 10\%. While the average processor usage did not change much, the average graphics processor usage showed a huge drop of 29\%. The average memory usage, however, increased by a whopping 30\% (from 78 megabytes to 101.5 megabytes). 
 
-\subsubsection*{Code examples}
+\subsubsection{Code examples}
 In order to work around using CALayer's corner radius when drawing text cell views, the background with a corner radius was drawn manually. This was done by creating a custom wrapper view for the text that was able draw the rounded corner background efficiently. Below is the code for that view, which shows the background color being customizable and the draw method being only aware of drawing a rectangle with rounded corners.
 \begin{listing}[H]
   \caption{Custom wrapper view for text message view with rounded corners that avoids offscreen rendering}
@@ -609,10 +610,10 @@ AsyncDisplayKit is an iOS framework built on top of UIKit that keeps even the mo
 
 In order to test this out, a replica of the best case scenario view was built, identical to the one built with UIKit. This meant only having text message views. Media messages were replaced with text. Instead of UIKit classes, AsyncDisplayKit's classes and methodologies were used.
 
-\subsubsection*{Theoretical benefits}
+\subsubsection{Theoretical benefits}
 The expected test results after applying AsyncDisplayKit's classes and methodologies was performance at least equivalent to that of UIKit's best case scenario. The expected benefits would be less resources consumed due to the better use of threads.
 
-\subsubsection*{Performance changes}
+\subsubsection{Performance changes}
 Running the performance tests yielded the following results:
 \itkIncludeImage{test-8}{Performance test results with AsyncDisplayKit's classes and methodologies}
 
@@ -622,7 +623,7 @@ Scrolling performance wise, it performed much worse than UIKit's UITableView. Th
 
 Due to the best case scenario results being so poor, it was decided not to continue trying to make AsyncDisplayKit work as an optimization.
 
-\subsubsection*{Code examples}
+\subsubsection{Code examples}
 Below is a code example of how cells were created and returned to be used in the user interface using AsyncDisplayKit's classes and functions.
 \begin{listing}[H]
   \caption{Creation and use of AsyncDisplayKit's cell views}
