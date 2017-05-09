@@ -83,21 +83,31 @@
 \iosection{Introduction}
 Verbal feedback from smartphone users, online studies regarding the priorities of mobile application users\cite{AppSpeedStudyHP}\cite{AppSpeedStudyApigee} and the author's personal preference all indicate that mobile applications' performance is important. This is not a recent trend. The expectation of having no input lag has been around as long as the technological devices that require user input have existed.\cite{NielsenUsabilityEngineering} Even the slightest delay (anything above 0.1s) is not considered instantaneous by users and anything above 1 second results in the user's flow of thought to be interrupted and focus to be lost.\cite{NielsenUsabilityEngineering} That is enough information to conclude that not only do the users expect a smooth and fast user experience, it is actually necessary to retain the user's attention.
 
-Pairby's mobile applications are no exception when it comes to that good user experience requirement. Pairby, of which the author is a co-founder of, is a mobile dating service which has applications on both iOS and Android platforms. The thesis subject is directly derived from the author's interest in solving a performance issue in the iOS application.
+Pairby's mobile applications are no exception when it comes to that good user experience requirement. Pairby, of which the author is a co-founder of, is a mobile dating service which has applications on both iOS and Android platforms. The thesis' subject is directly derived from the author's interest in solving a performance issue in the iOS application.
 
 \iosubsection{Description of the problem}
-Pairby iOS application contains, among other views, a multitude of different vertically scrolling views, which can contain a theoretically unlimited amount of subviews. One of those vertically scrolling views is the message list view, which this thesis will focus on. The message list view's purpose is to render a list of messages using a UITableView component, in which each message could contain either text or images.
+Pairby iOS application contains, among other views, a multitude of different vertically scrolling views, which can contain a large number of subviews with no defined limit. One of those vertically scrolling views is the message list view, which this thesis focuses on. The message list view's purpose was to use a UITableView to render a list of cells (views) that display messages. The messages could contain either text or one or multiple visual media items (images).
 
-Pairby iOS application's first prototype version was scratched due to a massive performance issue in the message list view. Namely, scrolling up or down at a rapid speed in that view was so resource consuming on any older Apple device it froze the whole user interface. This behavior was deemed unacceptable by the Pairby team and development of that prototype was halted. It became apparent to the developer that something fundamental had been done wrong both in the development of the user interface and in the handling of the data in the model.
+Pairby iOS application's first prototype version had serious performance problems in the messages list view. The prototype project was eventually discarded, but not directly due to the messages view performance issues. Looking for ways to improve the performance in the messages list view and other similar views was something that had to be done before building the new project.
 
-At the time of starting the thesis test project, the development of the new iOS application for Pairby had started, but a solution to the performance issue had not yet been found.
+At the time of writing the thesis, the development of the new iOS application for Pairby had started, but a solution to the performance issue had not yet been found.
 
 \iosubsection{Goal of the thesis}
-The goal of the thesis was to improve the Pairby iOS application's message list view's UITableView's performance. To do that, a number of different optimizations that could be applied to the UITableView component and its subviews were analyzed, realized and benchmarked. All of the optimizations had the purpose of improving the responsiveness of the user interface and through that make the application offer a good user experience. All optimizations were applied in a sequence, where the next one would complement the previous one, creating a more performant view after each optimization. The user interface was designed with the Pairby real-life application in mind: visually, the test project and the real life application share many similarities.
+The goal of the thesis was to improve the Pairby iOS application's message list view's performance. More specifically, improve the UITableView component's performance when rendering complex views that contain either text or one or multiple visual media items.
 
-Each optimization had to go through a pre-defined programmatic scrolling test while different aspects of the device's were monitored. The monitoring resulted in large data sets about the frame rate, CPU usage and memory usage, which were then analyzed and combined into general data about the test. These generalized values were then compared against existing results and the optimization's effectiveness was decided based on that.
 
-The expected end result was a UITableView component that is performant even when the scroll behavior exceeds the boundaries of realistic use cases.
+\iosubsection{Structure of the thesis}
+Reaching the goal required a strictly structured approach.
+
+The first step was to lay out a set of specifications that describe what the messages could contain and how the views should look like. The visual design of the views was directly inspired by the real life Pairby applications. The next step was to find a way to generate these messages and actually generate them.
+
+After having a solid set of test messages, the topic of measuring the UITableView's scroll performance had to addressed. Once a way to measure performance was found, two reference points, called the worst case scenario and best case scenario were created.
+
+Only after having a immutable set of sample messages, a way to measure performance and two comparison points could the actual optimization-by-optimization process to improve UITableView's performance begin.
+
+Each optimization was first analyzed theoretically by explaining how and why it would benefit performance. Then it was created in code and added to the iOS test project and benchmarked. The performance measurement results were compared to either the reference points and/or the previous optimization step. Each optimization was added cumulatively to the test project, eventually resulting in a project with all the optimizations.
+
+The expected final result was a UITableView component that has similar performance as the best case scenario and is a huge improvement over the worst case scenario. This would theoretically also mean that the final result handles well in real life scenarios and the user would not notice any performance issues.
 
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Specifications % % REVIEWED | T: + | G:   %
