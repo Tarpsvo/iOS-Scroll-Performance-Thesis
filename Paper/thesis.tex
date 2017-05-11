@@ -75,33 +75,45 @@
 % Introduction % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \iosection{Introduction}
-Verbal feedback from smartphone users, online studies regarding the priorities of mobile application users\cite{AppSpeedStudyHP}\cite{AppSpeedStudyApigee} and the author's personal preference all indicate that mobile applications' performance is important. This is not a recent trend. The expectation of having no input lag has been around as long as the technological devices that require user input have existed.\cite{NielsenUsabilityEngineering} Even the slightest delay (anything above 0.1s) is not considered instantaneous by users and anything above 1 second results in the user's flow of thought to be interrupted and focus to be lost.\cite{NielsenUsabilityEngineering} That is enough information to conclude that not only do the users expect a smooth and fast user experience, it is actually necessary to retain the user's attention.
+Mobile applications' user interface responsiveness is necessary to keep the brand's reputation and keep the user using the application, as shown in online studies.\cite{AppSpeedStudyHP}\cite{AppSpeedStudyApigee} 55\% of the people who participated in a research by HP said that only the application is to blame for bad performance and 37\% stated that errors and freezes made them think less of a company’s brand.\cite{AppSpeedStudyHP} A study by Apigee revealed that 18\% of the survey participants are likely to delete the application after it freezes for more than 5 seconds.\cite{AppSpeedStudyApigee} The percentage of the Apigee survey participants who would delete the application became 38\% when the freeze time would exceed 30 seconds.\cite{AppSpeedStudyApigee} The Apigee survey also revealed that two of five most common reasons for bad reviews were related to user interface responsiveness: freezes were the reason for leaving a bad review for 76\% of the survey participants and slow responsiveness for 59\% of the participants.\cite{AppSpeedStudyApigee}
 
-Pairby's mobile applications are no exception when it comes to that good user experience requirement. Pairby, of which the author is a co-founder of, is a mobile dating service which has applications on both iOS and Android platforms. The thesis' subject is directly derived from the author's interest in solving a performance issue in the iOS application.
+The expectation of having an instantaneously responding user interface has been around as long as user interfaces.\cite{NielsenUsabilityEngineering} Jakob Nielsen, a web usability consultant who holds a PH.d in human–computer interaction\cite{JakobNielsenNNGroup}, has written in his literature that even the slightest delay (anything above 0.1 seconds) is not considered instantaneous by users and anything above 1 second results in the user's flow of thought to be interrupted and focus to be lost.\cite{NielsenUsabilityEngineering} Anything above 10 seconds means the user's attention is completely lost and without any feedback about progress, they might not return their attention to the application.\cite{NielsenUsabilityEngineering}
+
+The researches cited in the previous two paragraphs show that users expect a responsive user interface and if the application fails to provide it, the users might delete the application, leave a bad review of the application or both.
+
+Pairby, a mobile dating service of which the author is a co-founder of, has applications on mobile platforms Android and iOS and none of the two Pairby applications are an exception to the users' previously described expectation of having a responsive user interface. This thesis' subject is directly derived from the author's interest in solving a user interface responsiveness and low frame rate issue in a Pairby iOS application's vertically scrollable view, which uses the iOS UITableView component, with the goal of avoiding both losing users and bad reviews.
+
+The following subsections will describe the problem and declare the goal of the thesis in greater detail and describe how the thesis is structured and how the problem was approached.
 
 \iosubsection{Description of the problem}
-Pairby iOS application contains, among other views, a multitude of different vertically scrolling views, which can contain a large number of subviews with no defined limit. One of those vertically scrolling views is the message list view, which this thesis focuses on. The message list view's purpose was to use a UITableView to render a list of cells (views) that display messages. The messages could contain either text or one or multiple visual media items (images).
+Pairby's iOS application contains a multitude of different vertically scrolling views, which can contain a large number of subviews with no defined limit. One of the mentioned vertically scrolling views is the message list view, which this thesis focuses on. The message list view uses a UITableView to render a vertical list of views (called cells) that display messages, which can contain either only text or one or multiple visual media items.
 
-Pairby iOS application's first prototype version had serious performance problems in the messages list view. The prototype project was eventually discarded, but not directly due to the messages view performance issues. Looking for ways to improve the performance in the messages list view and other similar views was something that had to be done before building the new project.
+Pairby iOS application's first prototype encountered user interface responsiveness and low frame rate issues in the message list view. The prototype project was discarded, in part, because of the user interface responsiveness and low frame rate issues. Exploring ways to improve on the two encountered issues in the message list view, and other similar scrollable views, was something that needed to be done before building the new project.
 
-At the time of writing the thesis, the development of the new iOS application for Pairby had started, but a solution to the performance issue had not yet been found.
+At the time of writing this thesis, the development of the new iOS application for Pairby had started, but a solution to the user interface responsiveness and low frame rate issues in the vertically scrollable message list view had not yet been found.
 
 \iosubsection{Goal of the thesis}
-The goal of the thesis was to improve the Pairby iOS application's message list view's performance. More specifically, improve the UITableView component's performance when rendering complex views that contain either text or one or multiple visual media items.
+The goal of the thesis was to explore, analyze and document ways to improve the Pairby iOS application's vertically scrolling views' user interface responsiveness and frame rate. More specifically, find ways to improve the UITableView component's performance in the two previously mentioned performance aspects when rendering complex views that contain either text or one or multiple visual media items.
 
+The optimizations were expected to have a positive impact on user interface responsiveness or frame rate or both and be applicable to the Pairby iOS application's vertically scrollable views, including the message list view. All the optimizations were expected to be documented as independently of each other as possible, to allow for their use as separate resources.
 
 \iosubsection{Structure of the thesis}
-Reaching the goal required a strictly structured approach.
+Reaching the goal of this thesis required a strictly structured approach. The following paragraphs will describe the order of operations chosen to approach the problem.
 
-The first step was to lay out a set of specifications that describe what the messages could contain and how the views should look like. The visual design of the views was directly inspired by the real life Pairby applications. The next step was to find a way to generate these messages and actually generate them.
+\paragraph*{Specifications}
+Specifications section focused on producing a set specifications describing what content the message objects could contain and how the message views should look like.
 
-After having a solid set of test messages, the topic of measuring the UITableView's scroll performance had to addressed. Once a way to measure performance was found, two reference points, called the worst case scenario and best case scenario were created.
+\paragraph*{Measuring performance}
+The "measuring performance" section explains the techniques used to measure different user interface responsiveness and device performance related metrics, explains in detail how the test environment was created, how and on what device the tests are run, and how the metrics are analyzed.
 
-Only after having a immutable set of sample messages, a way to measure performance and two comparison points could the actual optimization-by-optimization process to improve UITableView's performance begin.
+\paragraph*{Comparison points}
+In the comparison points section, two different vertically scrollable views were created, utilizing both the specification and the set of sample message objects produced. The two scrollable views were named "best case scenario" and "worst case scenario", where the first one was purpose built to display the best possible performance of the device it was run on and the latter one to display the worst performance.
 
-Each optimization was first analyzed theoretically by explaining how and why it would benefit performance. Then it was created in code and added to the iOS test project and benchmarked. The performance measurement results were compared to either the reference points and/or the previous optimization step. Each optimization was added cumulatively to the test project, eventually resulting in a project with all the optimizations.
+\paragraph*{Performance optimizations}
+The performance optimizations part of the thesis focuses on exploring and analyzing different optimization methods. All the found performance optimizations were built into the same project, with the starting point being the worst case scenario, and benchmarked after each optimization.
 
-The expected final result was a UITableView component that has similar performance as the best case scenario and is a huge improvement over the worst case scenario. This would theoretically also mean that the final result handles well in real life scenarios and the user would not notice any performance issues.
+\paragraph*{Findings}
+The findings section compares the combined result of all optimizations against the two reference points called best and worst case scenario and analyzes the results.
 
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Specifications % % REVIEWED | T: + | G:   %
