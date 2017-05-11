@@ -13,7 +13,6 @@
 \usepackage[english]{babel}
 \usepackage{itk_thesis_eng}
 \usepackage{cite}
-\usepackage{parskip} % Define paragraph line-breaks
 \usepackage{mathptmx} % Apply Times New Roman font
 \usepackage[toc, xindy, style=list, nonumberlist]{glossaries}
 \usepackage{url}
@@ -21,9 +20,6 @@
 \linespread{1.5}
 \usepackage{hyperref}
 \usepackage{tabularx} % Better tables (fill width)
-
-\usepackage{titlesec} % Make new sections start with a 1.5cm margin
-\newcommand{\sectionbreak}{\vspace*{1.5cm}}
 
 \usepackage{minted} % Code coloring
 \usepackage{xcolor}
@@ -68,7 +64,6 @@
 \thispagestyle{empty}
 \setcounter{tocdepth}{2}
 \tableofcontents
-\newpage
 
 
 
@@ -79,7 +74,6 @@
 %%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Introduction % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
 \iosection{Introduction}
 Verbal feedback from smartphone users, online studies regarding the priorities of mobile application users\cite{AppSpeedStudyHP}\cite{AppSpeedStudyApigee} and the author's personal preference all indicate that mobile applications' performance is important. This is not a recent trend. The expectation of having no input lag has been around as long as the technological devices that require user input have existed.\cite{NielsenUsabilityEngineering} Even the slightest delay (anything above 0.1s) is not considered instantaneous by users and anything above 1 second results in the user's flow of thought to be interrupted and focus to be lost.\cite{NielsenUsabilityEngineering} That is enough information to conclude that not only do the users expect a smooth and fast user experience, it is actually necessary to retain the user's attention.
 
@@ -112,7 +106,6 @@ The expected final result was a UITableView component that has similar performan
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Specifications % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
 \section{Specifications}
 The test project was meant to broadly mimic the user interface of the real-life iOS application of Pairby. This could only be possible if there were a number of requirements set to the project's test data and user interface.
 
@@ -200,7 +193,6 @@ A three media item message displayed the images side by side, with the image wid
 %%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Measuring performance % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
 \section{Measuring performance}
 To gather quantifiable information and not base comparison points on visual judgement, there needed to be a way to run reproducible tests and gather number based statistics from each test. This was achieved in two different parts: the creation of a repeatable test case (programmatic scrolling) and using different kinds of software to retrieve and save information about the system.
 
@@ -237,7 +229,6 @@ The tests were run on a iPod Touch 5G, as it is a good example of a low-powered 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Used third party libraries % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
 \section{Used third party libraries}
 Creating every aspect from scratch in the test project would have been too large of a task to cover in this thesis, therefore third-party solutions were used to simplify some tasks. The affected aspects were for example JSON parsing, image loading and caching, detailed logging and in-code constraint creation.
 
@@ -262,7 +253,6 @@ FPSCounter is a small library to measure the frame rate of an iOS Application.\c
 %%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Comparison points % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
 \section{Comparison points}
 In order to accurately compare performance changes in the test project, a set of starting points were needed. It was decided to use a best case scenario and a worst case scenario as two starting comparison points. Each of the tests had to be and were run with the exact same data set, including the best and worst case scenario ones.
 
@@ -291,7 +281,6 @@ The test results were not surprising and accomplished the previously set goal of
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Performance optimizations % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
 \section{Performance optimizations}
 All performance optimizations were built on top of one another in a way that each optimization complemented the previous one. The base for that project was the worst case scenario project. 
 
@@ -315,7 +304,6 @@ The optimization certainly had a positive impact on the performance of the proje
 \subsubsection{Code examples}
 Apple has already built support for cell reusing into the UITableView component, meaning the implementation on the UITableView side of things required little effort from the software engineer. All the reusable cell classes had to be registered to the instance of the UITableView class they are meant to be reused in using the \mintinline{swift}{register(_:forCellReuseIdentifier:)} function.\cite{AppleRegisterMethod} After registering, they can be requested from the UITableView instance by using the \mintinline{swift}{dequeueReusableCell(withIdentifier:)} function.\cite{AppleDequeueReusableCellMethod}
 
-\newpage % Break to new page, to keep the image and text together
 Below is an example on how to register cell classes to be reused in a specific UITableView instance.
 \begin{listing}[H]
   \caption{Registering cells to be reused on a specific UITableView instance}
@@ -652,7 +640,6 @@ Below is a code example of how cells were created and returned to be used in the
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % End result comparisons % % REVIEWED | T:   | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
 \section{Findings}
 The end result was considered to be the result of applying all the optimizations cumulatively from recycling cells to avoiding unnecessary offscreen rendering. The optimizations included reusing cells, using static views, manual height calculations, height caching, image optimizations and avoiding unnecessary offscreen rendering. This meant considering the end result to be the product of \autoref{sec:avoiding-unnecessary-offscreen-rendering}.
 
@@ -672,7 +659,6 @@ Average memory usage increased by 2.6 times, from an average of 28 megabytes to 
 
 To conclude the comparison between the worst case scenario and the end result, it can be said that the optimizations were a success. The average frame rate more than doubled and the frame rate stability almost quadrupled. Average usages of both the graphics processor and the central processor decreased. Memory usage did increase by a large margin, but as the increase is temporary and will not affect the application's memory usage for the whole duration of the application's life, its importance can be disregarded. The optimizations can be called useful, when comparing them against the worst case scenario, as the performance improved while resource usage decreased.
 
-\newpage
 \subsection{Performance relative to best case scenario}
 To compare the end result against the goal, which was the best case scenario, another table was created. The table displayed the differences between the test results from \autoref{sec:best-case-scenario} against the results from \autoref{sec:avoiding-unnecessary-offscreen-rendering}. The created table, which also contains comparative percentages, is displayed below.
 \itkIncludeImage{best-vs-end}{Best case scenario results compared against the end result's test results}
@@ -690,7 +676,6 @@ The average memory usage for the best case scenario was about the same as for al
 %%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Summary % % REVIEWED | T: + | G:   %
 %%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\newpage
 \iosection{Summary}
 The goal of the thesis was to improve the Pairby iOS application's message list view's UITableView's performance. In total, 8 different optimization methods were found, realized and benchmarked. 6 of the found optimizations had the expected performance boosting effect. 2 of the optimizations did not provide the expected performance enhancing benefits, but were still included in this thesis since their failure reasons became a basis for the next optimizations.
 

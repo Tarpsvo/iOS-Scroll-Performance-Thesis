@@ -31,6 +31,18 @@
 \ofoot[\pagemark]{\pagemark}
 \pagestyle{scrplain}
 
+% parskip
+\usepackage{parskip}
+\setlength{\parskip}{1.5em}
+
+% titlesec
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{0pt}{0pt}
+\titlespacing\subsection{0pt}{0pt}{-0.8\parskip}
+\titlespacing\subsubsection{0pt}{0pt}{-0.8\parskip}
+\titlespacing\paragraph{0pt}{0pt}{1em}
+\newcommand{\sectionbreak}{\newpage\vspace*{1.5cm}} 
+
 %%%%%%%%%%%%%%
 % Title page %
 %%%%%%%%%%%%%%
