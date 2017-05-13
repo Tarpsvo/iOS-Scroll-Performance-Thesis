@@ -211,37 +211,45 @@ A three media item message should display the images side by side, with the imag
 % Measuring performance % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Measuring performance}
-To gather quantifiable information and not base comparison points on visual judgement, there needed to be a way to run reproducible tests and gather number based statistics from each test. This was achieved in two different parts: the creation of a repeatable test case (programmatic scrolling) and using different kinds of software to retrieve and save information about the system.
+To gather quantifiable information and not base comparison points on visual judgement, there needed to be a way to run reproducible tests and gather numeric statistics from each test. The gathering of quantifiable information was achieved in two different parts: the creation of a repeatable test case (programmatic scrolling that simulates human interaction) and using different software to retrieve and save information about the user interface related metrics, like frame rate, and the test device's resource usage, like average CPU usage.
+
+The following subsections describe, in depth, how the repeatable test case was created and works, how the user interface related metrics were measured, what device was used as the test device and how the device resource usage was monitored and what steps were taken to make the gathered data more easily analyzable. 
 
 \subsection{Repeatable test case}
-The repeatable test case's purpose was to simulate scrolling and do it in the exact same way every time the test is executed.
+\label{subsec:repeatable-test-case}
+The repeatable test case's purpose was to simulate human interaction through scrolling and do the exact same way every time the test is executed. The test consisted of scrolling from the top of the list view to the bottom five times, with the scroll speed continuously increasing.
 
-To achieve this, UITableView's \mintinline{swift}{setContentOffset(contentOffset, animated: true)} function was used along with a repeating Timer. The Timer fired every 0.4 seconds and forced the view to scroll, starting from the top, towards the bottom. The scrolling was purposefully not linear: starting from 100 points, every time the timer fired and the view was scrolled, the scroll amount increased by 30 points. This means that the first time the timer fired, the \mintinline{swift}{setContentOffset(contentOffset, animated: true)} was fired with a 100 point increase in the vertical content offset. The next time, the increase was 130 points and after that, 160 points.
+To achieve the continuously increasing speed, UITableView's \mintinline{swift}{setContentOffset(contentOffset, animated: true)} function was used along with a repeating Timer. The Timer fired every 0.4 seconds and forced the view to scroll, starting from the top, towards the bottom. The scrolling was purposefully not linear: starting from 100 points, every time the Timer fired and the view was scrolled, the scroll offset value increased by 30 points. This means that the first time the Timer fired, the \mintinline{swift}{setContentOffset(contentOffset, animated: true)} was executed with a 100 point increase in the vertical content offset. The next time the Timer executed, the increase was 130 points and after that, 160 points.
+
+To achieve the scrolling to bottom five times expectation of the test, the view's vertical offset was instantaneously reset to the 0 (causing the UITableView to start at the very top), if the inner UITableView reached the bottom and an internal timer recording the count of resets had not reached 4. If the internal timer recording the count of resets (number of scrolls to the top) reached 5, the test execution was stopped and the test was considered over.
 
 \subsection{Measuring test case performance}
-A multitude of metrics were monitored to get a good overview of the performance and efficiency of the UITableView. In addition to measuring frame rates and scroll test durations, the system resource usages were monitored. The purpose of that was to reveal if and how the performance is dependant on the system's resource usage. The monitored resources were processor (CPU), graphics processor (GPU) and memory (RAM) usage.
+Five metrics were monitored to get an overview of the performance and efficiency of the UITableView. The measured metrics are both user interface and device resource usage related. The user interface related metrics are the test duration and frame rate. Device resource usage related metrics are average processor, graphics processor and memory usages.
 
-Measuring frame rates was programmatic and handled by a custom implementation of the FPSCounter\cite{FPSCounterGithub} library. The scroll test duration was also measured programmatically.
+Measuring of the duration of the test case and the frame rate of the user interface was done programmatically in the thesis project. Measuring the frame rates was handled by a custom implementation of the FPSCounter\cite{FPSCounterGithub} library. Measuring the test duration was done by recording the system absolute time, using the \mintinline{swift}{CACurrentMediaTime()} function, at the start of the test and comparing it against the system absolute time at the end of the test.
 
-In addition to just measuring frame rate, a metric called frame rate stability was introduced. The simplified definition for that is "time spent within 20\% of the average frame rate". In the background, it was calculated as the percentage of measured frame rate points that were within 20\% of the average frame rate. The difference is that this might not directly translate into time spent in the stable zone, as frame rate measurements were taken at a 0.5 second interval.
+In addition to measuring frame rate, a custom metric called "frame rate stability" was introduced. The simplified definition of frame rate stability is "time spent within 20\% of the average frame rate". In the code, the frame rate stability was calculated as the percentage of measured frame rate points that were within 20\% of the average frame rate. Because the actual measurement technique for this metric is an estimation of its theoretical definition, its accuracy is not guaranteed to directly match its theoretical definition. For the purposes of this thesis project, the slight variation in accuracy is considered acceptable and the metric will still provide a beneficial metric value for analyzing the overall responsiveness of the user interface.
 
-The rest of the metrics, namely CPU, GPU and RAM usage were measured using a third-party software called GameBench\cite{GameBenchHome}. The software required very little setup and offered very few configuration options. All that was needed was to start the monitoring process and then end it when the test was finished and it would display the measured data in an exportable form. The data included the three data set points mentioned earlier.
+The device resource usage related metrics (average CPU, GPU and RAM usage) were measured using a third-party software called GameBench\cite{GameBenchHome}. The software required very little setup and offered very few configuration options. The test device monitoring process in GameBench was started at the same time as the repeatable scrolling test, described in \autoref{subsec:repeatable-test-case}, and stopped when the test had finished, manually. After stopping the test device monitoring process, GameBench uploaded the test data to their servers and the data became available and exportable on their website. The test data contained, among other device related information and metrics, the average CPU, GPU and RAM usage.
 
 \subsection{Analyzing gathered metrics}
-In order to get a comprehensible overview of the gathered data, the large sets of data had to be trimmed down to a small number of data points. For frame rates, it was decided to use average frame rates and frame rate stability. For processor, graphics processor and memory usage, only averages were calculated.
+All the recorded metrics, mentioned in the subsections of this section, resulted in a total set of 6 different measurement points. The resulting list of measurement points is displayed below, in Listing \autoref{lst:measurement-points}.
 
-This resulted with a list of the following measurement points for each test:
-\begin{itemize}
-  \item Duration (seconds);
-  \item Average frame rate;
-  \item Frame rate stability;
-  \item Average processor usage;
-  \item Average graphics processor usage;
-  \item Average memory usage.
-\end{itemize}
+\begin{listing}[H]
+  \caption{List of measurement points recorded for every test case}
+  \label{lst:measurement-points}
+  \begin{itemize}
+    \item Duration (seconds);
+    \item Average frame rate;
+    \item Frame rate stability;
+    \item Average processor usage;
+    \item Average graphics processor usage;
+    \item Average memory usage.
+  \end{itemize}
+\end{listing}
 
 \subsection{Test device}
-The tests were run on a iPod Touch 5G, as it is a good example of a low-powered device. The 5th generation iPod touch has a retina display (resolution 1136x640)\cite{AppleIPodTouch5G} while still having a very weak processor (dual core Apple A5 underclocked to 800 MHz)\cite{MacObserverUnderclock}. All of this means all the performance optimizations would have a strong effect that is easy to detect in the measured data.
+All tests were run on an iPod Touch 5G, as it is a good example of a low-powered device by today's standards. The 5th generation iPod touch has a retina display (resolution 1136x640)\cite{AppleIPodTouch5G} while having a weak \cite{IPhoneVsIPod5} processor (dual core Apple A5 underclocked to 800 MHz)\cite{MacObserverUnderclock}. Having a high resolution display with a weak processor means that the processor may not be able to handle complex rendering tasks that well, as the number of pixels it is required to control is too large for it to handle, among other tasks.\cite{RetinaAndWeakProcessor} The high-resolution display and weak processor combination is expected to have the effect of making the user interface responsiveness and device resource usage related metrics change more noticeably after every optimization.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Used third party libraries % % REVIEWED | T: + | G:   %
