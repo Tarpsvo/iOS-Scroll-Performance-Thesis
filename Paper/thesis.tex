@@ -472,21 +472,22 @@ Calculating the height of the text message cells is more complex, as the number 
 % Cell height caching % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Cell height caching}
-Even though the efficient manual calculations did yield a noticeable increase in performance, it was possible to improve it even further by caching the calculation results. This means the calculations for each cell should only be run once.
+The previous optimization of using efficient manual cell height calculations resulted in a noticeable increase in performance. Reducing the number of calculations altogether should therefore also result in a boost in performance. Reducing the number of calculations was expected to be possible by caching the calculation results in memory and only doing the calculations if no cached value could be found.
 
 \subsubsection{Theoretical benefits}
-This optimization would not provide any performance benefits the first time the user scrolls the messages list. This would, however, improve performance when the user scrolls back to regions where they have already scrolled.
+Caching the calculation results was expected to reduce the number of calculations, and through that strain the processor less, when the user scrolls the same content multiple times. This optimization would not provide any performance benefits the first time the user opens or scrolls the list view, as the in-memory cache of the calculated cell heights would be empty. When the user reaches content they have already seen, the calculation should theoretically not be run and the cached value used instead.
 
 \subsubsection{Performance changes}
-Running the performance tests yielded the following results:
-\itkIncludeImage{test-4}{Performance test results after adding caching to manual cell height calculations}
+Running the performance tests yielded the results shown in \autoref{test-4}.
+\itkIncludeImage{test-4}{Performance test results after the implementation of caching manually calculated cell heights}
 
-As expected, the performance did improve. The average frame rate increased by 3.9 frames per second and the stability by 6.95 percent. The average processor, graphics processor and memory usage, similarly to previous tests, remained the same. The average processor usage did decrease by 1.91\%, but that deviation is too small to draw any conclusions from. In conclusion, the average frame rate increased by 8.7\%, stability by 6.95\% and the resource usage stayed the same.
+As expected, the performance did improve. The average frame rate increased by 3.9 frames per second and the frame rate stability by 6.95\%. The average processor, graphics processor and memory usages, similarly to previous tests, remained nearly the same. Average device resource usages stayed nearly the same. The implementation of caching manually calculated cell heights improved the user interface responsiveness while not affecting the resource usages.
 
 \subsubsection{Code examples}
-The cache was a simple Dictionary where the key was the cell's row index and the value was the height as a CGFloat. Below is an example of the whole cycle of calculating, caching and using the cached value. The calculations have been omitted from this code, they can be seen in section \ref{subsec:manual-cell-height-calculations}. 
+The cache was a Dictionary, in which the key was the cell's row index and the value was the height as a CGFloat. Listing \autoref{lst:caching-1} shows an example of the whole cycle of calculating the cell heights manually, storing and using the cached value. The manual calculations have been omitted from this listing, they can be found in \autoref{subsec:manual-cell-height-calculations}. 
 \begin{listing}[H]
-  \caption{Caching and using cached height}
+  \caption{Using a Dictionary to store and use manually calculated cell heights for caching purposes}
+  \label{lst:caching-1}
   \begin{minted}{swift}
     private var _heightCache: [Int: CGFloat] = [:]
 
