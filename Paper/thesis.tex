@@ -269,12 +269,14 @@ JASON is a faster JSON deserializer written in Swift.\cite{JASON} The sole purpo
 SnapKit is a DSL to make Auto Layout easy on both iOS and OS X.\cite{SnapKit} SnapKit was used extensively in the test project to create constraints in the code, rather than in the storyboard. Creating layout constraints in the code had many benefits over creating them in the storyboards. For example, creating programmatic constraints removed the system overhead brought in by the processing of storyboards. SnapKit also gave the engineer very precise control over each constraint and provided an overview of all constraints that exist and when they will be created. Storyboards would have only had the benefit of providing the engineer with a graphical interface in which to create those constraints.
 
 \subsection{PINRemoteImage}
+\label{subsec:pinremoteimage}
 PINRemoteImage, also known as PINRemoteImageManager, is an image downloading, processing and caching manager.\cite{PINRemoteImage} PINRemoteImage was used for the exact three things brought out in the library's description: it downloaded the images, allowed them to be processed, and then stored safely in a disk cache. The PINRemoteImage library made the image downloading, processing and caching tasks require very little work to be done in the thesis project's own code. Downloading images would have been trivial with the Swift's built in tools as well, but processing and caching would have been more difficult. The ability to process the images is especially useful as it allows the images to be scaled down if necessary, which in turn makes the image smaller in dimensions and the file smaller in size. The library's cache manager is also powerful and extremely useful as it provided the option to cache different, processed, versions of the same image, including the original one. The different versions were distinguished by a string key passed to the process function.
 
 \subsection{XCGLogger}
 XCGLogger is a debug log framework for use in Swift projects.\cite{XCGLogger} XCGLogger improved Swift's built-in logging mechanism by adding a lot of useful, yet optional, information about every log statement. For example, XCGLogger's log statements displayed the thread name on which the logging function was executed on, without forcing the engineer to explicitly print out the thread name. XCGLogger also printed out function names, file names and line numbers in a similar manner to the thread names printing. The library's uses and benefits in the test project are the same as the examples brought out previously (such as the identification of threads and functions).
 
 \subsection{FLAnimatedImageView}
+\label{subsec:flanimatedimageview}
 FLAnimatedImage is a performant animated GIF engine for iOS.\cite{FLAnimatedImageView} FLAnimatedImageView does one thing that the iOS's built in UIImageView was not able to do: play animated images (GIFs). FLAnimatedImageView was very important to both the test project and the actual Pairby iOS application due to the fact it can display animated images.
 
 \subsection{FPSCounter}
@@ -517,25 +519,24 @@ The cache was a Dictionary, in which the key was the cell's row index and the va
 %%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Optimizing image sizes}
 \label{sec:optimizing-image-sizes}
-As specified in the specification section, the test data contained about 25\% of media messages, all of which contained 1 to 3 images (both static and animated). Since images make up a relatively large portion of all messages in the test data set, it was decided to look into optimizing them by resizing them to the correct size before displaying them in the user interface. The idea was a collaboration between the author and the thesis' supervisor Gary Planthaber.
+As described in the \autoref{subsec:test-data-generation}, the test data contained about 25\% of media messages, each of which contained 1 to 3 images (static, animated or both). As media messages account for a large portion of the total number of messages in the test data set, it was decided to explore what effect resizing the images to their correct size before displaying them in the UI would have.
 
-PINRemoteImage already provided the functionality to do image processing and caching of the processed images, but that was only possible for non-animated images. It was decided to not optimize the animated images optimized and let the system handle them as they are.
+PINRemoteImage, a library described in detail in \autoref{subsec:pinremoteimage}, provided the functionality of image processing and caching of processed images. That functionality was only available for non-animated images. It was decided to not optimize the animated images optimized and let the FLAnimatedImageView (see \autoref{subsec:flanimatedimageview}) handle them as they are.
 
 \subsubsection{Theoretical benefits}
-The pre-processing should make the images the correct size before they reach the user interface and if the static images would no longer need any up- or downscaling in terms of processing, this should theoretically improve the rendering times of the media cells and the performance when the scrollable view is in motion.
+The purpose of pre-processing static images is to make the images the correct size before they reach the user interface. The removed need of up- or downscaling of static images, once they have reached the user interface, was expected to reduce strain on the GPU while improving the average frames per second and frame rate stability.
 
 \subsubsection{Performance changes}
-Running the performance tests yielded the following results:
-\itkIncludeImage{test-5}{Performance test results after adding pre-processing of images}
+Running the performance tests yielded the results shown in \autoref{test-5}.
+\itkIncludeImage{test-5}{Performance test results after after implementing resizing of images}
 
-The change in the average frame rate did not display a big change (improvement of 1.7 frames per second), but the frame rate stability increased by 30.5\%, which was a huge improvement. The processor and graphics processor usage did not display a noticeable change. The memory usage, however, changed dramatically. The average memory usage increased by 136\%, from 33 megabytes to 78 megabytes, compared to the previous test. This average memory increase is easily explainable by the fact that the image processing uses a lot of memory and the application had to start a lot of image processing processes when the scroll speed was nearing its maximum.
-
-The average memory usage does seem high, but since it is temporary for the duration of the fast scroll, it should definitely be worth the huge improvements in the frame rate stability.
+The improvement of 1.7 frames per second in the average frame rate was not noticeable. However, massive improvements were recorded in the frame rate stability parameter, as the frame rate stability increased by 30.5\%. The average processor and graphics processor usages did not display a noticeable change. The memory usage, however, changed dramatically. The average memory usage increased by 136\%, from 33 megabytes to 78 megabytes, compared to the previous test. This increase is explainable by the fact that the image processing uses a lot of memory and the application had to start a lot of image processing processes when the scroll speed was nearing its maximum.
 
 \subsubsection{Code examples}
-Below is an example of how the image was resized to a given size, using iOS' built-in classes. The parameters of the function were the original UIImage and the expected size of the new image. Since the handled images are always square, only one dimension's length was enough to specify the size.
+Listing \ref{lst:optimizing-image-sizes-1} shows how the image was resized to a given size, using iOS' built-in classes. The custom function accepted the original UIImage object and the expected size as the parameters.
 \begin{listing}[H]
   \caption{Resizing an UIImage to a specified size}
+  \label{lst:optimizing-image-sizes-1}
   \begin{minted}{swift}
     func processImage(image: UIImage, size: CGFloat) -> UIImage {
       let scaledSize = (size * UIScreen.main.scale)
