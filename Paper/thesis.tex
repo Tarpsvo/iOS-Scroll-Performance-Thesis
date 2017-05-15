@@ -415,24 +415,26 @@ Listing \autoref{lst:static-cell-code-example} shows the code used in the thesis
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Manual cell height calculations % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Manual cell height calculations}\label{subsection:ManualCellHeightCalculations}
-Up to this point in the test project, the cell height calculations had been done automatically by the UITableView instance's underlying logic. This was activated purposefully by setting the UITableView instance's property \mintinline{swift}{rowHeight} to \mintinline{swift}{UITableViewAutomaticDimension}. According to a multitude of sources, these automatic calculations are often slow and it's sensible to override them with manual calculations that are more efficient.\cite{PerfectSmoothScrollingInUITableViews}\cite{HowToMakeDynamicTableViewCellHeight}\cite{MediumSmoothScrollPrearo}
+\subsection{Manual cell height calculations}
+\label{subsec:manual-cell-height-calculations}
+By default, the cell height calculations are done automatically by the UITableView instance's underlying logic. According to literature on this topic, these automatic calculations are often slow and it's sensible to override them with manual calculations that are more efficient.\cite{PerfectSmoothScrollingInUITableViews}\cite{HowToMakeDynamicTableViewCellHeight}\cite{MediumSmoothScrollPrearo}
 
 \subsubsection{Theoretical benefits}
-Calculating the cell height manually using efficient calculations should improve the performance when scrolling at high speeds or when the whole UITableView is refreshed using the \mintinline{swift}{reloadData()} function, which causes all cell heights to be calculated again.
+Calculating the cells heights manually using efficient calculations was expected to improve the performance when scrolling at high speeds or when the whole UITableView is refreshed using the \mintinline{swift}{reloadData()} function, which causes all cell heights to be calculated again\cite{ReloadDataHeights}.
 
-When doing manual calculations, it was trivial to optimize the calculations for the type of cells the application should be able to render. For example, media cells had a fixed height and calculations were not necessary in that case, as the pre-defined constant could be returned instead (the vertical margins should still be added to it).
+When the calculations are done manually, it is trivial to optimize the calculations for the type of cells the application should be able to render. For example, media cells have a fixed height and calculations were not necessary in that case, as the pre-defined constant could be returned instead (after adding the defined vertical margins).
 
 \subsubsection{Performance changes}
-Running the performance tests yielded the following results:
+Running the performance tests yielded the results shown in \autoref{test-3}.
 \itkIncludeImage{test-3}{Performance test results after migrating to manual cell height calculations}
 
-The manual cell height calculations increased the average frame rate by 4.3 frames per second and the frame rate stability by 7.5 percent while keeping the resource usage the same. The optimization can be counted as a huge success as there was another 10.6\% increase in the average frame rate without affect the resource usage. 
+The manual cell height calculations increased the average frame rate by 4.3 frames per second and the frame rate stability by 7.5 percent, while keeping the resource usage nearly the same. This optimization was considered a success as there was a 10.6\% increase in the average frame rate without affecting the resource usage. 
 
 \subsubsection{Code examples}
-The cell height calculations overwriting had to occur in the function displayed below (this example shows how it was previously when automatic calculations were used).
+To override the cell height calculations, the function \mintinline{swift}{tableView(_:heightForRowAt:)} from the UITableViewDelegate protocol has to be overwritten. An example of overriding the function, but not changing the default behavior of the UITableView is shown in listing \autoref{lst:manual-cell-height-1}.
 \begin{listing}[H]
-  \caption{Interface function for overwriting cell height calculations}
+  \caption{Function for overwriting cell height calculations from the UITableViewDelegate protocol}
+  \label{lst:manual-cell-height-1}
   \begin{minted}{swift}
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
       return UITableViewAutomaticDimension
@@ -440,9 +442,10 @@ The cell height calculations overwriting had to occur in the function displayed 
   \end{minted}
 \end{listing}
 
-Calculating the height for media item cells was trivial as they had a fixed height and fixed vertical margins. Below is an example on how the height for media item cells was calculated.
+Calculating the height of the media message cells is trivial as the media message views have a fixed height and fixed vertical margins. Listing \autoref{lst:manual-cell-height-2} shows how the height of the media message cells was calculated in the thesis project.
 \begin{listing}[H]
-  \caption{Calculating media cell's height manually}
+  \caption{Calculating media message views' height manually}
+  \label{lst:manual-cell-height-2}
   \begin{minted}{swift}
     let message = self._messages[indexPath.row]
     if let mediaItems = message.mediaItems {
@@ -453,9 +456,10 @@ Calculating the height for media item cells was trivial as they had a fixed heig
   \end{minted}
 \end{listing}
 
-Calculating the height for th text cells was more difficult as the text height varied depending on the number of lines in the text. The number of lines was dependant on the length of the text and the width of the screen, as described in the specification. Below is an example on how to calculate the height for the text message cell from the text.
+Calculating the height of the text message cells is more complex, as the number of lines in the message content can vary. Listing \autoref{lst:manual-cell-height-3} shows how the height of the text message view is calculated, using the message text and pre-defined vertical and horizontal margins.
 \begin{listing}[H]
   \caption{Calculating text cell's height manually}
+  \label{lst:manual-cell-height-3}
   \begin{minted}{swift}
     let maximumWidth = (self._tableView.frame.size.width - (2 * Pairby.MessageUI.MARGIN_HORIZONTAL) - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_DYNAMIC - Pairby.MessageUI.MARGIN_HORIZONTAL_WRAP_FIXED)
     let verticalMarginsSum = (2 * Pairby.MessageUI.MARGIN_VERTICAL + 2 * Pairby.MessageUI.MARGIN_VERTICAL_WRAP)
@@ -480,7 +484,7 @@ Running the performance tests yielded the following results:
 As expected, the performance did improve. The average frame rate increased by 3.9 frames per second and the stability by 6.95 percent. The average processor, graphics processor and memory usage, similarly to previous tests, remained the same. The average processor usage did decrease by 1.91\%, but that deviation is too small to draw any conclusions from. In conclusion, the average frame rate increased by 8.7\%, stability by 6.95\% and the resource usage stayed the same.
 
 \subsubsection{Code examples}
-The cache was a simple Dictionary where the key was the cell's row index and the value was the height as a CGFloat. Below is an example of the whole cycle of calculating, caching and using the cached value. The calculations have been omitted from this code, they can be seen in section \ref{subsection:ManualCellHeightCalculations}. 
+The cache was a simple Dictionary where the key was the cell's row index and the value was the height as a CGFloat. Below is an example of the whole cycle of calculating, caching and using the cached value. The calculations have been omitted from this code, they can be seen in section \ref{subsec:manual-cell-height-calculations}. 
 \begin{listing}[H]
   \caption{Caching and using cached height}
   \begin{minted}{swift}
