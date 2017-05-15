@@ -213,6 +213,7 @@ A three media item message should display the images side by side, with the imag
 % Measuring performance % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Measuring performance}
+\label{sec:measuring-performance}
 To gather quantifiable information and not base comparison points on visual judgement, there needed to be a way to run reproducible tests and gather numeric statistics from each test. The gathering of quantifiable information was achieved in two different parts: the creation of a repeatable test case (programmatic scrolling that simulates human interaction) and using different software to retrieve and save information about the user interface related metrics, like frame rate, and the test device's resource usage, like average CPU usage.
 
 The following subsections describe, in depth, how the repeatable test case was created and works, how the user interface related metrics were measured, what device was used as the test device and how the device resource usage was monitored and what steps were taken to make the gathered data more easily analyzable. 
@@ -310,43 +311,47 @@ Running the performance tests yielded the results shown in \autoref{test-0-2}.
 The test results displayed relatively worse performance compared to the best case scenario (\autoref{subsec:best-case-scenario}), as expected. The average frame rate had dropped to 26, compared to the 60 measured in the best case scenario tests. Both the processor and the graphics processor were noticeably more stressed with the average usages being 69\% and 66\% respectively, compared to the best case scenario results of 16\% and 24\%, respectively. Unexpectedly, the average memory usage for the application decreased by 3 megabytes, even though images, which use more memory both on disk and in random access memory \cite{UnderstandingFileSizes}, were used in the tests.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Performance optimizations % % REVIEWED | T:   | G:   %
+% Performance optimizations % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Performance optimizations}
-All performance optimizations were built on top of one another in a way that each optimization complemented the previous one. The base for that project was the worst case scenario project. 
+This section focuses on the practical part of the thesis, which was the creation, testing and benchmarking of different optimizations. All optimizations that had a positive effect of improving either average frame rate or frame rate stability or both were kept in the test project. This was expected to ultimately lead to the creation of a project that would have all the found optimizations with positive effects on performance.
 
-%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Reusing cells % % REVIEWED | T: + | G:   %
-%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Reusing cells}
-Reusing the cells was chosen as a so-called starting point for all the optimizations due to the fact it was one of the more widely known ones. That capability was already built into the UITableView control by Apple and has been there ever since iOS 2.0.\cite{HackingWithSwiftCellReuse}
+Each of the following subsections in this section describes an optimization. Each subsection is also divided into three parts: theoretical analysis of why and how the optimization should work, benchmarking of the automated test results specified in \autoref{sec:measuring-performance} after applying the optimization, and code examples.
+
+%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Reuse of cells % % REVIEWED | T: + | G:   %
+%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Reuse of cells}
+Cell reuse was chosen as the first optimization due to the fact it is one of the more widely known ones. That capability is built into the UITableView component by Apple and has been there since iOS 2.0.\cite{HackingWithSwiftCellReuse}
 
 \subsubsection{Theoretical benefits}
-Reusing cells means that every time a new message enters the view, instead of creating a new instance of the cell class, an existing object created from that class is used. This reuse of cell objects is a performance enhancement because it eliminates the overhead of cell creation.\cite{AppleCharacteristicsOfCellObjects}
+Reusing of cell views means that most times, when a new message enters the view, instead of creating a new instance of the cell view class, an existing object created from that class is used. This reuse of cell views is a performance enhancement because it eliminates the overhead of cell creation.\cite{AppleCharacteristicsOfCellObjects}
 
 This enhancement required fundamental changes to be made to the existing cell classes. Views needed to have the ability to re-adjust themselves during runtime in order match their design to the type of message they were meant to display. Previously, views only needed to define their layout state once, upon initialization, and would no longer have to readjust themselves.
 
 \subsubsection{Performance changes}
-Running the performance tests yielded the following results:
+Running the performance tests yielded the results shown in \autoref{test-1}.
 \itkIncludeImage{test-1}{Performance test results after applying cell reuse optimizations}
 
-The optimization certainly had a positive impact on the performance of the project, compared to the worst case scenario which was the starting point. Average frame rate increased by 8.9 frames per second, while both the processor's and graphic processor's average usage decreased by 12.78 and 2.95 percent respectively. The duration for the test case also decreased from 105.5 seconds to 92.7 seconds, displaying a time decrease of 12.8 seconds. This was directly tied to the average frame rate, as all the necessary frames were rendered faster. Average memory usage did show an increase of 3 megabytes, from 28 to 31 megabytes, but this change is small enough to classify it as minor and label it as "did not change".
+The optimization had a positive impact on the performance of the thesis project, compared to the worst case scenario, which was the starting point. Average frame rate increased by 8.9 frames per second, while both the processor's and graphic processor's average usage decreased by 12.78 and 2.95 percent respectively. The duration of the test case also decreased from 105.5 seconds to 92.7 seconds, displaying a decrease of 12.8 seconds. The decrease in duration was directly tied to the average frame rate, as all the necessary frames were rendered faster. Average memory usage did show an increase of 3 megabytes, from 28 to 31 megabytes, but this change was small enough to classify it as minor and label it as "did not change".
 
 \subsubsection{Code examples}
-Apple has already built support for cell reusing into the UITableView component, meaning the implementation on the UITableView side of things required little effort from the software engineer. All the reusable cell classes had to be registered to the instance of the UITableView class they are meant to be reused in using the \mintinline{swift}{register(_:forCellReuseIdentifier:)} function.\cite{AppleRegisterMethod} After registering, they can be requested from the UITableView instance by using the \mintinline{swift}{dequeueReusableCell(withIdentifier:)} function.\cite{AppleDequeueReusableCellMethod}
+Apple has already built support for cell reuse into the UITableView component, making its implementation easy. Each of the different reusable cell classes have to be registered to the instance of the UITableView class they are meant to be reused in using the \mintinline{swift}{register(_:forCellReuseIdentifier:)} function.\cite{AppleRegisterMethod} After registering the cell classes, they can be requested from the UITableView instance by using the \mintinline{swift}{dequeueReusableCell(withIdentifier:)} function.\cite{AppleDequeueReusableCellMethod}
 
-Below is an example on how to register cell classes to be reused in a specific UITableView instance.
+Listing \autoref{lst:registering-cells-code} shows an example on how to register cell classes to be reused in a specific UITableView instance.
 \begin{listing}[H]
   \caption{Registering cells to be reused on a specific UITableView instance}
+  \label{lst:registering-cells-code}
   \begin{minted}{swift}
     self._tableView.register(ReusingCells_TextCell.self, forCellReuseIdentifier: "ReusingCells_TextCell")
     self._tableView.register(ReusingCells_MediaCell.self, forCellReuseIdentifier: "ReusingCells_MediaCell")
   \end{minted}
 \end{listing}
 
-This is an example on how to query reusable cells in the same UITableView instance.
+Listing \autoref{lst:using-registered-cells-code} shows an example on how to query reusable cells in the same UITableView instance.
 \begin{listing}[H]
   \caption{Using recycled cells in the test project}
+  \label{lst:using-registered-cells-code}
   \begin{minted}{swift}
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
       let message = self._messages[indexPath.row]
