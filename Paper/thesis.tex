@@ -468,10 +468,10 @@ Calculating the height of the text message cells is more complex, as the number 
   \end{minted}
 \end{listing}
 
-%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Cell height caching % % REVIEWED | T: + | G:   %
-%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Cell height caching}
+%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+% Caching of cell heights % % REVIEWED | T: + | G:   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Caching of cell heights}
 The previous optimization of using efficient manual cell height calculations resulted in a noticeable increase in performance. Reducing the number of calculations altogether should therefore also result in a boost in performance. Reducing the number of calculations was expected to be possible by caching the calculation results in memory and only doing the calculations if no cached value could be found.
 
 \subsubsection{Theoretical benefits}
