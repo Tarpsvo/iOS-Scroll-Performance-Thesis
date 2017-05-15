@@ -366,36 +366,40 @@ Listing \autoref{lst:using-registered-cells-code} shows an example on how to que
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Static layouts % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Making cell views' layouts static}
-Making cell views' layouts static was an idea proposed by this thesis' supervisor Gary Planthaber. The idea behind it was that instead of two different cell classes that display mutating views which adjust themselves to display all the different message types there would be eight different cell classes that would display statically laid out views.
+\subsection{Making static cell layouts}
+The idea behind this possible performance optimization was to use different view classes for each of the eight different message types (see listing \autoref{lst:static-layout-cell-views}), instead of the two mutating view classes used currently. The current two view classes, text message view and media message view, adjust their layouts according to the type of message they are going to display.
 
-List of necessary cell views to make views with a static layout possible:
-\begin{itemize}
-  \item Inbound text message view;
-  \item Outbound text message view;
-  \item Inbound media item view (1 media item);
-  \item Outbound media item view (1 media items);
-  \item Inbound media item view (2 media items);
-  \item Outbound media item view (2 media items);
-  \item Inbound media item view (3 media items);
-  \item Outbound media item view (3 media items).
-\end{itemize}
+\begin{listing}[H]
+  \caption{List of necessary cell views to make static cell layouts possible}
+  \label{lst:static-layout-cell-views}
+  \begin{itemize}
+    \item Inbound text message view;
+    \item Outbound text message view;
+    \item Inbound media item view (1 media item);
+    \item Outbound media item view (1 media items);
+    \item Inbound media item view (2 media items);
+    \item Outbound media item view (2 media items);
+    \item Inbound media item view (3 media items);
+    \item Outbound media item view (3 media items).
+  \end{itemize}
+\end{listing}
 
 \subsubsection{Theoretical benefits}
-The theoretical performance enhancing effect of this optimization was eliminating the overhead of creating and disposing of both subviews and layout constraints. This optimization complements the previous one, as they both work towards the same goal of removing unnecessary view creations, mutations and deletions. When the previous optimization only recycled the larger parent (cell) views, this change has the goal to also optimize all of the inner views and constraints.
+The theoretical performance enhancing effect of this optimization was expected to be caused by the elimination of the overhead of creating and disposing of both subviews and layout constraints. This optimization complements the previous one, as they both work towards the same goal of removing unnecessary view creations, mutations and deletions. While the previous optimization only recycled the larger parent (cell) views, this change was expected to also optimize all of the inner views and constraints.
 
 \subsubsection{Performance changes}
-Running the performance tests yielded the following results:
-\itkIncludeImage{test-2}{Performance test results after making cell views' layouts static}
+Running the performance tests yielded the results shown in \autoref{test-2}.
+\itkIncludeImage{test-2}{Performance test results after making cell layouts static}
 
-The optimization had a strong effect on the average frame rate which increased by 5.7 frames per second. The frame rate stability also saw an increase of 6.4 percent. The changes in the average processor, graphics processor and memory usage were so slight, they can be classified as staying the same. Overall, this optimization increased the frame rate by 16\% and frame rate stability by 6.4\% without affecting the resource usage.
+The optimization had a strong effect on the average frame rate which increased by 5.7 frames per second. The frame rate stability saw an increase of 6.4 percent. The changes in the average processor, graphics processor and memory usage were so slight, they can be classified as staying the same. Overall, this optimization increased the frame rate by 16\% and frame rate stability by 6.4\% without affecting the resource usage.
 
 \subsubsection{Code examples}
-This also changed the code for reusing the cells. After re-working the cell views, 8 different views needed to be registered to be recycled and that in turn made the logic of querying reusable cells a bit more difficult.
+The optimization of making static cell layouts also affected the code that handled the reuse of cells. After the creation of the 8 different cell views (listed in listing \autoref{lst:static-layout-cell-views}), all of the created view classes had to be registered to the UITableView instance before they could be reused. The higher number of cell view classes also made the logic of querying for reusable cells slightly more difficult.
 
-Below is the new code where the 8 new views are registered in the main UITableView instance:
+Listing \autoref{lst:static-cell-code-example} shows the code used in the thesis project for registering the 8 different cell views to a UITableView instance.
 \begin{listing}[H]
-  \caption{Registering static cell views to a UITableView instance}
+  \caption{Registering cell views with a static layout to a UITableView instance}
+  \label{lst:static-cell-code-example}
   \begin{minted}{swift}
     self._tableView.register(StaticCells_TextCell_In.self, forCellReuseIdentifier: "StaticCells_TextCell_In")
     self._tableView.register(StaticCells_TextCell_Out.self, forCellReuseIdentifier: "StaticCells_TextCell_Out")
