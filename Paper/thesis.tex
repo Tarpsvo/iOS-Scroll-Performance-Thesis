@@ -565,23 +565,24 @@ Listing \ref{lst:optimizing-image-sizes-1} shows how the image was resized to a 
 % Layer rasterization % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Rasterization of cell layers}
-Rasterization in the iOS view rendering context means turning the view into a cacheable bitmap that can be used in later rendering more efficiently. Rasterization of views was a built in feature of the CALayer class. Every view has a CALayer instance, accessible through the \mintinline{swift}{layer} property. That property is inherited from the UIView base class.
+Rasterization in the iOS view rendering context means turning a view into a cacheable bitmap that can be used in later rendering more efficiently. Rasterization of views is a built in feature of the CALayer class. Every view has a CALayer instance, accessible through the view object's \mintinline{swift}{layer} property. That property is inherited from the UIView base class, that all views extend.
 
 \subsubsection{Theoretical benefits}
-All the views except the ones containing animated images are static once rendered and will not change in the UI. This was one of the requirements to reap benefits from layer rasterization. Rasterization process consumes more resources and time than regular rendering at first, but once done, the view would be handled much more efficiently by the rendering engine due to the fact that the graphics processor can use the cached bitmap instead of re-drawing the view.\cite{MovingPixelsOntoTheScreen}
+All views, except the ones containing animated images, are static once rendered and will not change in the user interface. Having a static view is one of the requirements to reap benefits from layer rasterization. Rasterization process consumes more resources and time than regular rendering when it's first triggered. After the view has been drawn once, the view is handled much more efficiently by the rendering engine due to the fact that the graphics processor can use the cached bitmap instead of re-drawing the view.\cite{MovingPixelsOntoTheScreen}
 
 \subsubsection{Performance changes}
-Running the performance tests yielded the following results:
+Running the performance tests yielded the results shown in \autoref{test-6}.
 \itkIncludeImage{test-6}{Performance test results after enabling rasterization of the views}
 
-Cell rasterization did not provide any of the expected performance improvements. The average frame rate decreased by 2.8 frames per second and the frame rate stability went down by almost 30\%.
+The rasterization of cell layers did not result in expected performance improvements in any of the user interface related metrics. The average frame rate decreased by 2.8 frames per second and the frame rate stability went down by nearly 30\%.
 
-This shocking result confirmed that more research needed to be done about the proper usage of rasterization. These benefits are investigated in the next section.
+Analyzing and explaining the unexpected decrease in performance is done in \autoref{sec:avoiding-unnecessary-offscreen-rendering}.
 
 \subsubsection{Code examples}
-Enabling the rasterization of the cell views required adding only two lines of code. There is an example of the two lines below. The first one enabled rasterization and the second one told the rasterization mechanism to use a certain scale to compensate for the fact that some devices are using retina screens and require scaling when being rasterized.
+Enabling the rasterization of cell views required the addition of two lines of code. Listing \ref{lst:rasterization-1} shows the added two lines, where the first one enabled rasterization and the second one forced the rasterization mechanism to use scaling to compensate for the use of retina screens on some devices.
 \begin{listing}[H]
   \caption{Rasterizing views}
+  \label{lst:rasterization-1}
   \begin{minted}{swift}
     self.view.layer.shouldRasterize = true
     self.view.layer.rasterizationScale = UIScreen.main.scale
