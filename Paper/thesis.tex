@@ -655,25 +655,26 @@ To work around using CALayer's corner radius when drawing text cell views, the b
 \subsection{AsyncDisplayKit}
 AsyncDisplayKit is an iOS framework built on top of UIKit that keeps even the most complex user interfaces smooth and responsive.\cite{IntroducingAsyncDisplayKit} The library's goal was to make even the most complex views have a 60 frames per second rendering in iOS applications by moving the rendering off the main thread.
 
-In order to test this out, a replica of the best case scenario view was built, identical to the one built with UIKit. This meant only having text message views. Media messages were replaced with text. Instead of UIKit classes, AsyncDisplayKit's classes and methodologies were used.
+To test AsyncDisplayKit's base performance, a replica of the best case scenario view was built, identical in user interface design to the one built with UIKit (see \autoref{subsec:best-case-scenario}). As was the case with the UIKit's best case performance, all media messages were replaced with text messages at runtime. Instead of UIKit classes, AsyncDisplayKit's classes and methodologies were used.
 
 \subsubsection{Theoretical benefits}
-The expected test results after applying AsyncDisplayKit's classes and methodologies was performance at least equivalent to that of UIKit's best case scenario. The expected benefits would be less resources consumed due to the better use of threads.
+The performance test results were expected to be similar to that of the UIKit's best case scenario (see \autoref{subsec:best-case-scenario}). The user interface responsiveness metrics, namely the average frame rate and frame rate stability, were expected to be the same as the values measured in best case scenario test and the device resource usages were expected to be similar to the values measured in the best case scenario test.
 
 \subsubsection{Performance changes}
-Running the performance tests yielded the following results:
-\itkIncludeImage{test-8}{Performance test results with AsyncDisplayKit's classes and methodologies}
+Running the performance tests yielded the results shown in \autoref{test-8}.
+\itkIncludeImage{test-8}{Performance test results using AsyncDisplayKit's classes and methodologies}
 
 Not only was the performance noticeably worse compared to the UIKit's best case scenario, the time it took to open the view initially was unacceptable (more than 10 seconds to load all the AsyncDisplayKit's classes and views). UIKit's best case scenario view opened instantly, with no main thread holdups.
 
-Scrolling performance wise, it performed much worse than UIKit's UITableView. The average frame rate did not meet the 60 frames per second expectation. The frame rate stability was also not a solid 100 percent. The actual recorded values were 58.5 frames per second and 97.5\% respectively. CPU usage was 26\% higher than that of UIKit's best case scenario. Graphics processor and memory usage did not change notably.
+With respect to scrolling performance, the scrollable view built using AsyncDisplayKit performed much worse than the UITableView built in the best case scenario section. The average frame rate did not meet the 60 frames per second expectation. The frame rate stability was also not a solid 100\%. The actual recorded values were 58.5 frames per second and 97.5\% respectively. CPU usage was 26\% higher than that of UIKit's best case scenario. The recorded average graphics processor and memory usages did not change notably.
 
-Due to the best case scenario results being so poor, it was decided not to continue trying to make AsyncDisplayKit work as an optimization.
+Due to the test results being so poor, it was decided not to continue with using AsyncDisplayKit for any further tests.
 
 \subsubsection{Code examples}
-Below is a code example of how cells were created and returned to be used in the user interface using AsyncDisplayKit's classes and functions.
+Listing \ref{lst:asyncdisplaykit-1} shows the code for the creation and configuration of cells, used in the AsyncDisplayKit's equivalent of UITableView, called ASTableNode.
 \begin{listing}[H]
   \caption{Creation and use of AsyncDisplayKit's cell views}
+  \label{lst:asyncdisplaykit-1}
   \begin{minted}{swift}
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
       let message = self._messages[indexPath.row]
