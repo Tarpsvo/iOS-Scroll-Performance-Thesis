@@ -565,6 +565,7 @@ Listing \ref{lst:optimizing-image-sizes-1} shows how the image was resized to a 
 % Layer rasterization % % REVIEWED | T: + | G:   %
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Rasterization of cell layers}
+\label{subsec:rasterization-of-cell-layers}
 Rasterization in the iOS view rendering context means turning a view into a cacheable bitmap that can be used in later rendering more efficiently. Rasterization of views is a built in feature of the CALayer class. Every view has a CALayer instance, accessible through the view object's \mintinline{swift}{layer} property. That property is inherited from the UIView base class, that all views extend.
 
 \subsubsection{Theoretical benefits}
@@ -596,25 +597,26 @@ Enabling the rasterization of cell views required the addition of two lines of c
 \label{sec:avoiding-unnecessary-offscreen-rendering}
 Offscreen rendering means drawing the view into a new buffer (bitmap cache) which is offscreen (not on the screen) before drawing that buffer on the screen. The conventional way of drawing views is to draw them subview by subview directly onto the screen.\cite{MovingPixelsOntoTheScreen}
 
-Offscreen rendering consumes more resources and is slower than conventional rendering, but it can be beneficial to performance due to the fact that the resulting bitmap can be cached and reused. The caching and reusing will only work and improve performance when the view does not change that often. The ideal case would be a view that never changes (is immutable). If a view were to change often, for example a view containing an animated image (GIF), then the drawing to bitmap would have had to be done every time the animated image's frame changed and none of the cached buffers could be reused.
+Offscreen rendering consumes more resources and is slower than conventional rendering, but it can be beneficial to performance as the resulting bitmap can be cached and reused. The caching and reusing will only improve performance when the view does not change often (remains the same for at least a second). The ideal case is be a view that never changes (is immutable). If a view were to change more than a few times per second, for example a view containing an animated image (GIF), then the drawing to bitmap has to be done every time the animated image's frame changes and none of the cached buffers could be reused.\cite{MovingPixelsOntoTheScreen}
 
-Layer rasterization was one example of manually triggering offscreen rendering on a whole view. Offscreen rendering can also be triggered automatically by Core Animation. This would happen for example when a mask is directly or indirectly applied to a layer. That would also force the graphics processor to do offscreen rendering in order to apply that mask. This will in turn, as stated earlier, put unnecessary burden on the GPU.\cite{MovingPixelsOntoTheScreen}
+Layer rasterization is one example of manually forcing offscreen rendering of a view. Offscreen rendering can also be triggered automatically by Core Animation. Offscreen rendering would happen, for example, when a mask is directly or indirectly applied to a layer. Offscreen rendering will in turn, as stated earlier, put unnecessary burden on the GPU.\cite{MovingPixelsOntoTheScreen}
 
-In order to get benefits from the rasterization of layers, all other direct or indirect causes of offscreen rendering should be avoided. This is theoretically why the previous optimization did not work - some indirect causes of offscreen rendering were invalidating the rasterization cached bitmap. For example, some indirect causes of offscreen rendering are applying shadows and corner radiuses to the layer, the latter of which the test project does for all cells to create the chat bubble effect.\cite{MovingPixelsOntoTheScreen}
+To benefit from the rasterization of layers user interface responsiveness wise, all automatic direct or indirect causes of offscreen rendering should be avoided. The automatic causes of offscreen rendering are theoretically why the previous optimization, in \autoref{subsec:rasterization-of-cell-layers}, did not work: some, currently unknown, indirect causes of offscreen rendering were invalidating the rasterization cached bitmap. Indirect causes of offscreen rendering are, for example, applying shadows and corner radiuses to a layer.\cite{MovingPixelsOntoTheScreen} Applying corner radiuses is currently done for all message views to create a chat bubble effect.
 
 \subsubsection{Theoretical benefits}
-The theoretical benefits were reduced resource usage and increased performance (better average frame rate, higher frame rate stability). These should have also resulted in smoother scrolling.
+The results of avoiding unnecessary offscreen rendering were expected to be reduced device resource usage and an increase in both frame rate and frame rate stability. The theoretical causes of the improvement are the same as described previous optimization, in \autoref{subsec:rasterization-of-cell-layers}. This optimization tried to address the theoretical issue of the cached bitmap being invalidated due to offscreen rendering being triggered by automatic and non-direct causes.\cite{MovingPixelsOntoTheScreen}
 
 \subsubsection{Performance changes}
-Running the performance tests yielded the following results:
+Running the performance tests yielded the results shown in \autoref{test-7}.
 \itkIncludeImage{test-7}{Performance test results after removing unnecessary offscreen rendering}
 
-Avoiding unnecessary offscreen rendering proved to be beneficial to performance and graphics processor usage. The average frame rate increased by 3.1 and the stability increased by almost 10\%. While the average processor usage did not change much, the average graphics processor usage showed a huge drop of 29\%. The average memory usage, however, increased by a whopping 30\% (from 78 megabytes to 101.5 megabytes). 
+Avoiding unnecessary offscreen rendering proved to be beneficial to performance and graphics processor usage. The average frame rate increased by 3.1 frames per second and the frame rate stability increased by nearly 10\%. While the average processor usage did not change noticeably (-3\%), the average graphics processor usage displayed a large decrease of 29\%. The average memory usage, however, increased by a whopping 30\% (from 78 megabytes to 101.5 megabytes).
 
 \subsubsection{Code examples}
-In order to work around using CALayer's corner radius when drawing text cell views, the background with a corner radius was drawn manually. This was done by creating a custom wrapper view for the text that was able draw the rounded corner background efficiently. Below is the code for that view, which shows the background color being customizable and the draw method being only aware of drawing a rectangle with rounded corners.
+To work around using CALayer's corner radius when drawing text cell views, the background with a corner radius was drawn manually. The manual drawing of the rounded cornered background was done by creating a custom wrapper view for the text that was able draw the rounded corner background efficiently. Listing \ref{lst:avoiding-offscreen-1} shows the code for the text message view class with the manually drawn background that avoids automatically triggering offscreen rendering. The listing also shows that the background color is customizable.
 \begin{listing}[H]
-  \caption{Custom wrapper view for text message view with rounded corners that avoids offscreen rendering}
+  \caption{Custom view for displaying text messages with rounded corners that avoid automatically triggering offscreen rendering}
+  \label{lst:avoiding-offscreen-1}
   \begin{minted}{swift}
     class NoOffscreenRendering_TextCell_LabelWrapView: UIView {
       private var _fillColor: UIColor?
