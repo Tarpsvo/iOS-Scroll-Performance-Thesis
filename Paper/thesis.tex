@@ -72,18 +72,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Introduction % % REVIEWED | T: + | G:   %
+% Introduction % % REVIEWED | T: + | G: + %
 %%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \iosection{Introduction}
-Mobile applications must have highly responsive user interfaces to maintain their brand's reputation and keep users engaged.\cite{AppSpeedStudyHP}\cite{AppSpeedStudyApigee} Of all participants in a study by HP, 55\% said that only the application is to blame for bad performance, as opposed to other plausible causes like their possibly underpowered device or background processes, and 37\% stated that errors and freezes made them think less of a company’s brand.\cite{AppSpeedStudyHP} A study by Apigee revealed that 18\% of survey participants are likely to delete an application after it freezes for more than 5 seconds.\cite{AppSpeedStudyApigee} The percentage of Apigee survey participants who would delete such an application increased to 38\% when the freeze time exceeded 30 seconds.\cite{AppSpeedStudyApigee} The Apigee survey also revealed that two of five most common reasons for bad reviews were related to user interface responsiveness: freezes were the reason for leaving a bad review for 76\% of the survey participants and slow responsiveness for 59\% of the participants.\cite{AppSpeedStudyApigee}
+Mobile applications must have highly responsive user interfaces to maintain their brand's reputation and keep users engaged.\cite{AppSpeedStudyHP}\cite{AppSpeedStudyApigee} Of all participants in a study by HP, 55\% said that the application alone is to blame for bad performance, as opposed to other plausible causes like their possibly underpowered device or background processes, and 37\% stated that errors and freezes made them think less of a company’s brand.\cite{AppSpeedStudyHP} A study by Apigee revealed that 18\% of survey participants are likely to delete an application after it freezes for more than 5 seconds.\cite{AppSpeedStudyApigee} The percentage of Apigee survey participants who would delete such an application increased to 38\% when the freeze time exceeded 30 seconds.\cite{AppSpeedStudyApigee} The Apigee survey also revealed that two of five most common reasons for bad reviews were related to user interface responsiveness: freezes were the reason for leaving a bad review for 76\% of the survey participants and slow responsiveness for 59\% of the participants.\cite{AppSpeedStudyApigee}
 
 An expectation of having a highly responsive user interface has been around as long as user interfaces.\cite{NielsenUsabilityEngineering} Jakob Nielsen, a web usability consultant who holds a Ph.D in human–computer interaction\cite{JakobNielsenNNGroup}, has written that even the slightest delay (anything above 0.1 seconds) is not considered instantaneous by users, and anything above 1 second results in the user's flow of thought being interrupted and focus being lost.\cite{NielsenUsabilityEngineering} Any delay above 10 seconds results in the user's attention being completely lost and, without any feedback about progress, they may not return their attention to the application.\cite{NielsenUsabilityEngineering}
 
-The studies cited in the previous paragraphs show that users expect a responsive user interface, and if the application fails to provide it, they might delete the application, leave a bad review, or both.
+The studies cited in the previous paragraphs show that users expect a responsive user interface and if the application fails to provide it they might delete the application, leave a bad review, or both.
 
 Pairby, a mobile dating service of which the author is a co-founder, has applications on both Android and iOS. Neither application is an exception to the users' previously described expectation of having a responsive user interface. This thesis' subject is directly derived from the author's interest in solving user interface responsiveness and low frame rate issues in the Pairby iOS application's vertically scrollable views, which use the iOS UITableView component.
 
-The following subsections will describe the problem and declare the goal of the thesis in greater detail, describe how the thesis is structured, and how the problem was approached.
+The following subsections describe the problem and declare the goal of the thesis in greater detail, how the thesis is structured, and how the problem was approached.
 
 \iosubsection{Description of the problem}
 Pairby's iOS application contains a multitude of different vertically scrolling views, which can contain a large number of subviews with no defined limit. One of the vertically scrolling views is the message list view, which this thesis uses as for reference. The message list view uses a UITableView to render a vertical list of views (called cells) that display messages, which can contain either only text or one or multiple visual media items.
@@ -752,7 +752,7 @@ Benchmarking the recorded best case scenario's average central processor and gra
 The average memory usage increased from 31 to 101 megabytes. The large, yet temporary (see \autoref{subsec:performance-relative-to-worst-case-scenario}), increase is caused by two optimizations described in \autoref{subsec:optimizing-image-sizes} and \autoref{subsec:avoiding-unnecessary-offscreen-rendering}. The two mentioned optimizations are image processing related.
 
 %%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Summary % % REVIEWED | T: + | G:   %
+% Summary % % REVIEWED | T: + | G: + %
 %%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \iosection{Summary}
 The goal of the thesis was to explore different ways of improving the Pairby iOS application's scrollable views' user interface performance. In total, 8 different optimization methods were theorized, realized, benchmarked and analyzed. Of the 8 theorized optimizations, 6 had the expected performance enhancing effect, meaning the optimizations improved either the frame rate, frame rate stability or both. The remaining 2 of the 8 theorized optimizations did not provide the expected performance enhancing benefits, but are still included in this thesis, as the reasons for the optimization methods failure either became a basis for the next optimizations or otherwise made an introduction to the next logical and structural step in the optimization process.
