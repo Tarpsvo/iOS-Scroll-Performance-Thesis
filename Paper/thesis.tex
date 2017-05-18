@@ -257,7 +257,7 @@ All the recorded metrics, mentioned in the subsections of this section, resulted
 \label{subsec:test-device}
 All tests were run on an iPod Touch 5G, as it is a good example of a low-powered device by today's standards. The 5th generation iPod touch has a retina display (resolution 1136x640)\cite{AppleIPodTouch5G} while having a relatively underpowered \cite{IPhoneVsIPod5} processor (dual core Apple A5 underclocked to 800 MHz)\cite{MacObserverUnderclock}. Having a high resolution display with an underpowered processor means that the processor may not be able to handle complex rendering tasks that well, as the number of pixels it is required to control is too large for it to handle, among other tasks.\cite{RetinaAndWeakProcessor} The high-resolution display and underpowered processor combination is expected to have the effect of making the user interface responsiveness and device resource usage related metrics change more noticeably after every optimization.
 
-The input lag of the test device was taken into consideration when doing assumptions and calculations regarding the user interface responsiveness times. No data could be found regarding the input latency of the touch screen for the test device, which was the iPod Touch 5G. Online sources did state that the iPod Touch 5G has the same screen as the iPhone 5\cite{Iphone5SameDisplayAs5G}. The iPhone 5's screen was measured to have a input latency of 55 milliseconds.\cite{IPhoneInputLag} Given these two references, it can be assumed, for the purposes of this thesis, that the test device's screen input latency is 55 milliseconds.
+The input lag of the test device was taken into consideration when making assumptions and calculations regarding the user interface response times. No data could be found regarding the input latency of the touch screen of the test device, which was the iPod Touch 5G. As online sources stated that the iPod Touch 5G has the same screen as the iPhone 5\cite{Iphone5SameDisplayAs5G} and that the iPhone 5's screen was measured to have a input latency of 55 milliseconds\cite{IPhoneInputLag}, it was assumed, for the purposes of this thesis, that the test device's screen input latency is 55 milliseconds.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Third party libraries used % % REVIEWED | T: + | G: + %
@@ -570,7 +570,7 @@ Listing \ref{lst:optimizing-image-sizes-1} shows how the image was resized to a 
 
 
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
-% Layer rasterization % % REVIEWED | T: + | G:   %
+% Layer rasterization % % REVIEWED | T: + | G: + %
 %%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Rasterization of cell layers}
 \label{subsec:rasterization-of-cell-layers}
